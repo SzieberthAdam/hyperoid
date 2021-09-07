@@ -18,17 +18,17 @@ Number of Code/Data Segments = 04
 Number of Dialogs =    1 (decimal)
 
 Name: DialogID_01F4, # of Controls=011, Caption:"About", ClassName:""
-     001 - ControlID:FFFF, Control Class:"" Control Text:"Hyperoid" 
-     002 - ControlID:FFFF, Control Class:"" Control Text:"The classic game" 
-     003 - ControlID:FFFF, Control Class:"" Control Text:"Version 1.1" 
-     004 - ControlID:FFFF, Control Class:"" Control Text:"Copyright © 1991 Hutchins Software" 
-     005 - ControlID:FFFF, Control Class:"" Control Text:"This program is freeware" 
-     006 - ControlID:FFFF, Control Class:"" Control Text:"Author: Edward Hutchins" 
-     007 - ControlID:FFFF, Control Class:"" Control Text:"eah1@cec1.wustl.edu" 
-     008 - ControlID:01F6, Control Class:"" Control Text:"" 
-     009 - ControlID:FFFF, Control Class:"" Control Text:"" 
-     010 - ControlID:000C, Control Class:"P€Ok!" Control Text:"" 
-     011 - ControlID:0001, Control Class:"&Help" Control Text:"" 
+     001 - ControlID:FFFF, Control Class:"" Control Text:"Hyperoid"
+     002 - ControlID:FFFF, Control Class:"" Control Text:"The classic game"
+     003 - ControlID:FFFF, Control Class:"" Control Text:"Version 1.1"
+     004 - ControlID:FFFF, Control Class:"" Control Text:"Copyright ï¿½ 1991 Hutchins Software"
+     005 - ControlID:FFFF, Control Class:"" Control Text:"This program is freeware"
+     006 - ControlID:FFFF, Control Class:"" Control Text:"Author: Edward Hutchins"
+     007 - ControlID:FFFF, Control Class:"" Control Text:"eah1@cec1.wustl.edu"
+     008 - ControlID:01F6, Control Class:"" Control Text:""
+     009 - ControlID:FFFF, Control Class:"" Control Text:""
+     010 - ControlID:000C, Control Class:"Pï¿½Ok!" Control Text:""
+     011 - ControlID:0001, Control Class:"&Help" Control Text:""
 
 +++++++++++++++++++ IMPORTED FUNCTIONS ++++++++++++++++++
 Number of Imported Modules =    4 (decimal)
@@ -42,62 +42,62 @@ Number of Imported Modules =    4 (decimal)
 Number of Entry Table Functions = 0004 (decimal)
 
 
- Addr:0003.0011 Ord:0000d Type:00h Name: Hyperoid 
- Addr:0003.0011 Ord:0000d Type:00h Name: Hyperoid Copyright (C) 1990,91 Hutchins Software 
+ Addr:0003.0011 Ord:0000d Type:00h Name: Hyperoid
+ Addr:0003.0011 Ord:0000d Type:00h Name: Hyperoid Copyright (C) 1990,91 Hutchins Software
  Addr:0001.2AD4 Ord:0001d Type:FFh Name: HYPEROIDWNDPROC {Exported}
  Addr:0002.07AC Ord:0002d Type:FFh Name: HYPEROIDABOUTDLG {Exported}
 
 
 ++++++ INTERNAL FUNCTIONS ++++++++++++++++++
 
- Addr:0002.0000 Ord:0003d Type:FFh Name: FUNC001 
- Addr:0002.009C Ord:0004d Type:FFh Name: FUNC002 
- Addr:0003.0092 Ord:0005d Type:FFh Name: FUNC003 
- Addr:0003.012C Ord:0006d Type:FFh Name: FUNC004 
- Addr:0002.082C Ord:0007d Type:FFh Name: FUNC005 
- Addr:0002.0566 Ord:0008d Type:FFh Name: FUNC006 
- Addr:0002.040C Ord:0009d Type:FFh Name: FUNC007 
- Addr:0002.0330 Ord:0010d Type:FFh Name: FUNC008 
- Addr:0002.06B2 Ord:0011d Type:FFh Name: FUNC009 
- Addr:0003.017E Ord:0012d Type:FFh Name: FUNC010 
- Addr:0003.016E Ord:0013d Type:FFh Name: FUNC011 
- Addr:0003.0174 Ord:0014d Type:FFh Name: FUNC012 
- Addr:0002.016A Ord:0015d Type:FFh Name: FUNC013 
- Addr:0001.0000 Ord:0016d Type:FFh Name: FUNC014 
- Addr:0003.008A Ord:0017d Type:FFh Name: FUNC015 
- Addr:0001.0758 Ord:0018d Type:FFh Name: FUNC016 
- Addr:0003.008E Ord:0019d Type:FFh Name: FUNC017 
- Addr:0003.01D0 Ord:0020d Type:FFh Name: FUNC018 
- Addr:0003.035C Ord:0021d Type:FFh Name: FUNC019 
- Addr:0003.04EE Ord:0022d Type:FFh Name: FUNC020 
- Addr:0001.2E20 Ord:0023d Type:FFh Name: FUNC021 
- Addr:0003.028F Ord:0024d Type:FFh Name: FUNC022 
- Addr:0003.029D Ord:0025d Type:FFh Name: FUNC023 
- Addr:0003.0DEC Ord:0026d Type:FFh Name: FUNC024 
- Addr:0003.0BB6 Ord:0027d Type:FFh Name: FUNC025 
- Addr:0003.0758 Ord:0028d Type:FFh Name: FUNC026 
- Addr:0003.0808 Ord:0029d Type:FFh Name: FUNC027 
- Addr:0003.06E4 Ord:0030d Type:FFh Name: FUNC028 
- Addr:0003.07D2 Ord:0031d Type:FFh Name: FUNC029 
- Addr:0003.117C Ord:0032d Type:FFh Name: FUNC030 
- Addr:0003.01BC Ord:0033d Type:FFh Name: FUNC031 
- Addr:0003.11DE Ord:0034d Type:FFh Name: FUNC032 
- Addr:0003.1338 Ord:0035d Type:FFh Name: FUNC033 
- Addr:0003.195E Ord:0036d Type:FFh Name: FUNC034 
- Addr:0003.13F2 Ord:0037d Type:FFh Name: FUNC035 
- Addr:0003.12A0 Ord:0038d Type:FFh Name: FUNC036 
- Addr:0003.12EE Ord:0039d Type:FFh Name: FUNC037 
- Addr:0003.19C8 Ord:0040d Type:FFh Name: FUNC038 
- Addr:0003.13AA Ord:0041d Type:FFh Name: FUNC039 
- Addr:0003.12D2 Ord:0042d Type:FFh Name: FUNC040 
- Addr:0003.19AE Ord:0043d Type:FFh Name: FUNC041 
- Addr:0003.1420 Ord:0044d Type:FFh Name: FUNC042 
- Addr:0003.123D Ord:0045d Type:FFh Name: FUNC043 
- Addr:0003.19F6 Ord:0046d Type:FFh Name: FUNC044 
- Addr:0003.2408 Ord:0047d Type:FFh Name: FUNC045 
- Addr:0003.18D8 Ord:0048d Type:FFh Name: FUNC046 
- Addr:0003.19C1 Ord:0049d Type:FFh Name: FUNC047 
- Addr:0003.19FC Ord:0050d Type:FFh Name: FUNC048 
+ Addr:0002.0000 Ord:0003d Type:FFh Name: FUNC001
+ Addr:0002.009C Ord:0004d Type:FFh Name: FUNC002
+ Addr:0003.0092 Ord:0005d Type:FFh Name: FUNC003
+ Addr:0003.012C Ord:0006d Type:FFh Name: FUNC004
+ Addr:0002.082C Ord:0007d Type:FFh Name: FUNC005
+ Addr:0002.0566 Ord:0008d Type:FFh Name: FUNC006
+ Addr:0002.040C Ord:0009d Type:FFh Name: FUNC007
+ Addr:0002.0330 Ord:0010d Type:FFh Name: FUNC008
+ Addr:0002.06B2 Ord:0011d Type:FFh Name: FUNC009
+ Addr:0003.017E Ord:0012d Type:FFh Name: FUNC010
+ Addr:0003.016E Ord:0013d Type:FFh Name: FUNC011
+ Addr:0003.0174 Ord:0014d Type:FFh Name: FUNC012
+ Addr:0002.016A Ord:0015d Type:FFh Name: FUNC013
+ Addr:0001.0000 Ord:0016d Type:FFh Name: FUNC014
+ Addr:0003.008A Ord:0017d Type:FFh Name: FUNC015
+ Addr:0001.0758 Ord:0018d Type:FFh Name: FUNC016
+ Addr:0003.008E Ord:0019d Type:FFh Name: FUNC017
+ Addr:0003.01D0 Ord:0020d Type:FFh Name: FUNC018
+ Addr:0003.035C Ord:0021d Type:FFh Name: FUNC019
+ Addr:0003.04EE Ord:0022d Type:FFh Name: FUNC020
+ Addr:0001.2E20 Ord:0023d Type:FFh Name: FUNC021
+ Addr:0003.028F Ord:0024d Type:FFh Name: FUNC022
+ Addr:0003.029D Ord:0025d Type:FFh Name: FUNC023
+ Addr:0003.0DEC Ord:0026d Type:FFh Name: FUNC024
+ Addr:0003.0BB6 Ord:0027d Type:FFh Name: FUNC025
+ Addr:0003.0758 Ord:0028d Type:FFh Name: FUNC026
+ Addr:0003.0808 Ord:0029d Type:FFh Name: FUNC027
+ Addr:0003.06E4 Ord:0030d Type:FFh Name: FUNC028
+ Addr:0003.07D2 Ord:0031d Type:FFh Name: FUNC029
+ Addr:0003.117C Ord:0032d Type:FFh Name: FUNC030
+ Addr:0003.01BC Ord:0033d Type:FFh Name: FUNC031
+ Addr:0003.11DE Ord:0034d Type:FFh Name: FUNC032
+ Addr:0003.1338 Ord:0035d Type:FFh Name: FUNC033
+ Addr:0003.195E Ord:0036d Type:FFh Name: FUNC034
+ Addr:0003.13F2 Ord:0037d Type:FFh Name: FUNC035
+ Addr:0003.12A0 Ord:0038d Type:FFh Name: FUNC036
+ Addr:0003.12EE Ord:0039d Type:FFh Name: FUNC037
+ Addr:0003.19C8 Ord:0040d Type:FFh Name: FUNC038
+ Addr:0003.13AA Ord:0041d Type:FFh Name: FUNC039
+ Addr:0003.12D2 Ord:0042d Type:FFh Name: FUNC040
+ Addr:0003.19AE Ord:0043d Type:FFh Name: FUNC041
+ Addr:0003.1420 Ord:0044d Type:FFh Name: FUNC042
+ Addr:0003.123D Ord:0045d Type:FFh Name: FUNC043
+ Addr:0003.19F6 Ord:0046d Type:FFh Name: FUNC044
+ Addr:0003.2408 Ord:0047d Type:FFh Name: FUNC045
+ Addr:0003.18D8 Ord:0048d Type:FFh Name: FUNC046
+ Addr:0003.19C1 Ord:0049d Type:FFh Name: FUNC047
+ Addr:0003.19FC Ord:0050d Type:FFh Name: FUNC048
 
 
 +++++++++++++++++++ ASSEMBLY CODE LISTING ++++++++++++++++++
@@ -727,7 +727,7 @@ Exported fn(): FUNC014 - Ord:0010h
 :0001.03DF 8B1EEC10               mov bx, [10EC]
 :0001.03E3 FF4712                 inc word ptr [bx+12]
 :0001.03E6 8A4712                 mov al , [bx+12]
-:0001.03E9 884716                 mov [bx+16], al 
+:0001.03E9 884716                 mov [bx+16], al
 :0001.03EC 3C03                   cmp al, 03
 :0001.03EE 7608                   jbe 03F8
 :0001.03F0 8B1EEC10               mov bx, [10EC]
@@ -887,7 +887,7 @@ Exported fn(): FUNC014 - Ord:0010h
 :0001.050D 051800                 add ax, 0018
 :0001.0510 8946F8                 mov [bp-08], ax
 :0001.0513 8A66FE                 mov ah, [bp-02]
-:0001.0516 2AC0                   sub al , al 
+:0001.0516 2AC0                   sub al , al
 :0001.0518 8946F6                 mov [bp-0A], ax
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -946,7 +946,7 @@ Exported fn(): FUNC014 - Ord:0010h
 :0001.0581 894412                 mov [si+12], ax
 :0001.0584 8B5E04                 mov bx, [bp+04]
 :0001.0587 8A4716                 mov al , [bx+16]
-:0001.058A 884416                 mov [si+16], al 
+:0001.058A 884416                 mov [si+16], al
 :0001.058D C6441702               mov byte ptr [si+17], 02
 :0001.0591 8B5EF8                 mov bx, [bp-08]
 :0001.0594 8B07                   mov ax, [bx]
@@ -1136,7 +1136,7 @@ Exported fn(): FUNC014 - Ord:0010h
 :0001.0712 7426                   je 073A
 :0001.0714 8B1EEC10               mov bx, [10EC]
 :0001.0718 8A4712                 mov al , [bx+12]
-:0001.071B 884716                 mov [bx+16], al 
+:0001.071B 884716                 mov [bx+16], al
 :0001.071E 3C03                   cmp al, 03
 :0001.0720 7608                   jbe 072A
 :0001.0722 8B1EEC10               mov bx, [10EC]
@@ -1288,7 +1288,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.07F8 F7D1                   not cx
 :0001.07FA 49                     dec cx
 :0001.07FB 894EFA                 mov [bp-06], cx
-:0001.07FE 884F17                 mov [bx+17], cl 
+:0001.07FE 884F17                 mov [bx+17], cl
 :0001.0801 8B46FA                 mov ax, [bp-06]
 :0001.0804 C1E002                 shl ax, 02
 :0001.0807 03D8                   add bx, ax
@@ -1485,7 +1485,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.0943 8A4712                 mov al , [bx+12]
 :0001.0946 D0E0                   shl al, 01
 :0001.0948 0403                   add al, 03
-:0001.094A 884716                 mov [bx+16], al 
+:0001.094A 884716                 mov [bx+16], al
 :0001.094D C6471706               mov byte ptr [bx+17], 06
 
 * Possible Reference to Dialog: DialogID_01F4, CONTROL_ID:000C, ""
@@ -1816,7 +1816,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.0B7E 75AC                   jne 0B2C
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.0AFA(U), :0001.0B05(C), :0001.0B0E(C), :0001.0B17(C), :0001.0B20(C), 
+|:0001.0AFA(U), :0001.0B05(C), :0001.0B0E(C), :0001.0B17(C), :0001.0B20(C),
 |:0001.0B2A(C)
 |
 :0001.0B80 8B5EFE                 mov bx, [bp-02]
@@ -1835,7 +1835,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.0BA7 8A4712                 mov al , [bx+12]
 :0001.0BAA D0E0                   shl al, 01
 :0001.0BAC 0403                   add al, 03
-:0001.0BAE 884716                 mov [bx+16], al 
+:0001.0BAE 884716                 mov [bx+16], al
 :0001.0BB1 837F1200               cmp word ptr [bx+12], 0000
 :0001.0BB5 751B                   jne 0BD2
 :0001.0BB7 FF7604                 push word ptr [bp+04]
@@ -2484,7 +2484,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.106F E88AF3                 call 03FC
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.0FC9(U), :0001.0FD7(U), :0001.0FDE(U), :0001.0FEB(U), :0001.0FF5(C), 
+|:0001.0FC9(U), :0001.0FD7(U), :0001.0FDE(U), :0001.0FEB(U), :0001.0FF5(C),
 |:0001.0FFE(C), :0001.1007(C), :0001.100E(C), :0001.1038(U)
 |
 :0001.1072 6A00                   push 0000
@@ -2732,7 +2732,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.1278 50                     push ax
 :0001.1279 E8B0FE                 call 112C
 
-* Possible Reference to Dialog: DialogID_01F4 
+* Possible Reference to Dialog: DialogID_01F4
                                   |
 :0001.127C 68F401                 push 01F4
 :0001.127F E87EED                 call 0000
@@ -2876,7 +2876,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.1399 C747120000             mov word ptr [bx+12], 0000
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.1335(C), :0001.133E(C), :0001.1347(C), :0001.1350(C), :0001.1357(C), 
+|:0001.1335(C), :0001.133E(C), :0001.1347(C), :0001.1350(C), :0001.1357(C),
 |:0001.1381(U)
 |
 :0001.139E 8B5EFE                 mov bx, [bp-02]
@@ -3014,7 +3014,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.14A8 89470C                 mov [bx+0C], ax
 :0001.14AB 80E90F                 sub cl, 0F
 :0001.14AE F6D9                   neg cl
-:0001.14B0 884F16                 mov [bx+16], cl 
+:0001.14B0 884F16                 mov [bx+16], cl
 :0001.14B3 C6471705               mov byte ptr [bx+17], 05
 :0001.14B7 B90A00                 mov cx, 000A
 :0001.14BA 8D7F18                 lea di, [bx+18]
@@ -3150,8 +3150,8 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.15CA FF4F12                 dec word ptr [bx+12]
 :0001.15CD 8B4F12                 mov cx, [bx+12]
 :0001.15D0 8BD1                   mov dx, cx
-:0001.15D2 2AC1                   sub al , cl 
-:0001.15D4 884716                 mov [bx+16], al 
+:0001.15D2 2AC1                   sub al , cl
+:0001.15D4 884716                 mov [bx+16], al
 :0001.15D7 83FA01                 cmp dx, 0001
 :0001.15DA 7C03                   jl 15DF
 :0001.15DC E9BD00                 jmp 169C
@@ -3250,8 +3250,8 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.167E FF4F12                 dec word ptr [bx+12]
 :0001.1681 8B4F12                 mov cx, [bx+12]
 :0001.1684 8BD1                   mov dx, cx
-:0001.1686 2AC1                   sub al , cl 
-:0001.1688 884716                 mov [bx+16], al 
+:0001.1686 2AC1                   sub al , cl
+:0001.1688 884716                 mov [bx+16], al
 :0001.168B 83FA01                 cmp dx, 0001
 :0001.168E 7D03                   jge 1693
 :0001.1690 E94CFF                 jmp 15DF
@@ -3266,7 +3266,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.1699 E860ED                 call 03FC
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.15DC(U), :0001.160A(U), :0001.1617(U), :0001.1621(C), :0001.162A(C), 
+|:0001.15DC(U), :0001.160A(U), :0001.1617(U), :0001.1621(C), :0001.162A(C),
 |:0001.1633(C), :0001.163A(C), :0001.1664(U)
 |
 :0001.169C 8B1EEC10               mov bx, [10EC]
@@ -3410,10 +3410,10 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.1781 6B460C64               imul ax, [bp+0C], 0064
 :0001.1785 894712                 mov [bx+12], ax
 :0001.1788 8A460A                 mov al , [bp+0A]
-:0001.178B 884716                 mov [bx+16], al 
+:0001.178B 884716                 mov [bx+16], al
 :0001.178E 8A460C                 mov al , [bp+0C]
 :0001.1791 FEC0                   inc al
-:0001.1793 884717                 mov [bx+17], al 
+:0001.1793 884717                 mov [bx+17], al
 :0001.1796 C746FE0000             mov word ptr [bp-02], 0000
 :0001.179B 837E0C00               cmp word ptr [bp+0C], 0000
 :0001.179F 7E57                   jle 17F8
@@ -3423,7 +3423,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.17AA 051800                 add ax, 0018
 :0001.17AD 8946FA                 mov [bp-06], ax
 :0001.17B0 8A66FE                 mov ah, [bp-02]
-:0001.17B3 2AC0                   sub al , al 
+:0001.17B3 2AC0                   sub al , al
 :0001.17B5 8946F8                 mov [bp-08], ax
 :0001.17B8 6B460C64               imul ax, [bp+0C], 0064
 :0001.17BC 8946F4                 mov [bp-0C], ax
@@ -3670,7 +3670,7 @@ Exported fn(): FUNC016 - Ord:0012h
 |:0001.1959(C)
 |
 :0001.195E 8A66FE                 mov ah, [bp-02]
-:0001.1961 2AC0                   sub al , al 
+:0001.1961 2AC0                   sub al , al
 :0001.1963 8946F0                 mov [bp-10], ax
 :0001.1966 8B4710                 mov ax, [bx+10]
 :0001.1969 99                     cwd
@@ -3870,7 +3870,7 @@ Exported fn(): FUNC016 - Ord:0012h
 
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.1AA5(C), :0001.1AAD(C), :0001.1AB5(C), :0001.1ABD(C), :0001.1ACA(C), 
+|:0001.1AA5(C), :0001.1AAD(C), :0001.1AB5(C), :0001.1ABD(C), :0001.1ACA(C),
 |
 :0001.1AFC 8B46F4                 mov ax, [bp-0C]
 :0001.1AFF 3906A810               cmp [10A8], ax
@@ -3925,7 +3925,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.1B59 E81CFD                 call 1878
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.1AF5(U), :0001.1B03(C), :0001.1B0C(C), :0001.1B15(C), :0001.1B1E(C), 
+|:0001.1AF5(U), :0001.1B03(C), :0001.1B0C(C), :0001.1B15(C), :0001.1B1E(C),
 |:0001.1B25(C), :0001.1B4F(U)
 |
 :0001.1B5C 8B46FC                 mov ax, [bp-04]
@@ -3987,7 +3987,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.1BAC 3D0A00                 cmp ax, 000A
 :0001.1BAF 742B                   je 1BDC
 :0001.1BB1 7730                   ja 1BE3
-:0001.1BB3 0AC0                   or al , al 
+:0001.1BB3 0AC0                   or al , al
 :0001.1BB5 7407                   je 1BBE
 :0001.1BB7 2C05                   sub al, 05
 :0001.1BB9 7417                   je 1BD2
@@ -4134,7 +4134,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.1C74 3D0700                 cmp ax, 0007
 :0001.1C77 742B                   je 1CA4
 :0001.1C79 7730                   ja 1CAB
-:0001.1C7B 0AC0                   or al , al 
+:0001.1C7B 0AC0                   or al , al
 :0001.1C7D 7407                   je 1C86
 :0001.1C7F 2C03                   sub al, 03
 :0001.1C81 7417                   je 1C9A
@@ -4454,7 +4454,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.1EE3 FF0EE610               dec word ptr [10E6]
 :0001.1EE7 7548                   jne 1F31
 :0001.1EE9 8A4712                 mov al , [bx+12]
-:0001.1EEC 884716                 mov [bx+16], al 
+:0001.1EEC 884716                 mov [bx+16], al
 :0001.1EEF 3C03                   cmp al, 03
 :0001.1EF1 763E                   jbe 1F31
 :0001.1EF3 8B1EEC10               mov bx, [10EC]
@@ -4492,10 +4492,10 @@ Exported fn(): FUNC016 - Ord:0012h
 |:0001.1F25(U)
 |
 :0001.1F2A 8B1EEC10               mov bx, [10EC]
-:0001.1F2E 884716                 mov [bx+16], al 
+:0001.1F2E 884716                 mov [bx+16], al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.1EE7(C), :0001.1EF1(C), :0001.1EFB(U), :0001.1F09(C), :0001.1F10(C), 
+|:0001.1EE7(C), :0001.1EF1(C), :0001.1EFB(U), :0001.1F09(C), :0001.1F10(C),
 |
 :0001.1F31 833ED20000             cmp word ptr [00D2], 0000
 :0001.1F36 7E42                   jle 1F7A
@@ -4751,16 +4751,16 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.2110 8A4606                 mov al , [bp+06]
 :0001.2113 8B5E08                 mov bx, [bp+08]
 :0001.2116 FF4608                 inc word ptr [bp+08]
-:0001.2119 8807                   mov [bx], al 
+:0001.2119 8807                   mov [bx], al
 :0001.211B 8B5E08                 mov bx, [bp+08]
 :0001.211E FF4608                 inc word ptr [bp+08]
-:0001.2121 8807                   mov [bx], al 
+:0001.2121 8807                   mov [bx], al
 :0001.2123 8B5E08                 mov bx, [bp+08]
 :0001.2126 FF4608                 inc word ptr [bp+08]
-:0001.2129 8807                   mov [bx], al 
+:0001.2129 8807                   mov [bx], al
 :0001.212B 8B5E08                 mov bx, [bp+08]
 :0001.212E FF4608                 inc word ptr [bp+08]
-:0001.2131 8807                   mov [bx], al 
+:0001.2131 8807                   mov [bx], al
 :0001.2133 8B5E08                 mov bx, [bp+08]
 :0001.2136 FF4608                 inc word ptr [bp+08]
 :0001.2139 C60740                 mov byte ptr [bx], 40
@@ -4785,7 +4785,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.214A 8A4606                 mov al , [bp+06]
 :0001.214D 8B5E08                 mov bx, [bp+08]
 :0001.2150 FF4608                 inc word ptr [bp+08]
-:0001.2153 8807                   mov [bx], al 
+:0001.2153 8807                   mov [bx], al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0001.2147(U)
@@ -5000,7 +5000,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.22FA 8B5ED2                 mov bx, [bp-2E]
 :0001.22FD 8BF3                   mov si, bx
 :0001.22FF 8A42D8                 mov al , [bp+si-28]
-:0001.2302 38878010               cmp [bx+1080], al 
+:0001.2302 38878010               cmp [bx+1080], al
 :0001.2306 7436                   je 233E
 :0001.2308 FF76C8                 push word ptr [bp-38]
 :0001.230B 98                     cbw
@@ -5020,7 +5020,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.2330 6A20                   push 0020
 :0001.2332 9A86230000             call GDI.Ord{0022h}
 :0001.2337 8A42D8                 mov al , [bp+si-28]
-:0001.233A 88848010               mov [si+1080], al 
+:0001.233A 88848010               mov [si+1080], al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0001.2306(C)
@@ -5353,7 +5353,7 @@ Exported fn(): FUNC016 - Ord:0012h
 :0001.25AE 6A02                   push 0002
 :0001.25B0 E84DDA                 call 0000
 :0001.25B3 3D0100                 cmp ax, 0001
-:0001.25B6 1AC0                   sbb al , al 
+:0001.25B6 1AC0                   sbb al , al
 :0001.25B8 24F7                   and al, F7
 :0001.25BA 040A                   add al, 0A
 :0001.25BC 50                     push ax
@@ -6060,7 +6060,7 @@ Exported fn(): HYPEROIDWNDPROC - Ord:0001h
 :0001.2B64 E83DFC                 call 27A4
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.2B91(U), :0001.2B9A(U), :0001.2BD2(C), :0001.2BD9(U), :0001.2C18(U), 
+|:0001.2B91(U), :0001.2B9A(U), :0001.2BD2(C), :0001.2BD9(U), :0001.2C18(U),
 |:0001.2C24(U), :0001.2C31(U)
 |
 :0001.2B67 2BC0                   sub ax, ax
@@ -6108,7 +6108,7 @@ Exported fn(): HYPEROIDWNDPROC - Ord:0001h
 :0001.2B9E E841FA                 call 25E2
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.2AFB(U), :0001.2B14(U), :0001.2B2D(C), :0001.2B37(U), :0001.2B4A(U), 
+|:0001.2AFB(U), :0001.2B14(U), :0001.2B2D(C), :0001.2B37(U), :0001.2B4A(U),
 |:0001.2BE1(C), :0001.2BEB(C), :0001.2BF3(C), :0001.2C0F(U)
 |
 :0001.2BA1 FF760E                 push word ptr [bp+0E]
@@ -6242,7 +6242,7 @@ Exported fn(): HYPEROIDWNDPROC - Ord:0001h
 :0001.2C52 E855F8                 call 24AA
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0001.2BE9(C), :0001.2BEF(C), :0001.2BFA(C), :0001.2C01(U), :0001.2C40(U), 
+|:0001.2BE9(C), :0001.2BEF(C), :0001.2BFA(C), :0001.2C01(U), :0001.2C40(U),
 |
 :0001.2C55 2BC0                   sub ax, ax
 :0001.2C57 EB2E                   jmp 2C87
@@ -6652,7 +6652,7 @@ Exported fn(): FUNC001 - Ord:0003h
 :0002.0073 894708                 mov [bx+08], ax
 :0002.0076 89570A                 mov [bx+0A], dx
 :0002.0079 8A4608                 mov al , [bp+08]
-:0002.007C 884716                 mov [bx+16], al 
+:0002.007C 884716                 mov [bx+16], al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0002.005C(C)
@@ -6762,7 +6762,7 @@ Exported fn(): FUNC002 - Ord:0004h
 :0002.013A F7D8                   neg ax
 :0002.013C 894710                 mov [bx+10], ax
 :0002.013F 8A4608                 mov al , [bp+08]
-:0002.0142 884716                 mov [bx+16], al 
+:0002.0142 884716                 mov [bx+16], al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0002.0114(C)
@@ -7015,13 +7015,13 @@ Exported fn(): FUNC013 - Ord:000Fh
 |
 :0002.02E4 8A468A                 mov al , [bp-76]
 :0002.02E7 8B5E80                 mov bx, [bp-80]
-:0002.02EA 8807                   mov [bx], al 
+:0002.02EA 8807                   mov [bx], al
 :0002.02EC 8A468B                 mov al , [bp-75]
 :0002.02EF 8B5E80                 mov bx, [bp-80]
-:0002.02F2 884701                 mov [bx+01], al 
+:0002.02F2 884701                 mov [bx+01], al
 :0002.02F5 8A468C                 mov al , [bp-74]
 :0002.02F8 8B5E80                 mov bx, [bp-80]
-:0002.02FB 884702                 mov [bx+02], al 
+:0002.02FB 884702                 mov [bx+02], al
 :0002.02FE 8B5E80                 mov bx, [bp-80]
 :0002.0301 C6470300               mov byte ptr [bx+03], 00
 :0002.0305 83468004               add word ptr [bp-80], 0004
@@ -7946,7 +7946,7 @@ Exported fn(): FUNC005 - Ord:0007h
 :0002.084E FF36A235               push word ptr [35A2]
 :0002.0852 6A00                   push 0000
 
-* Possible Reference to Dialog: DialogID_01F4 
+* Possible Reference to Dialog: DialogID_01F4
                                   |
 :0002.0854 68F401                 push 01F4
 :0002.0857 FF7606                 push word ptr [bp+06]
@@ -8363,7 +8363,7 @@ Exported fn(): FUNC018 - Ord:0014h
 :0003.0260 AC                     lodsb
 :0003.0261 2C41                   sub al, 41
 :0003.0263 720D                   jb 0272
-:0003.0265 D2E0                   shl al, cl 
+:0003.0265 D2E0                   shl al, cl
 :0003.0267 92                     xchg ax,dx
 :0003.0268 AC                     lodsb
 :0003.0269 2C41                   sub al, 41
@@ -8451,7 +8451,7 @@ Exported fn(): FUNC023 - Ord:0019h
 |:0003.029B(U), :0003.02AA(U), :0003.02BB(U)
 |
 :0003.02CC 51                     push cx
-:0003.02CD 0AC9                   or cl , cl 
+:0003.02CD 0AC9                   or cl , cl
 :0003.02CF 751E                   jne 02EF
 :0003.02D1 BEDA10                 mov si, 10DA
 :0003.02D4 BFDA10                 mov di, 10DA
@@ -8597,7 +8597,7 @@ Exported fn(): FUNC019 - Ord:0015h
 :0003.03AC 74F7                   je 03A5
 :0003.03AE 3C0D                   cmp al, 0D
 :0003.03B0 746F                   je 0421
-:0003.03B2 0AC0                   or al , al 
+:0003.03B2 0AC0                   or al , al
 :0003.03B4 746B                   je 0421
 :0003.03B6 47                     inc di
 
@@ -8616,7 +8616,7 @@ Exported fn(): FUNC019 - Ord:0015h
 :0003.03BF 74E4                   je 03A5
 :0003.03C1 3C0D                   cmp al, 0D
 :0003.03C3 745C                   je 0421
-:0003.03C5 0AC0                   or al , al 
+:0003.03C5 0AC0                   or al , al
 :0003.03C7 7458                   je 0421
 :0003.03C9 3C22                   cmp al, 22
 :0003.03CB 7424                   je 03F1
@@ -8669,7 +8669,7 @@ Exported fn(): FUNC019 - Ord:0015h
 :0003.03F1 AC                     lodsb
 :0003.03F2 3C0D                   cmp al, 0D
 :0003.03F4 742B                   je 0421
-:0003.03F6 0AC0                   or al , al 
+:0003.03F6 0AC0                   or al , al
 :0003.03F8 7427                   je 0421
 :0003.03FA 3C22                   cmp al, 22
 :0003.03FC 74BA                   je 03B8
@@ -8712,7 +8712,7 @@ Exported fn(): FUNC019 - Ord:0015h
 
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0003.03B0(C), :0003.03B4(C), :0003.03C3(C), :0003.03C7(C), :0003.03F4(C), 
+|:0003.03B0(C), :0003.03B4(C), :0003.03C3(C), :0003.03C7(C), :0003.03F4(C),
 |:0003.03F8(C)
 |
 :0003.0421 16                     push ss
@@ -8741,7 +8741,7 @@ Exported fn(): FUNC019 - Ord:0015h
 |
 :0003.0448 AC                     lodsb
 :0003.0449 AA                     stosb
-:0003.044A 0AC0                   or al , al 
+:0003.044A 0AC0                   or al , al
 :0003.044C 75FA                   jne 0448
 :0003.044E 368E1EC80C             mov ds, ss:[0CC8]
 :0003.0453 BE8100                 mov si, 0081
@@ -8765,7 +8765,7 @@ Exported fn(): FUNC019 - Ord:0015h
 :0003.0462 74F7                   je 045B
 :0003.0464 3C0D                   cmp al, 0D
 :0003.0466 747C                   je 04E4
-:0003.0468 0AC0                   or al , al 
+:0003.0468 0AC0                   or al , al
 :0003.046A 7478                   je 04E4
 :0003.046C 36893F                 mov ss:[bx], di
 :0003.046F 43                     inc bx
@@ -8786,7 +8786,7 @@ Exported fn(): FUNC019 - Ord:0015h
 :0003.0479 74DD                   je 0458
 :0003.047B 3C0D                   cmp al, 0D
 :0003.047D 7462                   je 04E1
-:0003.047F 0AC0                   or al , al 
+:0003.047F 0AC0                   or al , al
 :0003.0481 745E                   je 04E1
 :0003.0483 3C22                   cmp al, 22
 :0003.0485 7427                   je 04AE
@@ -8843,7 +8843,7 @@ Exported fn(): FUNC019 - Ord:0015h
 :0003.04AE AC                     lodsb
 :0003.04AF 3C0D                   cmp al, 0D
 :0003.04B1 742E                   je 04E1
-:0003.04B3 0AC0                   or al , al 
+:0003.04B3 0AC0                   or al , al
 :0003.04B5 742A                   je 04E1
 :0003.04B7 3C22                   cmp al, 22
 :0003.04B9 74B7                   je 0472
@@ -8988,7 +8988,7 @@ Exported fn(): FUNC020 - Ord:0016h
 |
 :0003.0564 AC                     lodsb
 :0003.0565 AA                     stosb
-:0003.0566 0AC0                   or al , al 
+:0003.0566 0AC0                   or al , al
 :0003.0568 75FA                   jne 0564
 :0003.056A E2DA                   loop 0546
 :0003.056C 26890F                 mov es:[bx], cx
@@ -9083,7 +9083,7 @@ Exported fn(): FUNC020 - Ord:0016h
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.05E4(C)
 |
-:0003.05CE 32C9                   xor cl , cl 
+:0003.05CE 32C9                   xor cl , cl
 :0003.05D0 9B                     wait
 :0003.05D1 D9E1                   fabs
 :0003.05D3 EB11                   jmp 05E6
@@ -9100,7 +9100,7 @@ Exported fn(): FUNC020 - Ord:0016h
 
 :0003.05DB 833EBC0E03             cmp word ptr [0EBC], 0003
 :0003.05E0 73F3                   jnb 05D5
-:0003.05E2 0AC9                   or cl , cl 
+:0003.05E2 0AC9                   or cl , cl
 :0003.05E4 75E8                   jne 05CE
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -9144,7 +9144,7 @@ Exported fn(): FUNC020 - Ord:0016h
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
 |:0003.061E(U), :0003.0626(U)
 |
-:0003.0610 0AC9                   or cl , cl 
+:0003.0610 0AC9                   or cl , cl
 :0003.0612 7403                   je 0617
 :0003.0614 9B                     wait
 :0003.0615 D9E0                   fchs
@@ -9205,7 +9205,7 @@ Exported fn(): FUNC020 - Ord:0016h
 * Referenced by a CALL at Address:
 |:0003.05FB
 |
-:0003.064E 0AC9                   or cl , cl 
+:0003.064E 0AC9                   or cl , cl
 :0003.0650 75F3                   jne 0645
 
 * Referenced by a CALL at Address:
@@ -9380,7 +9380,7 @@ Exported fn(): FUNC028 - Ord:001Eh
 |
 :0003.0723 8B5E06                 mov bx, [bp+06]
 :0003.0726 8A07                   mov al , [bx]
-:0003.0728 8846FC                 mov [bp-04], al 
+:0003.0728 8846FC                 mov [bp-04], al
 :0003.072B C6072E                 mov byte ptr [bx], 2E
 :0003.072E FF4606                 inc word ptr [bp+06]
 
@@ -9389,11 +9389,11 @@ Exported fn(): FUNC028 - Ord:001Eh
 |
 :0003.0731 8B5E06                 mov bx, [bp+06]
 :0003.0734 8A07                   mov al , [bx]
-:0003.0736 8846FA                 mov [bp-06], al 
+:0003.0736 8846FA                 mov [bp-06], al
 :0003.0739 8A46FC                 mov al , [bp-04]
-:0003.073C 8807                   mov [bx], al 
+:0003.073C 8807                   mov [bx], al
 :0003.073E 8A46FA                 mov al , [bp-06]
-:0003.0741 8846FC                 mov [bp-04], al 
+:0003.0741 8846FC                 mov [bp-04], al
 :0003.0744 8B5E06                 mov bx, [bp+06]
 :0003.0747 FF4606                 inc word ptr [bp+06]
 :0003.074A 803F00                 cmp byte ptr [bx], 00
@@ -9498,8 +9498,8 @@ Exported fn(): FUNC026 - Ord:001Ch
 :0003.07BB 8A07                   mov al , [bx]
 :0003.07BD FF4606                 inc word ptr [bp+06]
 :0003.07C0 8B5E06                 mov bx, [bp+06]
-:0003.07C3 8807                   mov [bx], al 
-:0003.07C5 0AC0                   or al , al 
+:0003.07C3 8807                   mov [bx], al
+:0003.07C5 0AC0                   or al , al
 :0003.07C7 75EC                   jne 07B5
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -9766,7 +9766,7 @@ Exported fn(): FUNC027 - Ord:001Dh
 :0003.0908 837E0A00               cmp word ptr [bp+0A], 0000
 :0003.090C 7E0D                   jle 091B
 :0003.090E 8A4401                 mov al , [si+01]
-:0003.0911 8804                   mov [si], al 
+:0003.0911 8804                   mov [si], al
 :0003.0913 8D4401                 lea ax, [si+01]
 :0003.0916 8BF0                   mov si, ax
 :0003.0918 C6042E                 mov byte ptr [si], 2E
@@ -9822,7 +9822,7 @@ Exported fn(): FUNC027 - Ord:001Dh
 :0003.0967 B96400                 mov cx, 0064
 :0003.096A 99                     cwd
 :0003.096B F7F9                   idiv cx
-:0003.096D 0004                   add [si], al 
+:0003.096D 0004                   add [si], al
 :0003.096F 8BC7                   mov ax, di
 :0003.0971 99                     cwd
 :0003.0972 F7F9                   idiv cx
@@ -9838,7 +9838,7 @@ Exported fn(): FUNC027 - Ord:001Dh
 :0003.097E B90A00                 mov cx, 000A
 :0003.0981 99                     cwd
 :0003.0982 F7F9                   idiv cx
-:0003.0984 0004                   add [si], al 
+:0003.0984 0004                   add [si], al
 :0003.0986 8BC7                   mov ax, di
 :0003.0988 99                     cwd
 :0003.0989 F7F9                   idiv cx
@@ -9849,7 +9849,7 @@ Exported fn(): FUNC027 - Ord:001Dh
 |
 :0003.098D 8BC7                   mov ax, di
 :0003.098F 46                     inc si
-:0003.0990 0004                   add [si], al 
+:0003.0990 0004                   add [si], al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.094B(C)
@@ -10166,7 +10166,7 @@ Exported fn(): FUNC027 - Ord:001Dh
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.0B58(C)
 |
-:0003.0B5E 2AC0                   sub al , al 
+:0003.0B5E 2AC0                   sub al , al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.0B5C(U)
@@ -10434,7 +10434,7 @@ Exported fn(): FUNC025 - Ord:001Bh
 |:0003.0C58(U), :0003.0C88(U)
 |
 :0003.0CCB 8A46EF                 mov al , [bp-11]
-:0003.0CCE 0AC0                   or al , al 
+:0003.0CCE 0AC0                   or al , al
 :0003.0CD0 7F39                   jg 0D0B
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -10739,7 +10739,7 @@ Exported fn(): FUNC024 - Ord:001Ah
 :0003.0E98 8A07                   mov al , [bx]
 :0003.0E9A 8B5EFC                 mov bx, [bp-04]
 :0003.0E9D FF46FC                 inc word ptr [bp-04]
-:0003.0EA0 8807                   mov [bx], al 
+:0003.0EA0 8807                   mov [bx], al
 :0003.0EA2 EB11                   jmp 0EB5
 
 
@@ -10780,7 +10780,7 @@ Exported fn(): FUNC024 - Ord:001Ah
 :0003.0EDA 8A07                   mov al , [bx]
 :0003.0EDC 8B5EFC                 mov bx, [bp-04]
 :0003.0EDF FF46FC                 inc word ptr [bp-04]
-:0003.0EE2 8807                   mov [bx], al 
+:0003.0EE2 8807                   mov [bx], al
 :0003.0EE4 FF4EFA                 dec word ptr [bp-06]
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -10862,7 +10862,7 @@ Exported fn(): FUNC024 - Ord:001Ah
 :0003.0F4A 0430                   add al, 30
 :0003.0F4C 8B5EFC                 mov bx, [bp-04]
 :0003.0F4F FF46FC                 inc word ptr [bp-04]
-:0003.0F52 8807                   mov [bx], al 
+:0003.0F52 8807                   mov [bx], al
 :0003.0F54 8B46F6                 mov ax, [bp-0A]
 :0003.0F57 99                     cwd
 :0003.0F58 F7F9                   idiv cx
@@ -10881,7 +10881,7 @@ Exported fn(): FUNC024 - Ord:001Ah
 :0003.0F66 0430                   add al, 30
 :0003.0F68 8B5EFC                 mov bx, [bp-04]
 :0003.0F6B FF46FC                 inc word ptr [bp-04]
-:0003.0F6E 8807                   mov [bx], al 
+:0003.0F6E 8807                   mov [bx], al
 :0003.0F70 8B46F6                 mov ax, [bp-0A]
 :0003.0F73 99                     cwd
 :0003.0F74 F7F9                   idiv cx
@@ -10893,7 +10893,7 @@ Exported fn(): FUNC024 - Ord:001Ah
 :0003.0F81 0430                   add al, 30
 :0003.0F83 8B5EFC                 mov bx, [bp-04]
 :0003.0F86 FF46FC                 inc word ptr [bp-04]
-:0003.0F89 8807                   mov [bx], al 
+:0003.0F89 8807                   mov [bx], al
 :0003.0F8B 8B46F6                 mov ax, [bp-0A]
 :0003.0F8E 99                     cwd
 :0003.0F8F F7F9                   idiv cx
@@ -11008,7 +11008,7 @@ Exported fn(): FUNC024 - Ord:001Ah
 :0003.103F 8946FA                 mov [bp-06], ax
 :0003.1042 2946F6                 sub [bp-0A], ax
 :0003.1045 8A46FA                 mov al , [bp-06]
-:0003.1048 284703                 sub [bx+03], al 
+:0003.1048 284703                 sub [bx+03], al
 :0003.104B EB11                   jmp 105E
 
 
@@ -11022,7 +11022,7 @@ Exported fn(): FUNC024 - Ord:001Ah
 :0003.1054 8A07                   mov al , [bx]
 :0003.1056 8B5EFC                 mov bx, [bp-04]
 :0003.1059 FF46FC                 inc word ptr [bp-04]
-:0003.105C 8807                   mov [bx], al 
+:0003.105C 8807                   mov [bx], al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.104B(U)
@@ -11102,7 +11102,7 @@ Exported fn(): FUNC024 - Ord:001Ah
 :0003.10CC 8A07                   mov al , [bx]
 :0003.10CE 8B5EFC                 mov bx, [bp-04]
 :0003.10D1 FF46FC                 inc word ptr [bp-04]
-:0003.10D4 8807                   mov [bx], al 
+:0003.10D4 8807                   mov [bx], al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.10C3(U)
@@ -11604,7 +11604,7 @@ Exported fn(): FUNC033 - Ord:0023h
 :0003.1350 803D00                 cmp byte ptr [di], 00
 :0003.1353 7407                   je 135C
 :0003.1355 8A05                   mov al , [di]
-:0003.1357 8804                   mov [si], al 
+:0003.1357 8804                   mov [si], al
 :0003.1359 47                     inc di
 :0003.135A EB03                   jmp 135F
 
@@ -11755,7 +11755,7 @@ Exported fn(): FUNC035 - Ord:0025h
 :0003.1400 8B4E0A                 mov cx, [bp+0A]
 :0003.1403 E315                   jcxz 141A
 :0003.1405 8A4608                 mov al , [bp+08]
-:0003.1408 8AE0                   mov ah, al 
+:0003.1408 8AE0                   mov ah, al
 :0003.140A F7C70100               test di, 0001
 :0003.140E 7402                   je 1412
 :0003.1410 AA                     stosb
@@ -11826,7 +11826,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 :0003.1465 D0E1                   shl cl, 01
 :0003.1467 D0F9                   sar cl, 01
 :0003.1469 D0C1                   rol cl, 01
-:0003.146B 8AC1                   mov al , cl 
+:0003.146B 8AC1                   mov al , cl
 :0003.146D 240F                   and al, 0F
 :0003.146F D7                     xlat
 :0003.1470 98                     cbw
@@ -11870,11 +11870,11 @@ Exported fn(): FUNC042 - Ord:002Ch
 :0003.14BB 8AC5                   mov al , ch
 :0003.14BD 240F                   and al, 0F
 :0003.14BF D7                     xlat
-:0003.14C0 8AE0                   mov ah, al 
+:0003.14C0 8AE0                   mov ah, al
 :0003.14C2 D0E1                   shl cl, 01
 :0003.14C4 D0F9                   sar cl, 01
 :0003.14C6 D0C1                   rol cl, 01
-:0003.14C8 8AC1                   mov al , cl 
+:0003.14C8 8AC1                   mov al , cl
 :0003.14CA 240F                   and al, 0F
 :0003.14CC D7                     xlat
 :0003.14CD D0E4                   shl ah, 01
@@ -11970,7 +11970,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
 |:0003.150F(C), :0003.1521(C), :0003.152E(C)
 |
-:0003.1527 0AC9                   or cl , cl 
+:0003.1527 0AC9                   or cl , cl
 :0003.1529 C3                     ret
 
 
@@ -11984,7 +11984,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 :0003.1531 EBE2                   jmp 1515
 
 
-:0003.1533 0AC9                   or cl , cl 
+:0003.1533 0AC9                   or cl , cl
 :0003.1535 7403                   je 153A
 :0003.1537 9B                     wait
 :0003.1538 D9E0                   fchs
@@ -12068,9 +12068,9 @@ Exported fn(): FUNC042 - Ord:002Ch
 :0003.1591 F7D8                   neg ax
 :0003.1593 053F00                 add ax, 003F
 :0003.1596 B501                   mov ch, 01
-:0003.1598 8AC8                   mov cl , al 
+:0003.1598 8AC8                   mov cl , al
 :0003.159A 80E107                 and cl, 07
-:0003.159D D2E5                   shl ch, cl 
+:0003.159D D2E5                   shl ch, cl
 :0003.159F 8ACD                   mov cl , ch
 :0003.15A1 49                     dec cx
 :0003.15A2 D1E8                   shr ax, 01
@@ -12078,8 +12078,8 @@ Exported fn(): FUNC042 - Ord:002Ch
 :0003.15A6 D1E8                   shr ax, 01
 :0003.15A8 8BD8                   mov bx, ax
 :0003.15AA 8A87200E               mov al , [bx+0E20]
-:0003.15AE 22E8                   and ch, al 
-:0003.15B0 22C8                   and cl , al 
+:0003.15AE 22E8                   and ch, al
+:0003.15B0 22C8                   and cl , al
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.15BB(U)
@@ -12095,7 +12095,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.15B4(C)
 |
-:0003.15BD 0AC9                   or cl , cl 
+:0003.15BD 0AC9                   or cl , cl
 :0003.15BF 751A                   jne 15DB
 :0003.15C1 9B                     wait
 :0003.15C2 D9C9                   fxch st(0), st(1)
@@ -12114,7 +12114,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 :0003.15D9 D9C0                   fld st(0), st(0)
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0003.158A(C), :0003.158F(C), :0003.15BF(C), :0003.15CF(C), :0003.15E3(C), 
+|:0003.158A(C), :0003.158F(C), :0003.15BF(C), :0003.15CF(C), :0003.15E3(C),
 |:0003.1608(C), :0003.161B(C)
 |
 :0003.15DB E934FF                 jmp 1512
@@ -12164,7 +12164,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 |
 :0003.1616 9B                     wait
 :0003.1617 D9C9                   fxch st(0), st(1)
-:0003.1619 0AC9                   or cl , cl 
+:0003.1619 0AC9                   or cl , cl
 :0003.161B 75BE                   jne 15DB
 
 * Referenced by a CALL at Address:
@@ -12179,7 +12179,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 
 
 :0003.1624 E8E4FE                 call 150B
-:0003.1627 0AC9                   or cl , cl 
+:0003.1627 0AC9                   or cl , cl
 :0003.1629 75B3                   jne 15DE
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -12492,7 +12492,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 :0003.17F5 8B560C                 mov dx, [bp+0C]
 :0003.17F8 8B760A                 mov si, [bp+0A]
 :0003.17FB 8B7E08                 mov di, [bp+08]
-:0003.17FE 0AC0                   or al , al 
+:0003.17FE 0AC0                   or al , al
 :0003.1800 7410                   je 1812
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -12520,7 +12520,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
 |:0003.187E(C)
 |
-:0003.1820 32C0                   xor al , al 
+:0003.1820 32C0                   xor al , al
 :0003.1822 895E12                 mov [bp+12], bx
 :0003.1825 894E10                 mov [bp+10], cx
 :0003.1828 89560E                 mov [bp+0E], dx
@@ -12595,7 +12595,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 :0003.18AC 2BF9                   sub di, cx
 :0003.18AE 8BDF                   mov bx, di
 :0003.18B0 43                     inc bx
-:0003.18B1 36885C03               mov ss:[si+03], bl 
+:0003.18B1 36885C03               mov ss:[si+03], bl
 :0003.18B5 EB15                   jmp 18CC
 
 
@@ -12619,7 +12619,7 @@ Exported fn(): FUNC042 - Ord:002Ch
 |:0003.18C2(C)
 |
 :0003.18C7 41                     inc cx
-:0003.18C8 36884C03               mov ss:[si+03], cl 
+:0003.18C8 36884C03               mov ss:[si+03], cl
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
 |:0003.176D(U), :0003.18B5(U)
@@ -13134,7 +13134,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1BA0 33FF                   xor di, di
 :0003.1BA2 BEF50E                 mov si, 0EF5
 :0003.1BA5 AC                     lodsb
-:0003.1BA6 8AF8                   mov bh, al 
+:0003.1BA6 8AF8                   mov bh, al
 :0003.1BA8 AD                     lodsw
 :0003.1BA9 8BC8                   mov cx, ax
 :0003.1BAB BA104D                 mov dx, 4D10
@@ -13210,7 +13210,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1C2B 13D9                   adc bx, cx
 :0003.1C2D BFFB0E                 mov di, 0EFB
 :0003.1C30 B91000                 mov cx, 0010
-:0003.1C33 32C0                   xor al , al 
+:0003.1C33 32C0                   xor al , al
 :0003.1C35 51                     push cx
 :0003.1C36 53                     push bx
 :0003.1C37 52                     push dx
@@ -13259,7 +13259,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1C7D FC                     cld
 :0003.1C7E 83C112                 add cx, 0012
 :0003.1C81 BEFA0E                 mov si, 0EFA
-:0003.1C84 880C                   mov [si], cl 
+:0003.1C84 880C                   mov [si], cl
 :0003.1C86 B80100                 mov ax, 0001
 :0003.1C89 5A                     pop dx
 :0003.1C8A 5B                     pop bx
@@ -13279,7 +13279,7 @@ Exported fn(): FUNC048 - Ord:0032h
 
 
 :0003.1CAF FA                     cli
-:0003.1CB0 084000                 or [bx+si+00], al 
+:0003.1CB0 084000                 or [bx+si+00], al
 :0003.1CB3 00000000000000         BYTE  7 DUP(0)
 
 
@@ -13320,7 +13320,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1CFD A1EDCC                 mov ax, word ptr [CCED]
 :0003.1D00 CE                     into
 :0003.1D01 1BC2                   sbb ax, dx
-:0003.1D03 D34E40                 ror word ptr [bp+40], cl 
+:0003.1D03 D34E40                 ror word ptr [bp+40], cl
 :0003.1D06 20F0                   and al , dh
 :0003.1D08 9E                     sahf
 :0003.1D09 B570                   mov ch, 70
@@ -13361,7 +13361,7 @@ Exported fn(): FUNC048 - Ord:0032h
 
 :0003.1D3B FF491F                 dec word ptr [bx+di+1F]
 :0003.1D3E 78C2                   js 1D02
-:0003.1D40 D3406F                 rol word ptr [bx+si+6F], cl 
+:0003.1D40 D3406F                 rol word ptr [bx+si+6F], cl
 :0003.1D43 C6E08C                 mov al, 80
 :0003.1D46 E980C9                 jmp E6C9
 
@@ -13389,7 +13389,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1D69 E3CC                   jcxz 1D37
 :0003.1D6B F2                     repnz
 :0003.1D6C 292F                   sub [bx], bp
-:0003.1D6E 84812644               test [bx+di+4426], al 
+:0003.1D6E 84812644               test [bx+di+4426], al
 :0003.1D72 2810                   sub [bx+si], dl
 :0003.1D74 17                     pop ss
 :0003.1D75 AA                     stosb
@@ -13461,7 +13461,7 @@ Exported fn(): FUNC048 - Ord:0032h
 |:0003.1D61(U)
 |
 :0003.1DE1 97                     xchg ax,di
-:0003.1DE2 208A0252               and [bp+si+5202], cl 
+:0003.1DE2 208A0252               and [bp+si+5202], cl
 :0003.1DE6 60                     pusha
 :0003.1DE7 C425                   les sp, [di]
 :0003.1DE9 75CD                   jne 1DB8
@@ -13488,7 +13488,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1E0E C3                     ret
 
 
-:0003.1E0F D32C                   shr word ptr [si], cl 
+:0003.1E0F D32C                   shr word ptr [si], cl
 :0003.1E11 6519E2                 sbb dx, sp
 :0003.1E14 58                     pop ax
 :0003.1E15 17                     pop ss
@@ -13603,7 +13603,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1ECA 00FD                   add ch, bh
 :0003.1ECC D7                     xlat
 :0003.1ECD 3BDC                   cmp bx, sp
-:0003.1ECF 885808                 mov [bx+si+08], bl 
+:0003.1ECF 885808                 mov [bx+si+08], bl
 :0003.1ED2 1BB1E8E3               sbb si, [bx+di+E3E8]
 :0003.1ED6 86A6033B               xchg [bp+3B03], ah
 :0003.1EDA C684454207             mov byte ptr [si+4245], 07
@@ -13611,7 +13611,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1EE1 7537                   jne 1F1A
 :0003.1EE3 DB2E3A33               fld tbyte ptr [333A]
 :0003.1EE7 711C                   jno 1F05
-:0003.1EE9 D223                   shl byte ptr [bp+di], cl 
+:0003.1EE9 D223                   shl byte ptr [bp+di], cl
 :0003.1EEB DB                     BYTE 0dbh
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -13736,7 +13736,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.1FA1 53                     push bx
 :0003.1FA2 D0E0                   shl al, 01
 :0003.1FA4 D0E0                   shl al, 01
-:0003.1FA6 8AE0                   mov ah, al 
+:0003.1FA6 8AE0                   mov ah, al
 :0003.1FA8 D0E0                   shl al, 01
 :0003.1FAA 02C4                   add al , ah
 :0003.1FAC 32E4                   xor ah, ah
@@ -14070,7 +14070,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.21D5 74F3                   je 21CA
 :0003.21D7 3C0D                   cmp al, 0D
 :0003.21D9 74EF                   je 21CA
-:0003.21DB 0AC0                   or al , al 
+:0003.21DB 0AC0                   or al , al
 :0003.21DD 7503                   jne 21E2
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
@@ -14124,7 +14124,7 @@ Exported fn(): FUNC048 - Ord:0032h
 |
 :0003.2208 3C30                   cmp al, 30
 :0003.220A 74FB                   je 2207
-:0003.220C 0AC0                   or al , al 
+:0003.220C 0AC0                   or al , al
 :0003.220E 7507                   jne 2217
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -14154,7 +14154,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.221F 3C30                   cmp al, 30
 :0003.2221 74F8                   je 221B
 :0003.2223 FF46EA                 inc word ptr [bp-16]
-:0003.2226 0AC0                   or al , al 
+:0003.2226 0AC0                   or al , al
 :0003.2228 74E6                   je 2210
 :0003.222A EB2B                   jmp 2257
 
@@ -14231,7 +14231,7 @@ Exported fn(): FUNC048 - Ord:0032h
 :0003.2271 76F7                   jbe 226A
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
-|:0003.2250(U), :0003.2254(C), :0003.2259(C), :0003.225D(C), :0003.226D(C), 
+|:0003.2250(U), :0003.2254(C), :0003.2259(C), :0003.225D(C), :0003.226D(C),
 |
 :0003.2273 F75EE6                 neg word ptr [bp-1A]
 :0003.2276 8346E619               add word ptr [bp-1A], 0019
@@ -14587,7 +14587,7 @@ Exported fn(): FUNC045 - Ord:002Fh
 
 
 :0003.2483 FA                     cli
-:0003.2484 084000                 or [bx+si+00], al 
+:0003.2484 084000                 or [bx+si+00], al
 :0003.2487 0000000000             BYTE  5 DUP(0)
 
 
@@ -14629,7 +14629,7 @@ Exported fn(): FUNC045 - Ord:002Fh
 :0003.24C2 00A1EDCC               add [bx+di+CCED], ah
 :0003.24C6 CE                     into
 :0003.24C7 1BC2                   sbb ax, dx
-:0003.24C9 D34E40                 ror word ptr [bp+40], cl 
+:0003.24C9 D34E40                 ror word ptr [bp+40], cl
 :0003.24CC 9E                     sahf
 :0003.24CD B570                   mov ch, 70
 :0003.24CF 2BA8ADC5               sub bp, [bx+si+C5AD]
@@ -14656,7 +14656,7 @@ Exported fn(): FUNC045 - Ord:002Fh
 
 :0003.24F7 FF491F                 dec word ptr [bx+di+1F]
 :0003.24FA 78C2                   js 24BE
-:0003.24FC D340E0                 rol word ptr [bx+si-20], cl 
+:0003.24FC D340E0                 rol word ptr [bx+si-20], cl
 :0003.24FF 8CE9                   mov cx, gs
 
 * Referenced by a (U)nconditional or (C)onditional Jump at Address:
@@ -14683,7 +14683,7 @@ Exported fn(): FUNC045 - Ord:002Fh
 :0003.251E CC                     int 03
 :0003.251F F2                     repnz
 :0003.2520 292F                   sub [bx], bp
-:0003.2522 84812644               test [bx+di+4426], al 
+:0003.2522 84812644               test [bx+di+4426], al
 :0003.2526 CDCC                   int CC
 :0003.2528 CC                     int 03
 :0003.2529 CC                     int 03
@@ -14831,7 +14831,7 @@ Exported fn(): FUNC045 - Ord:002Fh
 |
 :0003.2608 53                     push bx
 :0003.2609 D0E0                   shl al, 01
-:0003.260B 8AE0                   mov ah, al 
+:0003.260B 8AE0                   mov ah, al
 :0003.260D D0E0                   shl al, 01
 :0003.260F D0E0                   shl al, 01
 :0003.2611 02C4                   add al , ah
@@ -15028,205 +15028,3 @@ Exported fn(): FUNC045 - Ord:002Fh
 :0003.273E 8BE5                   mov sp, bp
 :0003.2740 5D                     pop bp
 :0003.2741 C20E00                 ret 000E
-
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 

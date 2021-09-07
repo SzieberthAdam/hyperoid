@@ -1,0 +1,2972 @@
+ 
+
+                                                                       PAGE   1
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+      1 //
+      2 // HYPEROID - a neato game
+      3 //
+      4 // Version: 1.1  Copyright (C) 1990,91 Hutchins Software
+      5 //      This software is licenced under the GNU General Public Licence
+      6 //      Please read the associated legal documentation
+      7 // Author: Edward Hutchins
+      8 // Internet: eah1@cec1.wustl.edu
+      9 // USNail: c/o Edward Hutchins, 63 Ridgemoor Dr., Clayton, MO, 63105
+     10 // Revisions:
+     11 // 10/31/91 made game better/harder - Ed.
+     12 //
+     13 // Music: R.E.M./The Cure/Ministry/Front 242/The Smiths/New Order/Hendr
+         ix...
+     14 // Beers: Bass Ale, Augsberger Dark
+     15 //
+     16 
+     17 #include "hyperoid.h"
+     18 
+     19 //
+     20 // imports
+     21 //
+     22 
+     23 IMPORT POINT        LetterPart[] FROM( roidsupp.c );
+     24 IMPORT NPSTR        szNumberDesc[] FROM( roidsupp.c );
+     25 IMPORT NPSTR        szLetterDesc[] FROM( roidsupp.c );
+     26 
+     27 //
+     28 // globals
+     29 //
+     30 
+     31 GLOBAL CHAR         szAppName[32];
+     32 GLOBAL HANDLE       hAppInst;
+     33 GLOBAL HWND         hAppWnd;
+     34 GLOBAL HPALETTE     hAppPalette;
+     35 GLOBAL INT          nDrawDelay;
+     36 GLOBAL INT          nLevel;
+     37 GLOBAL INT          nSafe;
+     38 GLOBAL INT          nShield;
+     39 GLOBAL INT          nBomb;
+     40 GLOBAL INT          nBadGuys;
+     41 GLOBAL LONG         lScore;
+     42 GLOBAL LONG         lLastLife;
+     43 GLOBAL LONG         lHighScore;
+     44 GLOBAL BOOL         bRestart;
+     45 GLOBAL BOOL         bPaused;
+     46 GLOBAL BOOL         bBW;
+     47 GLOBAL INT          vkShld;
+     48 GLOBAL INT          vkClkw;
+     49 GLOBAL INT          vkCtrClkw;
+     50 GLOBAL INT          vkThrst;
+     51 GLOBAL INT          vkRvThrst;
+     52 GLOBAL INT          vkFire;
+     53 GLOBAL INT          vkBomb;
+     54 GLOBAL NPOBJ        npPlayer;
+     55 GLOBAL LIST         FreeList;
+ 
+
+                                                                       PAGE   2
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+     56 GLOBAL LIST         RoidList;
+     57 GLOBAL LIST         ShotList;
+     58 GLOBAL LIST         FlameList;
+     59 GLOBAL LIST         SpinnerList;
+     60 GLOBAL LIST         HunterList;
+     61 GLOBAL LIST         HunterShotList;
+     62 GLOBAL LIST         SwarmerList;
+     63 GLOBAL LIST         LetterList;
+     64 GLOBAL LIST         BonusList;
+     65 GLOBAL INT          nCos[DEGREE_SIZE];
+     66 GLOBAL INT          nSin[DEGREE_SIZE];
+     67 GLOBAL HPEN         hPen[PALETTE_SIZE];
+     68 GLOBAL OBJ          Obj[MAX_OBJS];
+     69 GLOBAL HBITMAP      hBitmap[IDB_MAX];
+     70 
+     71 //
+     72 // locals
+     73 //
+     74 
+     75 LOCAL DWORD         dwSeed;
+     76 LOCAL INT           nScoreLen;
+     77 LOCAL CHAR          szScore[40];
+     78 LOCAL RECT          rectScoreClip;
+     79 LOCAL RECT          rectShotClip;
+     80 LOCAL POINT         Player[] =
+     81 { {0, 0}, {160, 150}, {0, 250}, {96, 150}, {0, 0} };
+     82 LOCAL POINT         Spinner[] =
+     83 { {160, 150}, {224, 100}, {96, 100}, {32, 150}, {160, 150} };
+     84 LOCAL POINT         Swarmer[] =
+     85 { {0, 100}, {64, 100}, {128, 100}, {192, 100}, {0, 100} };
+     86 LOCAL POINT         Hunter[] =
+     87 {
+     88 	{160, 150}, {0, 250}, {192, 30}, {64, 30},
+     89 	{0, 250}, {96, 150}, {128, 150}, {160, 150}
+     90 };
+     91 LOCAL POINT         Bonus[] =
+     92 { {0, 150}, {102, 150}, {205, 150}, {51, 150}, {154, 150}, {0, 150} };
+     93 
+     94 //
+     95 // KillBadGuy - kill off a badguy (made into a macro)
+     96 //
+     97 
+     98 #define KillBadGuy() \
+     99 ((--nBadGuys <= 0)?(SetRestart( RESTART_NEXTLEVEL ),TRUE):FALSE)
+    100 
+    101 //
+    102 // arand - pseudorandom number from 0 to x-1 (thanks antman!)
+    103 //
+    104 
+    105 INT NEAR PASCAL arand( INT x )
+    106 {
+    107 	dwSeed = dwSeed * 0x343fd + 0x269ec3;
+    108 	return( (INT)(((dwSeed >> 16) & 0x7fff) * x >> 15) );
+    109 }
+
+ 
+
+                                                                       PAGE   3
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+arand  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+x . . . . . . . . . . . . param                             0004
+
+    110 
+    111 //
+    112 // AddHead - add an object to the head of a list
+    113 //
+    114 
+    115 VOID NEAR PASCAL AddHead( NPLIST npList, NPNODE npNode )
+    116 {
+    117 	if (npList->npHead)
+    118 	{
+    119 		npNode->npNext = npList->npHead;
+    120 		npNode->npPrev = NULL;
+    121 		npList->npHead = (npList->npHead->npPrev = npNode);
+    122 	}
+    123 	else // add to an empty list
+    124 	{
+    125 		npList->npHead = npList->npTail = npNode;
+    126 		npNode->npNext = npNode->npPrev = NULL;
+    127 	}
+    128 }
+
+
+AddHead  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npNode. . . . . . . . . . param                             0004
+npList. . . . . . . . . . param                             0006
+
+    129 
+    130 //
+    131 // RemHead - remove the first element in a list
+    132 //
+    133 
+    134 NPNODE NEAR PASCAL RemHead( NPLIST npList )
+    135 {
+    136 	if (npList->npHead)
+    137 	{
+    138 		NPNODE npNode = npList->npHead;
+    139 		if (npList->npTail != npNode)
+    140 		{
+    141 			npList->npHead = npNode->npNext;
+    142 			npNode->npNext->npPrev = NULL;
+    143 		}
+    144 		else npList->npHead = npList->npTail = NULL;
+    145 		return( npNode );
+    146 	}
+    147 	else return( NULL );
+    148 }
+
+ 
+
+                                                                       PAGE   4
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+RemHead  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npNode. . . . . . . . . . auto                             -0002 
+npList. . . . . . . . . . param                             0004
+
+    149 
+    150 //
+    151 // Remove - remove an arbitrary element from a list
+    152 //
+    153 
+    154 VOID NEAR PASCAL Remove( NPLIST npList, NPNODE npNode )
+    155 {
+    156 	if (npNode->npPrev) npNode->npPrev->npNext = npNode->npNext;
+    157 	else npList->npHead = npNode->npNext;
+    158 	if (npNode->npNext) npNode->npNext->npPrev = npNode->npPrev;
+    159 	else npList->npTail = npNode->npPrev;
+    160 }
+
+
+Remove  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npNode. . . . . . . . . . param                             0004
+npList. . . . . . . . . . param                             0006
+
+    161 
+    162 //
+    163 // DrawObject - draw a single object
+    164 //
+    165 
+    166 VOID NEAR PASCAL DrawObject( HDC hDC, NPOBJ npObj )
+    167 {
+    168 	INT             nCnt;
+    169 	INT             nDir = (npObj->nDir += npObj->nSpin);
+    170 	INT             x = (npObj->Pos.x += npObj->Vel.x);
+    171 	INT             y = (npObj->Pos.y += npObj->Vel.y);
+    172 	POINT           Pts[MAX_PTS];
+    173 
+    174 	if (x < -CLIP_COORD) npObj->Pos.x = x = CLIP_COORD;
+    175 	else if (x > CLIP_COORD) npObj->Pos.x = x = -CLIP_COORD;
+    176 	if (y < -CLIP_COORD) npObj->Pos.y = y = CLIP_COORD;
+    177 	else if (y > CLIP_COORD) npObj->Pos.y = y = -CLIP_COORD;
+    178 
+    179 	for (nCnt = npObj->byPts - 1; nCnt >= 0; --nCnt)
+    180 	{
+    181 		WORD wDeg = DEG( npObj->Pts[nCnt].x + nDir );
+    182 		INT nLen = npObj->Pts[nCnt].y;
+    183 		Pts[nCnt].x = x + MULDEG( nLen, nCos[wDeg] );
+    184 		Pts[nCnt].y = y + MULDEG( nLen, nSin[wDeg] );
+    185 	}
+    186 
+    187 	if (npObj->byPts > 1)
+    188 	{
+ 
+
+                                                                       PAGE   5
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    189 		SelectObject( hDC, hPen[BLACK] );
+    190 		Polyline( hDC, npObj->Old, npObj->byPts );
+    191 		if (npObj->nCount > 0)
+    192 		{
+    193 			SelectObject( hDC, hPen[npObj->byColor] );
+    194 			Polyline( hDC, Pts, npObj->byPts );
+    195 			for (nCnt = npObj->byPts - 1; nCnt >= 0; --nCnt)
+    196 				npObj->Old[nCnt] = Pts[nCnt];
+    197 		}
+    198 	}
+    199 	else // just a point
+    200 	{
+    201 		SetPixel( hDC, npObj->Old[0].x, npObj->Old[0].y, PALETTEINDEX( BLACK 
+         ) );
+    202 		if (npObj->nCount > 0)
+    203 		{
+    204 			SetPixel( hDC, Pts[0].x, Pts[0].y, PALETTEINDEX( npObj->byColor ) );
+         
+    205 			npObj->Old[0] = Pts[0];
+    206 		}
+    207 	}
+    208 }
+
+
+DrawObject  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+nLen. . . . . . . . . . . auto                             -002c 
+wDeg. . . . . . . . . . . auto                             -002a 
+nDir. . . . . . . . . . . auto                             -0028 
+y . . . . . . . . . . . . auto                             -0026 
+x . . . . . . . . . . . . auto                             -0024 
+Pts . . . . . . . . . . . auto                             -0022 
+nCnt. . . . . . . . . . . auto                             -0002 
+npObj . . . . . . . . . . param                             0004
+hDC . . . . . . . . . . . param                             0006
+
+    209 
+    210 //
+    211 // SetRestart - set the restart timer
+    212 //
+    213 
+    214 VOID NEAR PASCAL SetRestart( RESTART_MODE Restart )
+    215 {
+    216 	POINT           Pt;
+    217 	CHAR            szBuff[32];
+    218 
+    219 	if (bRestart) return;
+    220 	SetTimer( hAppWnd, RESTART_TIMER, RESTART_DELAY, NULL );
+    221 	bRestart = TRUE;
+    222 
+    223 	Pt.x = Pt.y = 0;
+    224 	switch (Restart)
+    225 	{
+    226 	case RESTART_GAME:
+ 
+
+                                                                       PAGE   6
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    227 		SpinLetters( "GAME OVER", Pt, Pt, RED, 400 );
+    228 		break;
+    229 	case RESTART_LEVEL:
+    230 		PrintLetters( "GET READY", Pt, Pt, BLUE, 300 );
+    231 		break;
+    232 	case RESTART_NEXTLEVEL:
+    233 		wsprintf( szBuff, "LEVEL %u", nLevel + 1 );
+    234 		PrintLetters( szBuff, Pt, Pt, BLUE, 300 );
+    235 		break;
+    236 	}
+    237 }
+
+
+SetRestart  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+Pt. . . . . . . . . . . . auto                             -0024 
+szBuff. . . . . . . . . . auto                             -0020 
+Restart . . . . . . . . . param                             0004
+
+    238 
+    239 //
+    240 // PrintPlayerMessage - show the player a status message
+    241 //
+    242 
+    243 VOID NEAR PASCAL PrintPlayerMessage( NPSTR npszText )
+    244 {
+    245 	POINT Pos, Vel;
+    246 
+    247 	Pos = npPlayer->Pos;
+    248 	Pos.y -= 400;
+    249 	Vel.x = 0;
+    250 	Vel.y = -50;
+    251 	PrintLetters( npszText, Pos, Vel, GREEN, 150 );
+    252 }
+
+
+PrintPlayerMessage  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+Vel . . . . . . . . . . . auto                             -0008 
+Pos . . . . . . . . . . . auto                             -0004 
+npszText. . . . . . . . . param                             0004
+
+    253 
+    254 //
+    255 // AddExtraLife - give the player another life
+    256 //
+    257 
+    258 VOID NEAR PASCAL AddExtraLife( VOID )
+    259 {
+    260 	PrintPlayerMessage( "EXTRA LIFE" );
+    261 	++npPlayer->nCount;
+    262 	npPlayer->byColor = (BYTE)(BLACK + npPlayer->nCount);
+ 
+
+                                                                       PAGE   7
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    263 	if (npPlayer->byColor > WHITE) npPlayer->byColor = WHITE;
+    264 }
+    265 
+    266 //
+    267 // Hit - something hit an object, do fireworks
+    268 //
+    269 
+    270 VOID NEAR PASCAL Hit( HDC hDC, NPOBJ npObj )
+    271 {
+    272 	INT             nCnt;
+    273 
+    274 	for (nCnt = 0; nCnt < 6; ++nCnt)
+    275 	{
+    276 		NPOBJ npFlame = RemHeadObj( &FreeList );
+    277 		if (!npFlame) return;
+    278 		npFlame->Pos.x = npObj->Pos.x;
+    279 		npFlame->Pos.y = npObj->Pos.y;
+    280 		npFlame->Vel.x = npObj->Vel.x;
+    281 		npFlame->Vel.y = npObj->Vel.y;
+    282 		npFlame->nDir = npObj->nDir + (nCnt * DEGREE_SIZE) / 6;
+    283 		npFlame->nSpin = 0;
+    284 		npFlame->nCount = 10 + arand( 8 );
+    285 		npFlame->byColor = YELLOW;
+    286 		npFlame->byPts = 1;
+    287 		npFlame->Pts[0].x = npFlame->Pts[0].y = 0;
+    288 		ACCEL( npFlame, npFlame->nDir, 50 - npFlame->nCount );
+    289 		AddHeadObj( &FlameList, npFlame );
+    290 	}
+    291 }
+
+
+Hit  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npFlame . . . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+npObj . . . . . . . . . . param                             0004
+hDC . . . . . . . . . . . param                             0006
+
+    292 
+    293 //
+    294 // Explode - explode an object
+    295 //
+    296 
+    297 VOID NEAR PASCAL Explode( HDC hDC, NPOBJ npObj )
+    298 {
+    299 	INT             nCnt, nSize = npObj->byPts;
+    300 
+    301 	DrawObject( hDC, npObj );
+    302 	for (nCnt = 0; nCnt < nSize; ++nCnt)
+    303 	{
+    304 		NPOBJ npFlame;
+    305 		if (arand( 2 )) continue;
+    306 		if (!(npFlame = RemHeadObj( &FreeList ))) return;
+    307 		npFlame->Pos.x = npObj->Pos.x;
+ 
+
+                                                                       PAGE   8
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    308 		npFlame->Pos.y = npObj->Pos.y;
+    309 		npFlame->Vel.x = npObj->Vel.x;
+    310 		npFlame->Vel.y = npObj->Vel.y;
+    311 		npFlame->nDir = npObj->nDir + nCnt * DEGREE_SIZE / nSize + arand( 32 
+         );
+    312 		npFlame->nSpin = arand( 31 ) - 15;
+    313 		npFlame->nCount = 25 + arand( 16 );
+    314 		npFlame->byColor = npObj->byColor;
+    315 		npFlame->byPts = 2;
+    316 		npFlame->Pts[0] = npObj->Pts[nCnt];
+    317 		if (nCnt == nSize - 1) npFlame->Pts[1] = npObj->Pts[0];
+    318 		else npFlame->Pts[1] = npObj->Pts[nCnt + 1];
+    319 		ACCEL( npFlame, npFlame->nDir, 60 - npFlame->nCount );
+    320 		AddHeadObj( &FlameList, npFlame );
+    321 	}
+    322 	Hit( hDC, npObj );
+    323 }
+
+
+Explode  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npFlame . . . . . . . . . auto                             -0006 
+nSize . . . . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+npObj . . . . . . . . . . param                             0004
+hDC . . . . . . . . . . . param                             0006
+
+    324 
+    325 //
+    326 // HitPlayer - blow up the player
+    327 //
+    328 
+    329 BOOL NEAR PASCAL HitPlayer( HDC hDC, NPOBJ npObj )
+    330 {
+    331 	POINT           Vel;
+    332 	INT             nMass, nSpin;
+    333 
+    334 	if (nSafe || (npPlayer->nCount <= 0)) return( FALSE );
+    335 
+    336 	// rumble and shake both objects
+    337 	nMass = npPlayer->nMass + npObj->nMass;
+    338 
+    339 	nSpin = npPlayer->nSpin + npObj->nSpin;
+    340 	npObj->nSpin -= MulDiv( nSpin, npPlayer->nMass, nMass );
+    341 	npPlayer->nSpin -= MulDiv( nSpin, npObj->nMass, nMass );
+    342 
+    343 	Vel.x = npPlayer->Vel.x - npObj->Vel.x;
+    344 	Vel.y = npPlayer->Vel.y - npObj->Vel.y;
+    345 	npObj->Vel.x += MulDiv( Vel.x, npPlayer->nMass, nMass );
+    346 	npObj->Vel.y += MulDiv( Vel.y, npPlayer->nMass, nMass );
+    347 	npPlayer->Vel.x -= MulDiv( Vel.x, npObj->nMass, nMass );
+    348 	npPlayer->Vel.y -= MulDiv( Vel.y, npObj->nMass, nMass );
+    349 
+    350 	if (--npPlayer->nCount)
+ 
+
+                                                                       PAGE   9
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    351 	{
+    352 		npPlayer->byColor = (BYTE)(BLACK + npPlayer->nCount);
+    353 		if (npPlayer->byColor > WHITE) npPlayer->byColor = WHITE;
+    354 		Hit( hDC, npPlayer );
+    355 		return( TRUE );
+    356 	}
+    357 
+    358 	// final death
+    359 	npPlayer->byColor = WHITE;
+    360 	Explode( hDC, npPlayer );
+    361 	SetRestart( RESTART_GAME );
+    362 	return( FALSE );
+    363 }
+
+
+HitPlayer  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+nSpin . . . . . . . . . . auto                             -0008 
+Vel . . . . . . . . . . . auto                             -0006 
+nMass . . . . . . . . . . auto                             -0002 
+npObj . . . . . . . . . . param                             0004
+hDC . . . . . . . . . . . param                             0006
+
+    364 
+    365 //
+    366 // CreateLetter - make a new letter object
+    367 //
+    368 
+    369 NPOBJ FAR PASCAL CreateLetter( CHAR cLetter, INT nSize )
+    370 {
+    371 	NPOBJ           npLtr;
+    372 	INT             nCnt;
+    373 	NPSTR           npDesc;
+    374 
+    375 	if (cLetter >= '0' && cLetter <= '9') npDesc = szNumberDesc[cLetter - 
+         '0'];
+    376 	else if (cLetter >= 'A' && cLetter <= 'Z') npDesc = szLetterDesc[cLett
+         er - 'A'];
+    377 	else if (cLetter >= 'a' && cLetter <= 'z') npDesc = szLetterDesc[cLett
+         er - 'a'];
+    378 	else if (cLetter == '.') npDesc = "l";
+    379 	else return( NULL );
+    380 
+    381 	if (npLtr = RemHeadObj( &FreeList ))
+    382 	{
+    383 		npLtr->nMass = 1;
+    384 		npLtr->nDir = 0;
+    385 		npLtr->nSpin = 0;
+    386 		npLtr->nCount = 40;
+    387 		npLtr->byColor = WHITE;
+    388 		npLtr->byPts = (BYTE)(nCnt = strlen( npDesc ));
+    389 		while (nCnt--)
+    390 		{
+    391 			npLtr->Pts[nCnt] = LetterPart[npDesc[nCnt] - 'a'];
+ 
+
+                                                                       PAGE  10
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    392 			npLtr->Pts[nCnt].y = MulDiv( npLtr->Pts[nCnt].y, nSize, LETTER_MAX )
+         ;
+    393 		}
+    394 		AddHeadObj( &LetterList, npLtr );
+    395 	}
+    396 	return( npLtr );
+    397 }
+
+
+CreateLetter  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npDesc. . . . . . . . . . auto                             -0006 
+nCnt. . . . . . . . . . . auto                             -0004 
+npLtr . . . . . . . . . . auto                             -0002 
+nSize . . . . . . . . . . param                             0006
+cLetter . . . . . . . . . param                             0008
+
+    398 
+    399 //
+    400 // DrawLetters - draw letters and such
+    401 //
+    402 
+    403 VOID NEAR PASCAL DrawLetters( HDC hDC )
+    404 {
+    405 	NPOBJ           npLtr, npNext;
+    406 
+    407 	for (npLtr = HeadObj( &LetterList ); npLtr; npLtr = npNext)
+    408 	{
+    409 		npNext = NextObj( npLtr );
+    410 		switch (--npLtr->nCount)
+    411 		{
+    412 		case 3:
+    413 			--npLtr->byColor;
+    414 			break;
+    415 		case 0:
+    416 			RemoveObj( &LetterList, npLtr );
+    417 			AddHeadObj( &FreeList, npLtr );
+    418 			break;
+    419 		}
+    420 		DrawObject( hDC, npLtr );
+    421 	}
+    422 }
+
+
+DrawLetters  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npNext. . . . . . . . . . auto                             -0004 
+npLtr . . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+
+    423 
+    424 //
+ 
+
+                                                                       PAGE  11
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    425 // CreateBonus - make a new bonus object
+    426 //
+    427 
+    428 VOID NEAR PASCAL CreateBonus( VOID )
+    429 {
+    430 	NPOBJ           npBonus;
+    431 	INT             nCnt;
+    432 
+    433 	if (npBonus = RemHeadObj( &FreeList ))
+    434 	{
+    435 		npBonus->Pos.x = arand( CLIP_COORD * 2 ) - CLIP_COORD;
+    436 		npBonus->Pos.y = -CLIP_COORD;
+    437 		npBonus->Vel.x = npBonus->Vel.y = 0;
+    438 		npBonus->nDir = arand( DEGREE_SIZE );
+    439 		npBonus->nSpin = (arand( 2 ) ? 12 : -12);
+    440 		npBonus->nCount = arand( 4 ) + 1;
+    441 		npBonus->nDelay = 64 + arand( 128 );
+    442 		npBonus->nMass = 1;
+    443 		npBonus->byColor = (BYTE)(WHITE + (npBonus->nCount * 2));
+    444 		npBonus->byPts = DIM(Bonus);
+    445 		for (nCnt = 0; nCnt < DIM(Bonus); ++nCnt)
+    446 			npBonus->Pts[nCnt] = Bonus[nCnt];
+    447 		ACCEL( npBonus, npBonus->nDir, 30 + nLevel * 2 );
+    448 		AddHeadObj( &BonusList, npBonus );
+    449 	}
+    450 }
+
+
+CreateBonus  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npBonus . . . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+
+    451 
+    452 //
+    453 // DrawBonuses - process and draw the bonus list
+    454 //
+    455 
+    456 VOID NEAR PASCAL DrawBonuses( HDC hDC )
+    457 {
+    458 	NPOBJ           npBonus, npNext;
+    459 	LOCAL INT       nNextBonus = 1000;
+    460 
+    461 	if (nBadGuys && (--nNextBonus < 0))
+    462 	{
+    463 		CreateBonus();
+    464 		nNextBonus = 1000;
+    465 	}
+    466 
+    467 	for (npBonus = HeadObj( &BonusList ); npBonus; npBonus = npNext)
+    468 	{
+    469 		NPOBJ           npShot;
+    470 		INT             nDelta;
+    471 		RECT            rect;
+ 
+
+                                                                       PAGE  12
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    472 
+    473 		npNext = NextObj( npBonus );
+    474 
+    475 		MKRECT( &rect, npBonus->Pos, 150 );
+    476 
+    477 		if (PTINRECT( &rect, npPlayer->Pos ))
+    478 		{
+    479 			if (npPlayer->nCount > 0) switch (npBonus->nCount)
+    480 			{
+    481 			case 1:
+    482 				{
+    483 					CHAR szBuff[32];
+    484 					LONG lBonus = 1000L * nLevel;
+    485 					if (lBonus == 0) lBonus = 500;
+    486 					lScore += lBonus;
+    487 					wsprintf( szBuff, "%ld", lBonus );
+    488 					PrintPlayerMessage( szBuff );
+    489 				}
+    490 				break;
+    491 			case 2:
+    492 				nSafe = 15;
+    493 				++nShield;
+    494 				npPlayer->byColor = GREEN;
+    495 				PrintPlayerMessage( "EXTRA SHIELD" );
+    496 				break;
+    497 			case 3:
+    498 				++nBomb;
+    499 				PrintPlayerMessage( "EXTRA BOMB" );
+    500 				break;
+    501 			case 4:
+    502 				AddExtraLife();
+    503 				break;
+    504 			}
+    505 			npBonus->nCount = 0;
+    506 			Explode( hDC, npBonus );
+    507 			RemoveObj( &BonusList, npBonus );
+    508 			AddHeadObj( &FreeList, npBonus );
+    509 		}
+    510 		else if (INTRECT(&rect, &rectShotClip))
+    511 		{
+    512 			for (npShot = HeadObj( &ShotList ); npShot; npShot = NextObj( npShot
+          ))
+    513 			{
+    514 				if (!PTINRECT( &rect, npShot->Pos )) continue;
+    515 				npShot->nCount = 1;
+    516 				npBonus->nCount = 0;
+    517 				Explode( hDC, npBonus );
+    518 				RemoveObj( &BonusList, npBonus );
+    519 				AddHeadObj( &FreeList, npBonus );
+    520 			}
+    521 		}
+    522 		if (npBonus->nCount && --npBonus->nDelay <= 0)
+    523 		{
+    524 			--npBonus->nCount;
+    525 			npBonus->nDelay = 64 + arand( 128 );
+    526 			npBonus->byColor = (BYTE)(WHITE + (npBonus->nCount * 2));
+ 
+
+                                                                       PAGE  13
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    527 			if (npBonus->nCount == 0)
+    528 			{
+    529 				Explode( hDC, npBonus );
+    530 				RemoveObj( &BonusList, npBonus );
+    531 				AddHeadObj( &FreeList, npBonus );
+    532 			}
+    533 		}
+    534 		nDelta = npPlayer->Pos.x - npBonus->Pos.x;
+    535 		while (nDelta < -16 || nDelta > 16) nDelta /= 2;
+    536 		npBonus->Vel.x += nDelta - npBonus->Vel.x / 16;
+    537 		nDelta = npPlayer->Pos.y - npBonus->Pos.y;
+    538 		while (nDelta < -16 || nDelta > 16) nDelta /= 2;
+    539 		npBonus->Vel.y += nDelta - npBonus->Vel.y / 16;
+    540 		DrawObject( hDC, npBonus );
+    541 	}
+    542 }
+
+
+DrawBonuses  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+lBonus. . . . . . . . . . auto                             -0034 
+szBuff. . . . . . . . . . auto                             -0030 
+rect. . . . . . . . . . . auto                             -0010 
+npShot. . . . . . . . . . auto                             -0008 
+nDelta. . . . . . . . . . auto                             -0006 
+npNext. . . . . . . . . . auto                             -0004 
+npBonus . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+nNextBonus. . . . . . . . static  int                  2    00ba
+
+    543 
+    544 //
+    545 // DrawHunterShots - process and draw the hunter shot list
+    546 //
+    547 
+    548 VOID NEAR PASCAL DrawHunterShots( HDC hDC )
+    549 {
+    550 	NPOBJ           npShot, npNext;
+    551 
+    552 	for (npShot = HeadObj( &HunterShotList ); npShot; npShot = npNext)
+    553 	{
+    554 		RECT            rect;
+    555 
+    556 		npNext = NextObj( npShot );
+    557 
+    558 		MKRECT( &rect, npShot->Pos, 200 );
+    559 
+    560 		if (PTINRECT( &rect, npPlayer->Pos ))
+    561 		{
+    562 			HitPlayer( hDC, npShot );
+    563 			npShot->nCount = 1;
+    564 		}
+    565 		switch (--npShot->nCount)
+    566 		{
+ 
+
+                                                                       PAGE  14
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    567 		case 7:
+    568 			npShot->byColor = DKGREEN;
+    569 			break;
+    570 		case 0:
+    571 			RemoveObj( &HunterShotList, npShot );
+    572 			AddHeadObj( &FreeList, npShot );
+    573 			break;
+    574 		}
+    575 		DrawObject( hDC, npShot );
+    576 	}
+    577 }
+
+
+DrawHunterShots  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+rect. . . . . . . . . . . auto                             -000c 
+npNext. . . . . . . . . . auto                             -0004 
+npShot. . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+
+    578 
+    579 //
+    580 // FireHunterShot - fire a hunter bullet
+    581 //
+    582 
+    583 VOID NEAR PASCAL FireHunterShot( NPOBJ npHunt )
+    584 {
+    585 	NPOBJ           npShot;
+    586 
+    587 	if (npShot = RemHeadObj( &FreeList ))
+    588 	{
+    589 		npShot->Pos.x = npHunt->Pos.x;
+    590 		npShot->Pos.y = npHunt->Pos.y;
+    591 		npShot->Vel.x = npHunt->Vel.x;
+    592 		npShot->Vel.y = npHunt->Vel.y;
+    593 		npShot->nMass = 8;
+    594 		npShot->nDir = npHunt->nDir + arand( 5 ) - 2;
+    595 		npShot->nSpin = (arand( 2 ) ? 10 : -10);
+    596 		npShot->nCount = 16 + arand( 8 );
+    597 		npShot->byColor = GREEN;
+    598 		npShot->byPts = 2;
+    599 		npShot->Pts[0].x = 128;
+    600 		npShot->Pts[0].y = 50;
+    601 		npShot->Pts[1].x = 0;
+    602 		npShot->Pts[1].y = 50;
+    603 		ACCEL( npShot, npShot->nDir, 200 + npShot->nCount );
+    604 		AddHeadObj( &HunterShotList, npShot );
+    605 	}
+    606 }
+
+ 
+
+                                                                       PAGE  15
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+FireHunterShot  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npShot. . . . . . . . . . auto                             -0002 
+npHunt. . . . . . . . . . param                             0004
+
+    607 
+    608 //
+    609 // CreateHunter - make a new hunter
+    610 //
+    611 
+    612 VOID NEAR PASCAL CreateHunter( VOID )
+    613 {
+    614 	NPOBJ           npHunt;
+    615 	INT             nCnt;
+    616 
+    617 	if (npHunt = RemHeadObj( &FreeList ))
+    618 	{
+    619 		npHunt->Pos.x = arand( CLIP_COORD * 2 ) - CLIP_COORD;
+    620 		npHunt->Pos.y = -CLIP_COORD;
+    621 		npHunt->Vel.x = npHunt->Vel.y = 0;
+    622 		npHunt->nMass = 256;
+    623 		npHunt->nDir = arand( DEGREE_SIZE );
+    624 		npHunt->nSpin = 0;
+    625 		npHunt->nCount = 1 + arand( nLevel );
+    626 		npHunt->nDelay = 2 + arand( 10 );
+    627 		npHunt->byColor = CYAN;
+    628 		npHunt->byPts = DIM(Hunter);
+    629 		for (nCnt = 0; nCnt < DIM(Hunter); ++nCnt)
+    630 			npHunt->Pts[nCnt] = Hunter[nCnt];
+    631 		ACCEL( npHunt, npHunt->nDir, 30 + nLevel * 2 );
+    632 		AddHeadObj( &HunterList, npHunt );
+    633 		++nBadGuys;
+    634 	}
+    635 }
+
+
+CreateHunter  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npHunt. . . . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+
+    636 
+    637 //
+    638 // DrawHunters - process and draw the hunter list
+    639 //
+    640 
+    641 VOID NEAR PASCAL DrawHunters( HDC hDC )
+    642 {
+    643 	NPOBJ           npHunt, npNext;
+    644 	LOCAL INT       nNextHunter = 200;
+    645 
+    646 	if (nBadGuys && (--nNextHunter < 0))
+ 
+
+                                                                       PAGE  16
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    647 	{
+    648 		CreateHunter();
+    649 		nNextHunter = 1000 + arand( 1000 ) - nLevel * 8;
+    650 	}
+    651 
+    652 	for (npHunt = HeadObj( &HunterList ); npHunt; npHunt = npNext)
+    653 	{
+    654 		NPOBJ           npShot;
+    655 		RECT            rect;
+    656 
+    657 		npNext = NextObj( npHunt );
+    658 
+    659 		MKRECT( &rect, npHunt->Pos, 200 );
+    660 
+    661 		if (PTINRECT( &rect, npPlayer->Pos ))
+    662 		{
+    663 			HitPlayer( hDC, npHunt );
+    664 			--npHunt->nCount;
+    665 			if (npHunt->nCount < 1)
+    666 			{
+    667 				KillBadGuy();
+    668 				npHunt->byColor = CYAN;
+    669 				Explode( hDC, npHunt );
+    670 				RemoveObj( &HunterList, npHunt );
+    671 				AddHeadObj( &FreeList, npHunt );
+    672 			}
+    673 			else if (npHunt->nCount == 1) npHunt->byColor = DKCYAN;
+    674 		}
+    675 		else if (INTRECT(&rect, &rectShotClip))
+    676 		{
+    677 			for (npShot = HeadObj( &ShotList ); npShot; npShot = NextObj( npShot
+          ))
+    678 			{
+    679 				if (!PTINRECT( &rect, npShot->Pos )) continue;
+    680 				npShot->nCount = 1;
+    681 				lScore += npHunt->nCount * 1000;
+    682 				if (--npHunt->nCount < 1)
+    683 				{
+    684 					KillBadGuy();
+    685 					npHunt->byColor = CYAN;
+    686 					Explode( hDC, npHunt );
+    687 					RemoveObj( &HunterList, npHunt );
+    688 					AddHeadObj( &FreeList, npHunt );
+    689 				}
+    690 				else
+    691 				{
+    692 					if (npHunt->nCount == 1) npHunt->byColor = DKCYAN;
+    693 					Hit( hDC, npHunt );
+    694 				}
+    695 				break;
+    696 			}
+    697 		}
+    698 		ACCEL( npHunt, npHunt->nDir, 8 );
+    699 		npHunt->Vel.x -= npHunt->Vel.x / 16;
+    700 		npHunt->Vel.y -= npHunt->Vel.y / 16;
+    701 		if (--npHunt->nDelay <= 0)
+ 
+
+                                                                       PAGE  17
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    702 		{
+    703 			npHunt->nDelay = arand( 10 );
+    704 			npHunt->nSpin = arand( 11 ) - 5;
+    705 			FireHunterShot( npHunt );
+    706 		}
+    707 		DrawObject( hDC, npHunt );
+    708 	}
+    709 }
+
+
+DrawHunters  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+rect. . . . . . . . . . . auto                             -000e 
+npShot. . . . . . . . . . auto                             -0006 
+npHunt. . . . . . . . . . auto                             -0004 
+npNext. . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+nNextHunter . . . . . . . static  int                  2    00bc
+
+    710 
+    711 //
+    712 // CreateSwarmer - make a new swarmer
+    713 //
+    714 
+    715 VOID NEAR PASCAL CreateSwarmer( POINT Pos, INT nDir, INT nCount )
+    716 {
+    717 	NPOBJ           npSwarm;
+    718 	INT             nCnt;
+    719 
+    720 	if (npSwarm = RemHeadObj( &FreeList ))
+    721 	{
+    722 		npSwarm->Pos = Pos;
+    723 		npSwarm->Vel.x = npSwarm->Vel.y = 0;
+    724 		npSwarm->nDir = nDir;
+    725 		npSwarm->nSpin = arand( 31 ) - 15;
+    726 		npSwarm->nCount = nCount;
+    727 		npSwarm->nDelay = 64 + arand( 64 );
+    728 		npSwarm->nMass = 32;
+    729 		npSwarm->byColor = DKGREEN;
+    730 		npSwarm->byPts = DIM(Swarmer);
+    731 		for (nCnt = 0; nCnt < DIM(Swarmer); ++nCnt)
+    732 		{
+    733 			npSwarm->Pts[nCnt] = Swarmer[nCnt];
+    734 			npSwarm->Pts[nCnt].y += nCount * 10;
+    735 		}
+    736 		ACCEL( npSwarm, npSwarm->nDir, 30 + nLevel * 2 );
+    737 		AddHeadObj( &SwarmerList, npSwarm );
+    738 		++nBadGuys;
+    739 	}
+    740 }
+
+ 
+
+                                                                       PAGE  18
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+CreateSwarmer  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npSwarm . . . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+nCount. . . . . . . . . . param                             0004
+nDir. . . . . . . . . . . param                             0006
+Pos . . . . . . . . . . . param                             0008
+
+    741 
+    742 //
+    743 // DrawSwarmers - process and draw the swarmer list
+    744 //
+    745 
+    746 VOID NEAR PASCAL DrawSwarmers( HDC hDC )
+    747 {
+    748 	NPOBJ           npSwarm, npNext;
+    749 	LOCAL INT       nNextSwarmer = 1000;
+    750 
+    751 	if (nBadGuys && (--nNextSwarmer < 0))
+    752 	{
+    753 		POINT Pos;
+    754 		Pos.x = arand( CLIP_COORD * 2 ) - CLIP_COORD;
+    755 		Pos.y = -CLIP_COORD;
+    756 		CreateSwarmer( Pos, arand( DEGREE_SIZE ), 8 + nLevel * 2 );
+    757 		nNextSwarmer = 1000 + arand( 500 ) - nLevel * 4;
+    758 	}
+    759 
+    760 	for (npSwarm = HeadObj( &SwarmerList ); npSwarm; npSwarm = npNext)
+    761 	{
+    762 		NPOBJ           npShot;
+    763 		RECT            rect;
+    764 
+    765 		npNext = NextObj( npSwarm );
+    766 
+    767 		MKRECT( &rect, npSwarm->Pos, 150 + npSwarm->nCount * 10 );
+    768 
+    769 		if (PTINRECT( &rect, npPlayer->Pos ))
+    770 		{
+    771 			HitPlayer( hDC, npSwarm );
+    772 			npSwarm->nCount = 0;
+    773 		}
+    774 		else if (INTRECT(&rect, &rectShotClip))
+    775 		{
+    776 			for (npShot = HeadObj( &ShotList ); npShot; npShot = NextObj( npShot
+          ))
+    777 			{
+    778 				if (!PTINRECT( &rect, npShot->Pos )) continue;
+    779 				npShot->nCount = 1;
+    780 				lScore += npSwarm->nCount * 25;
+    781 				npSwarm->nCount = 0;
+    782 				break;
+    783 			}
+    784 		}
+    785 		if (npSwarm->nCount <= 0)
+ 
+
+                                                                       PAGE  19
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    786 		{
+    787 			npSwarm->byColor = GREEN;
+    788 			KillBadGuy();
+    789 			Explode( hDC, npSwarm );
+    790 			RemoveObj( &SwarmerList, npSwarm );
+    791 			AddHeadObj( &FreeList, npSwarm );
+    792 		}
+    793 		else
+    794 		{
+    795 			if ((npSwarm->nCount > 1) && (--npSwarm->nDelay <= 0))
+    796 			{
+    797 				INT nDir = arand( DEGREE_SIZE );
+    798 				INT nCount = npSwarm->nCount / 2;
+    799 				CreateSwarmer( npSwarm->Pos, nDir, nCount );
+    800 				nCount = npSwarm->nCount - nCount;
+    801 				CreateSwarmer( npSwarm->Pos, nDir + 128, nCount );
+    802 				npSwarm->nCount = 0;
+    803 			}
+    804 			DrawObject( hDC, npSwarm );
+    805 		}
+    806 	}
+    807 }
+
+
+DrawSwarmers  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+nDir. . . . . . . . . . . auto                             -0016 
+nCount. . . . . . . . . . auto                             -0014 
+rect. . . . . . . . . . . auto                             -0012 
+npShot. . . . . . . . . . auto                             -000a 
+Pos . . . . . . . . . . . auto                             -0008 
+npNext. . . . . . . . . . auto                             -0004 
+npSwarm . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+nNextSwarmer. . . . . . . static  int                  2    00be
+
+    808 
+    809 //
+    810 // CreateSpinner - make a new spinner
+    811 //
+    812 
+    813 VOID NEAR PASCAL CreateSpinner( VOID )
+    814 {
+    815 	NPOBJ           npSpin;
+    816 	INT             nCnt;
+    817 
+    818 	if (npSpin = RemHeadObj( &FreeList ))
+    819 	{
+    820 		npSpin->Pos.x = arand( CLIP_COORD * 2 ) - CLIP_COORD;
+    821 		npSpin->Pos.y = -CLIP_COORD;
+    822 		npSpin->Vel.x = npSpin->Vel.y = 0;
+    823 		npSpin->nDir = arand( DEGREE_SIZE );
+    824 		npSpin->nSpin = -12;
+    825 		npSpin->nCount = 1 + arand( nLevel );
+ 
+
+                                                                       PAGE  20
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    826 		npSpin->nMass = 64 + npSpin->nCount * 32;
+    827 		npSpin->byColor = (BYTE)(MAGENTA - npSpin->nCount);
+    828 		npSpin->byPts = DIM(Spinner);
+    829 		for (nCnt = 0; nCnt < DIM(Spinner); ++nCnt)
+    830 			npSpin->Pts[nCnt] = Spinner[nCnt];
+    831 		ACCEL( npSpin, npSpin->nDir, 30 + nLevel * 2 );
+    832 		AddHeadObj( &SpinnerList, npSpin );
+    833 		++nBadGuys;
+    834 	}
+    835 }
+
+
+CreateSpinner  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npSpin. . . . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+
+    836 
+    837 //
+    838 // DrawSpinners - process and draw the spinner list
+    839 //
+    840 
+    841 VOID NEAR PASCAL DrawSpinners( HDC hDC )
+    842 {
+    843 	NPOBJ           npSpin, npNext;
+    844 	LOCAL INT       nNextSpinner = 1000;
+    845 
+    846 	if (nBadGuys && (--nNextSpinner < 0))
+    847 	{
+    848 		CreateSpinner();
+    849 		nNextSpinner = 100 + arand( 900 ) - nLevel * 2;
+    850 	}
+    851 
+    852 	for (npSpin = HeadObj( &SpinnerList ); npSpin; npSpin = npNext)
+    853 	{
+    854 		NPOBJ           npShot;
+    855 		INT             nDelta;
+    856 		RECT            rect;
+    857 
+    858 		npNext = NextObj( npSpin );
+    859 
+    860 		MKRECT( &rect, npSpin->Pos, 150 );
+    861 
+    862 		if (PTINRECT( &rect, npPlayer->Pos ))
+    863 		{
+    864 			HitPlayer( hDC, npSpin );
+    865 			--npSpin->nCount;
+    866 			npSpin->byColor = (BYTE)(MAGENTA - npSpin->nCount);
+    867 			if (npSpin->nCount < 1)
+    868 			{
+    869 				KillBadGuy();
+    870 				Explode( hDC, npSpin );
+    871 				RemoveObj( &SpinnerList, npSpin );
+    872 				AddHeadObj( &FreeList, npSpin );
+ 
+
+                                                                       PAGE  21
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    873 			}
+    874 		}
+    875 		else if (INTRECT(&rect, &rectShotClip))
+    876 		{
+    877 			for (npShot = HeadObj( &ShotList ); npShot; npShot = NextObj( npShot
+          ))
+    878 			{
+    879 				if (!PTINRECT( &rect, npShot->Pos )) continue;
+    880 				npShot->nCount = 1;
+    881 				lScore += npSpin->nCount * 500;
+    882 				npSpin->byColor = (BYTE)(MAGENTA - (--npSpin->nCount));
+    883 				if (npSpin->nCount < 1)
+    884 				{
+    885 					KillBadGuy();
+    886 					Explode( hDC, npSpin );
+    887 					RemoveObj( &SpinnerList, npSpin );
+    888 					AddHeadObj( &FreeList, npSpin );
+    889 				}
+    890 				else Hit( hDC, npSpin );
+    891 				break;
+    892 			}
+    893 		}
+    894 		nDelta = npPlayer->Pos.x - npSpin->Pos.x;
+    895 		while (nDelta < -16 || nDelta > 16) nDelta /= 2;
+    896 		npSpin->Vel.x += nDelta - npSpin->Vel.x / 16;
+    897 		nDelta = npPlayer->Pos.y - npSpin->Pos.y;
+    898 		while (nDelta < -16 || nDelta > 16) nDelta /= 2;
+    899 		npSpin->Vel.y += nDelta - npSpin->Vel.y / 16;
+    900 		DrawObject( hDC, npSpin );
+    901 	}
+    902 }
+
+
+DrawSpinners  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+rect. . . . . . . . . . . auto                             -0010 
+npShot. . . . . . . . . . auto                             -0008 
+nDelta. . . . . . . . . . auto                             -0006 
+npNext. . . . . . . . . . auto                             -0004 
+npSpin. . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+nNextSpinner. . . . . . . static  int                  2    00c0
+
+    903 
+    904 //
+    905 // CreateRoid - make a new asteroid
+    906 //
+    907 
+    908 VOID NEAR PASCAL CreateRoid( POINT Pos, POINT Vel, INT nSides, BYTE byC
+         olor,
+    909 							 INT nDir, INT nSpeed, INT nSpin )
+    910 {
+    911 	NPOBJ           npRoid;
+    912 	INT             nCnt;
+ 
+
+                                                                       PAGE  22
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    913 
+    914 	if (npRoid = RemHeadObj( &FreeList ))
+    915 	{
+    916 		npRoid->Pos = Pos;
+    917 		npRoid->Vel = Vel;
+    918 		npRoid->nMass = nSides * 128;
+    919 		npRoid->nDir = nDir;
+    920 		npRoid->nSpin = nSpin + arand( 11 ) - 5;
+    921 		npRoid->nCount = nSides * 100;
+    922 		npRoid->byColor = byColor;
+    923 		npRoid->byPts = (BYTE)(nSides + 1);
+    924 		for (nCnt = 0; nCnt < nSides; ++nCnt)
+    925 		{
+    926 			npRoid->Pts[nCnt].x = nCnt * DEGREE_SIZE / nSides + arand( 30 );
+    927 			npRoid->Pts[nCnt].y = (nSides - 1) * 100 + 20 + arand( 80 );
+    928 		}
+    929 		npRoid->Pts[nSides] = npRoid->Pts[0];
+    930 		ACCEL( npRoid, nDir, nSpeed );
+    931 		AddHeadObj( &RoidList, npRoid );
+    932 		++nBadGuys;
+    933 	}
+    934 }
+
+
+CreateRoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npRoid. . . . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+nSpin . . . . . . . . . . param                             0004
+nSpeed. . . . . . . . . . param                             0006
+nDir. . . . . . . . . . . param                             0008
+byColor . . . . . . . . . param                             000a
+nSides. . . . . . . . . . param                             000c
+Vel . . . . . . . . . . . param                             000e
+Pos . . . . . . . . . . . param                             0012
+
+    935 
+    936 //
+    937 // BreakRoid - break up an asteroid
+    938 //
+    939 
+    940 VOID NEAR PASCAL BreakRoid( HDC hDC, NPOBJ npRoid, NPOBJ npShot )
+    941 {
+    942 	INT             nCnt, nNew;
+    943 
+    944 	lScore += npRoid->nCount;
+    945 	if (npShot) npShot->nCount = 1;
+    946 	switch (npRoid->byPts)
+    947 	{
+    948 	case 8:
+    949 		nNew = 2 + arand( 3 );
+    950 		break;
+    951 	case 7:
+    952 		nNew = 1 + arand( 3 );
+ 
+
+                                                                       PAGE  23
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    953 		break;
+    954 	case 6:
+    955 		nNew = 1 + arand( 2 );
+    956 		break;
+    957 	case 5:
+    958 		nNew = arand( 2 );
+    959 		break;
+    960 	default:
+    961 		nNew = 0;
+    962 		break;
+    963 	}
+    964 	if (nNew == 1) // don't explode outward
+    965 	{
+    966 		POINT Pt = npRoid->Pos;
+    967 		Pt.x += arand( 301 ) - 150; Pt.y += arand( 301 ) - 150;
+    968 		CreateRoid( Pt, npRoid->Vel, npRoid->byPts - (nNew + 1),
+    969 					npRoid->byColor, npShot->nDir, 8, npRoid->nSpin );
+    970 	}
+    971 	else if (nNew > 0)
+    972 	{
+    973 		INT nSpeed = npRoid->nSpin * npRoid->nSpin * nNew + 16;
+    974 		for (nCnt = 0; nCnt < nNew; ++nCnt)
+    975 		{
+    976 			POINT Pt = npRoid->Pos;
+    977 			Pt.x += arand( 601 ) - 300; Pt.y += arand( 601 ) - 300;
+    978 			CreateRoid( Pt, npRoid->Vel, npRoid->byPts - (nNew + 1),
+    979 						npRoid->byColor,
+    980 						npRoid->nDir + nCnt * DEGREE_SIZE / nNew + arand( 32 ),
+    981 						nSpeed + arand( nLevel * 4 ),
+    982 						npRoid->nSpin / 2 );
+    983 		}
+    984 	}
+    985 	KillBadGuy();
+    986 	++npRoid->byColor;
+    987 	npRoid->nCount = 0;
+    988 	if (nNew)
+    989 	{
+    990 		Hit( hDC, npRoid );
+    991 		DrawObject( hDC, npRoid );
+    992 	}
+    993 	else Explode( hDC, npRoid );
+    994 	RemoveObj( &RoidList, npRoid );
+    995 	AddHeadObj( &FreeList, npRoid );
+    996 }
+
+
+BreakRoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+Pt. . . . . . . . . . . . auto                             -000e 
+nSpeed. . . . . . . . . . auto                             -000a 
+Pt. . . . . . . . . . . . auto                             -0008 
+nNew. . . . . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+npShot. . . . . . . . . . param                             0004
+ 
+
+                                                                       PAGE  24
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+BreakRoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npRoid. . . . . . . . . . param                             0006
+hDC . . . . . . . . . . . param                             0008
+
+    997 
+    998 //
+    999 // DrawRoids - process and draw the asteroid list
+   1000 //
+   1001 
+   1002 VOID NEAR PASCAL DrawRoids( HDC hDC )
+   1003 {
+   1004 	NPOBJ           npRoid, npNext;
+   1005 
+   1006 	for (npRoid = HeadObj( &RoidList ); npRoid; npRoid = npNext)
+   1007 	{
+   1008 		INT             nSize = npRoid->nCount;
+   1009 		NPOBJ           npShot;
+   1010 		RECT            rect;
+   1011 
+   1012 		npNext = NextObj( npRoid );
+   1013 
+   1014 		DrawObject( hDC, npRoid );
+   1015 
+   1016 		MKRECT( &rect, npRoid->Pos, nSize );
+   1017 
+   1018 		if (PTINRECT( &rect, npPlayer->Pos ) && HitPlayer( hDC, npRoid ))
+   1019 		{
+   1020 			npPlayer->nCount = -npPlayer->nCount;
+   1021 			npPlayer->byColor = WHITE;
+   1022 			Explode( hDC, npPlayer );
+   1023 			BreakRoid( hDC, npRoid, NULL );
+   1024 			if (nBadGuys) SetRestart( RESTART_LEVEL );
+   1025 			else SetRestart( RESTART_NEXTLEVEL );
+   1026 		}
+   1027 		else if (INTRECT(&rect, &rectShotClip))
+   1028 		{
+   1029 			for (npShot = HeadObj( &ShotList ); npShot; npShot = NextObj( npShot
+          ))
+   1030 			{
+   1031 				if (!PTINRECT( &rect, npShot->Pos )) continue;
+   1032 				BreakRoid( hDC, npRoid, npShot );
+   1033 				break;
+   1034 			}
+   1035 		}
+   1036 	}
+   1037 }
+
+ 
+
+                                                                       PAGE  25
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+DrawRoids  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+rect. . . . . . . . . . . auto                             -0010 
+npShot. . . . . . . . . . auto                             -0008 
+nSize . . . . . . . . . . auto                             -0006 
+npNext. . . . . . . . . . auto                             -0004 
+npRoid. . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+
+   1038 
+   1039 //
+   1040 // DrawShots - process and draw the player shot list
+   1041 //
+   1042 
+   1043 VOID NEAR PASCAL DrawShots( HDC hDC )
+   1044 {
+   1045 	NPOBJ           npShot, npNext;
+   1046 
+   1047 	if (npShot = HeadObj( &ShotList ))
+   1048 	{
+   1049 		rectShotClip.left = rectShotClip.right = npShot->Pos.x;
+   1050 		rectShotClip.top = rectShotClip.bottom = npShot->Pos.y;
+   1051 		while (npShot)
+   1052 		{
+   1053 			npNext = NextObj( npShot );
+   1054 			switch (--npShot->nCount)
+   1055 			{
+   1056 			case 10:
+   1057 				npShot->byColor = DKCYAN;
+   1058 				break;
+   1059 			case 5:
+   1060 				npShot->byColor = DKBLUE;
+   1061 				break;
+   1062 			case 0:
+   1063 				RemoveObj( &ShotList, npShot );
+   1064 				AddHeadObj( &FreeList, npShot );
+   1065 				break;
+   1066 			}
+   1067 			DrawObject( hDC, npShot );
+   1068 			if (npShot->Pos.x < rectShotClip.left) rectShotClip.left = npShot->P
+         os.x;
+   1069 			else if (npShot->Pos.x > rectShotClip.right) rectShotClip.right = np
+         Shot->Pos.x;
+   1070 			if (npShot->Pos.y < rectShotClip.top) rectShotClip.top = npShot->Pos
+         .y;
+   1071 			else if (npShot->Pos.y > rectShotClip.bottom) rectShotClip.bottom = 
+         npShot->Pos.y;
+   1072 			npShot = npNext;
+   1073 		}
+   1074 	}
+   1075 	else rectShotClip.left = rectShotClip.right = rectShotClip.top = rectS
+         hotClip.bottom = 32767;
+   1076 }
+
+ 
+
+                                                                       PAGE  26
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+DrawShots  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npNext. . . . . . . . . . auto                             -0004 
+npShot. . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+
+   1077 
+   1078 //
+   1079 // DrawFlames - process and draw the flame list
+   1080 //
+   1081 
+   1082 VOID NEAR PASCAL DrawFlames( HDC hDC )
+   1083 {
+   1084 	NPOBJ           npFlame, npNext;
+   1085 
+   1086 	for (npFlame = HeadObj( &FlameList ); npFlame; npFlame = npNext)
+   1087 	{
+   1088 		npNext = NextObj( npFlame );
+   1089 		switch (--npFlame->nCount)
+   1090 		{
+   1091 		case 7:
+   1092 			npFlame->byColor = RED;
+   1093 			break;
+   1094 		case 3:
+   1095 			npFlame->byColor = DKRED;
+   1096 			break;
+   1097 		case 0:
+   1098 			RemoveObj( &FlameList, npFlame );
+   1099 			AddHeadObj( &FreeList, npFlame );
+   1100 			break;
+   1101 		}
+   1102 		DrawObject( hDC, npFlame );
+   1103 	}
+   1104 }
+
+
+DrawFlames  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npNext. . . . . . . . . . auto                             -0004 
+npFlame . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+
+   1105 
+   1106 //
+   1107 // FireShot - fire a bullet
+   1108 //
+   1109 
+   1110 VOID NEAR PASCAL FireShot( VOID )
+   1111 {
+   1112 	NPOBJ           npShot;
+   1113 
+   1114 	if (npShot = RemHeadObj( &FreeList ))
+ 
+
+                                                                       PAGE  27
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1115 	{
+   1116 		npShot->Pos.x = npPlayer->Pos.x;
+   1117 		npShot->Pos.y = npPlayer->Pos.y;
+   1118 		npShot->Vel.x = npPlayer->Vel.x;
+   1119 		npShot->Vel.y = npPlayer->Vel.y;
+   1120 		npShot->nMass = 8;
+   1121 		npShot->nDir = npPlayer->nDir + arand( 5 ) - 2;
+   1122 		npShot->nSpin = 0;
+   1123 		npShot->nCount = 16 + arand( 8 );
+   1124 		npShot->byColor = CYAN;
+   1125 		npShot->byPts = 2;
+   1126 		npShot->Pts[0].x = 128;
+   1127 		npShot->Pts[0].y = 50;
+   1128 		npShot->Pts[1].x = 0;
+   1129 		npShot->Pts[1].y = 50;
+   1130 		ACCEL( npShot, npShot->nDir, 200 + npShot->nCount );
+   1131 		AddHeadObj( &ShotList, npShot );
+   1132 	}
+   1133 }
+
+
+FireShot  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npShot. . . . . . . . . . auto                             -0002 
+
+   1134 
+   1135 //
+   1136 // AccelPlayer - move the player forward
+   1137 //
+   1138 
+   1139 VOID NEAR PASCAL AccelPlayer( INT nDir, INT nAccel )
+   1140 {
+   1141 	NPOBJ           npFlame;
+   1142 
+   1143 	nDir += npPlayer->nDir;
+   1144 	if (nAccel) ACCEL( npPlayer, nDir, nAccel );
+   1145 	if (npFlame = RemHeadObj( &FreeList ))
+   1146 	{
+   1147 		npFlame->Pos.x = npPlayer->Pos.x;
+   1148 		npFlame->Pos.y = npPlayer->Pos.y;
+   1149 		npFlame->Vel.x = npPlayer->Vel.x;
+   1150 		npFlame->Vel.y = npPlayer->Vel.y;
+   1151 		npFlame->nDir = nDir + 100 + arand( 57 );
+   1152 		npFlame->nSpin = 0;
+   1153 		npFlame->nCount = nAccel + arand( 7 );
+   1154 		npFlame->byColor = YELLOW;
+   1155 		npFlame->byPts = 1;
+   1156 		npFlame->Pts[0].x = npFlame->Pts[0].y = 0;
+   1157 		ACCEL( npFlame, npFlame->nDir, 50 + arand( 10 ) );
+   1158 		AddHeadObj( &FlameList, npFlame );
+   1159 	}
+   1160 }
+
+ 
+
+                                                                       PAGE  28
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+AccelPlayer  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npFlame . . . . . . . . . auto                             -0002 
+nAccel. . . . . . . . . . param                             0004
+nDir. . . . . . . . . . . param                             0006
+
+   1161 
+   1162 //
+   1163 // DrawPlayer - process and draw the player
+   1164 //
+   1165 
+   1166 VOID NEAR PASCAL DrawPlayer( HDC hDC )
+   1167 {
+   1168 	LOCAL INT       nBombing = 0;
+   1169 	LOCAL INT       nShotDelay = 0;
+   1170 
+   1171 	if (npPlayer->nCount <= 0) return;
+   1172 
+   1173 	if (nSafe > 0)
+   1174 	{
+   1175 		if (--nSafe == 0)
+   1176 		{
+   1177 			npPlayer->byColor = (BYTE)(BLACK + npPlayer->nCount);
+   1178 			if (npPlayer->byColor > WHITE) npPlayer->byColor = WHITE;
+   1179 		}
+   1180 	}
+   1181 	else if (IsKeyDown( vkShld ) && nShield > 0)
+   1182 	{
+   1183 		nSafe = 15;
+   1184 		if (--nShield > 0) npPlayer->byColor = GREEN;
+   1185 		else npPlayer->byColor = DKGREEN;
+   1186 	}
+   1187 
+   1188 	if (nBombing > 0)
+   1189 	{
+   1190 		if (--nBombing == 0)
+   1191 		{
+   1192 			ExplodeBadguys( hDC, &SpinnerList );
+   1193 			ExplodeBadguys( hDC, &SwarmerList );
+   1194 			ExplodeBadguys( hDC, &HunterList );
+   1195 		}
+   1196 		else
+   1197 		{
+   1198 			HitList( hDC, &SpinnerList );
+   1199 			HitList( hDC, &SwarmerList );
+   1200 			HitList( hDC, &HunterList );
+   1201 		}
+   1202 	}
+   1203 	else if (nBomb && IsKeyDown( vkBomb )) --nBomb, nBombing = 5;
+   1204 
+   1205 	if (IsKeyDown( vkClkw )) npPlayer->nSpin += 8;
+   1206 	if (IsKeyDown( vkCtrClkw )) npPlayer->nSpin -= 8;
+   1207 	if (IsKeyDown( vkThrst )) AccelPlayer( 0, 12 );
+   1208 	if (IsKeyDown( vkRvThrst )) AccelPlayer( 128, 12 );
+ 
+
+                                                                       PAGE  29
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1209 	if (nShotDelay) --nShotDelay;
+   1210 	else if (IsKeyDown( vkFire )) FireShot(), nShotDelay = 2;
+   1211 	DrawObject( hDC, npPlayer );
+   1212 	npPlayer->nSpin /= 2;
+   1213 }
+
+
+DrawPlayer  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hDC . . . . . . . . . . . param                             0004
+nBombing. . . . . . . . . static  int                  2    00c2
+nShotDelay. . . . . . . . static  int                  2    00c4
+
+   1214 
+   1215 //
+   1216 // GetHyperoidDC - get the correct DC for hyperoid rendering
+   1217 //
+   1218 
+   1219 HDC NEAR PASCAL GetHyperoidDC( HWND hWnd )
+   1220 {
+   1221 	HDC             hDC;
+   1222 	INT             cx, cy;
+   1223 	RECT            rect;
+   1224 
+   1225 	GetClientRect( hWnd, &rect );
+   1226 	cx = rect.right - rect.left;
+   1227 	cy = rect.bottom - rect.top;
+   1228 
+   1229 	hDC = GetDC( hWnd );
+   1230 
+   1231 	// set up the mapping mode
+   1232 	SetMapMode( hDC, MM_ISOTROPIC );
+   1233 	SetWindowExt( hDC, MAX_COORD, MAX_COORD );
+   1234 	SetViewportExt( hDC, cx / 2, -cy / 2 );
+   1235 	SetViewportOrg( hDC, cx / 2, cy / 2 );
+   1236 
+   1237 	// realize the palette
+   1238 	SelectPalette( hDC, hAppPalette, 0 );
+   1239 	RealizePalette( hDC );
+   1240 
+   1241 	return( hDC );
+   1242 }
+
+
+GetHyperoidDC  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hDC . . . . . . . . . . . auto                             -000e 
+rect. . . . . . . . . . . auto                             -000c 
+cy. . . . . . . . . . . . auto                             -0004 
+cx. . . . . . . . . . . . auto                             -0002 
+hWnd. . . . . . . . . . . param                             0004
+
+ 
+
+                                                                       PAGE  30
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1243 
+   1244 //
+   1245 // DrawObjects - transform and redraw everything in the system
+   1246 //
+   1247 
+   1248 VOID NEAR PASCAL DrawObjects( HWND hWnd )
+   1249 {
+   1250 	HDC             hDC = GetHyperoidDC( hWnd );
+   1251 
+   1252 	// move and draw things (I don't think the order is important...)
+   1253 	DrawPlayer( hDC );
+   1254 	DrawFlames( hDC );
+   1255 	DrawShots( hDC );
+   1256 	DrawRoids( hDC );
+   1257 	DrawSpinners( hDC );
+   1258 	DrawSwarmers( hDC );
+   1259 	DrawHunters( hDC );
+   1260 	DrawHunterShots( hDC );
+   1261 	DrawLetters( hDC );
+   1262 	DrawBonuses( hDC );
+   1263 	// (...but I'm not changing it!!! :-)
+   1264 
+   1265 	ReleaseDC( hWnd, hDC );
+   1266 }
+
+
+DrawObjects  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hDC . . . . . . . . . . . auto                             -0002 
+hWnd. . . . . . . . . . . param                             0004
+
+   1267 
+   1268 //
+   1269 // SetIndicator - set a quantity indicator
+   1270 //
+   1271 
+   1272 INT NEAR PASCAL SetIndicator( NPSTR npBuff, CHAR IDBitmap, INT nQuant )
+         
+   1273 {
+   1274 	if (nQuant > 5)
+   1275 	{
+   1276 		*npBuff++ = IDBitmap; *npBuff++ = IDBitmap;
+   1277 		*npBuff++ = IDBitmap; *npBuff++ = IDBitmap;
+   1278 		*npBuff++ = IDB_plus;
+   1279 	}
+   1280 	else
+   1281 	{
+   1282 		INT nBlank = 5 - nQuant;
+   1283 		while (nQuant--) *npBuff++ = IDBitmap;
+   1284 		while (nBlank--) *npBuff++ = IDB_blank;
+   1285 	}
+   1286 	return( 5 );
+   1287 }
+
+ 
+
+                                                                       PAGE  31
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+SetIndicator  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+nBlank. . . . . . . . . . auto                             -0002 
+nQuant. . . . . . . . . . param                             0004
+IDBitmap. . . . . . . . . param                             0006
+npBuff. . . . . . . . . . param                             0008
+
+   1288 
+   1289 //
+   1290 // CheckScore - show the score and such stuff
+   1291 //
+   1292 
+   1293 VOID NEAR PASCAL CheckScore( HWND hWnd )
+   1294 {
+   1295 	CHAR            szBuff[sizeof(szScore)];
+   1296 	NPSTR           npBuff = szBuff;
+   1297 	INT             nLives, nLen, nCnt, x, y;
+   1298 	HBITMAP         hbmOld;
+   1299 	HDC             hDC, hDCMem;
+   1300 
+   1301 	if (IsIconic( hWnd )) return;
+   1302 	if (lScore - lLastLife > EXTRA_LIFE)
+   1303 	{
+   1304 		AddExtraLife();
+   1305 		lLastLife = lScore;
+   1306 	}
+   1307 	nLives = ((npPlayer->nCount > 0) ? npPlayer->nCount : -npPlayer->nCoun
+         t);
+   1308 
+   1309 	*npBuff++ = IDB_level;
+   1310 	wsprintf( npBuff, "%2.2u", nLevel );
+   1311 	while (isdigit( *npBuff ))
+   1312 		*npBuff = (CHAR)(*npBuff + IDB_num0 - '0'), ++npBuff;
+   1313 	*npBuff++ = IDB_blank; *npBuff++ = IDB_score;
+   1314 	wsprintf( npBuff, "%7.7lu", lScore );
+   1315 	while (isdigit( *npBuff ))
+   1316 		*npBuff = (CHAR)(*npBuff + IDB_num0 - '0'), ++npBuff;
+   1317 	*npBuff++ = IDB_blank;
+   1318 	npBuff += SetIndicator( npBuff, IDB_life, nLives );
+   1319 	npBuff += SetIndicator( npBuff, IDB_shield, nShield );
+   1320 	npBuff += SetIndicator( npBuff, IDB_bomb, nBomb );
+   1321 	nLen = npBuff - szBuff;
+   1322 
+   1323 	hDC = GetWindowDC( hWnd );
+   1324 	IntersectClipRect( hDC, rectScoreClip.left, rectScoreClip.top,
+   1325 							rectScoreClip.right, rectScoreClip.bottom );
+   1326 	hDCMem = CreateCompatibleDC( hDC );
+   1327 	hbmOld = SelectObject( hDCMem, hBitmap[0] );
+   1328 	x = rectScoreClip.left;
+   1329 	y = rectScoreClip.top;
+   1330 
+   1331 	for (nCnt = 0; nCnt < nLen; ++nCnt)
+   1332 	{
+   1333 		if (szBuff[nCnt] != szScore[nCnt])
+ 
+
+                                                                       PAGE  32
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1334 		{
+   1335 			SelectObject( hDCMem, hBitmap[szBuff[nCnt] - IDB_blank] );
+   1336 			BitBlt( hDC, x, y, CX_BITMAP, CY_BITMAP, hDCMem, 0, 0, SRCCOPY );
+   1337 			szScore[nCnt] = szBuff[nCnt];
+   1338 		}
+   1339 		x += CX_BITMAP;
+   1340 	}
+   1341 	if (nCnt < nScoreLen)
+   1342 	{
+   1343 		SelectObject( hDCMem, hBitmap[0] );
+   1344 		do {
+   1345 			if (szScore[nCnt] != IDB_blank)
+   1346 			{
+   1347 				BitBlt( hDC, x, y, CX_BITMAP, CY_BITMAP, hDCMem, 0, 0, SRCCOPY );
+   1348 				szScore[nCnt] = IDB_blank;
+   1349 			}
+   1350 			x += CX_BITMAP;
+   1351 		} while (++nCnt < nScoreLen);
+   1352 	}
+   1353 	nScoreLen = nLen;
+   1354 
+   1355 	SelectObject( hDCMem, hbmOld );
+   1356 	DeleteDC( hDCMem );
+   1357 	ReleaseDC( hWnd, hDC );
+   1358 }
+
+
+CheckScore  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hDC . . . . . . . . . . . auto                             -003a 
+hDCMem. . . . . . . . . . auto                             -0038 
+nLen. . . . . . . . . . . auto                             -0036 
+y . . . . . . . . . . . . auto                             -0034 
+x . . . . . . . . . . . . auto                             -0032 
+hbmOld. . . . . . . . . . auto                             -0030 
+nCnt. . . . . . . . . . . auto                             -002e 
+npBuff. . . . . . . . . . auto                             -002c 
+nLives. . . . . . . . . . auto                             -002a 
+szBuff. . . . . . . . . . auto                             -0028 
+hWnd. . . . . . . . . . . param                             0004
+
+   1359 
+   1360 //
+   1361 // HitList - Hit() a list of things
+   1362 //
+   1363 
+   1364 VOID NEAR PASCAL HitList( HDC hDC, NPLIST npList )
+   1365 {
+   1366 	NPOBJ           npObj;
+   1367 
+   1368 	for (npObj = HeadObj( npList ); npObj; npObj = NextObj( npObj ))
+   1369 		if (npObj->nCount) Hit( hDC, npObj );
+   1370 }
+
+ 
+
+                                                                       PAGE  33
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+HitList  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npObj . . . . . . . . . . auto                             -0002 
+npList. . . . . . . . . . param                             0004
+hDC . . . . . . . . . . . param                             0006
+
+   1371 
+   1372 //
+   1373 // ExplodeBadguys - explode a list of badguys
+   1374 //
+   1375 
+   1376 VOID NEAR PASCAL ExplodeBadguys( HDC hDC, NPLIST npList )
+   1377 {
+   1378 	NPOBJ           npObj;
+   1379 
+   1380 	while (npObj = HeadObj( npList ))
+   1381 	{
+   1382 		KillBadGuy();
+   1383 		npObj->nCount = 0;
+   1384 		Explode( hDC, npObj );
+   1385 		RemoveObj( npList, npObj );
+   1386 		AddHeadObj( &FreeList, npObj );
+   1387 	}
+   1388 }
+
+
+ExplodeBadguys  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npObj . . . . . . . . . . auto                             -0002 
+npList. . . . . . . . . . param                             0004
+hDC . . . . . . . . . . . param                             0006
+
+   1389 
+   1390 //
+   1391 // NewGame - start a new game
+   1392 //
+   1393 
+   1394 VOID NEAR PASCAL NewGame( HWND hWnd )
+   1395 {
+   1396 	HDC             hDC = GetHyperoidDC( hWnd );
+   1397 
+   1398 	npPlayer->nCount = 0;
+   1399 	npPlayer->byColor = WHITE;
+   1400 	Explode( hDC, npPlayer );
+   1401 	SetRestart( RESTART_GAME );
+   1402 	ExplodeBadguys( hDC, &RoidList );
+   1403 	ExplodeBadguys( hDC, &SpinnerList );
+   1404 	ExplodeBadguys( hDC, &SwarmerList );
+   1405 	ExplodeBadguys( hDC, &HunterList );
+   1406 
+   1407 	ReleaseDC( hWnd, hDC );
+   1408 }
+ 
+
+                                                                       PAGE  34
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+
+NewGame  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hDC . . . . . . . . . . . auto                             -0002 
+hWnd. . . . . . . . . . . param                             0004
+
+   1409 
+   1410 //
+   1411 // RestartHyperoid - set up a game!
+   1412 //
+   1413 
+   1414 VOID NEAR PASCAL RestartHyperoid( VOID )
+   1415 {
+   1416 	if (npPlayer->nCount == 0)
+   1417 	{
+   1418 		POINT Pos, Vel;
+   1419 		Pos.x = 0;
+   1420 		Pos.y = -CLIP_COORD / 2;
+   1421 		Vel.x = 0;
+   1422 		Vel.y = 150;
+   1423 		PrintLetters( szAppName, Pos, Vel, YELLOW, 800 );
+   1424 		npPlayer->nCount = 3;
+   1425 		if (lHighScore < lScore) lHighScore = lScore;
+   1426 		lLastLife = lScore = 0;
+   1427 		nLevel = 0;
+   1428 		nShield = nBomb = 3;
+   1429 	}
+   1430 	else if (npPlayer->nCount < 0)
+   1431 	{
+   1432 		// cheesy way of restarting after a major collision
+   1433 		npPlayer->nCount = -npPlayer->nCount;
+   1434 		nShield = nBomb = 3;
+   1435 	}
+   1436 
+   1437 	npPlayer->Pos.x = npPlayer->Pos.y = 0;
+   1438 	npPlayer->Vel.x = npPlayer->Vel.y = 0;
+   1439 	npPlayer->nDir = 64;
+   1440 	npPlayer->nSpin = 0;
+   1441 	npPlayer->byColor = GREEN;
+   1442 	nSafe = 30;
+   1443 
+   1444 	if (ShotList.npHead)
+   1445 	{
+   1446 		NPOBJ npShot;
+   1447 		for (npShot = HeadObj( &ShotList ); npShot; npShot = NextObj( npShot 
+         ))
+   1448 			npShot->nCount = 1;
+   1449 	}
+   1450 
+   1451 	// reseed the asteroid field
+   1452 	if (nBadGuys == 0)
+   1453 	{
+   1454 		INT nCnt;
+ 
+
+                                                                       PAGE  35
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1455 		++nLevel;
+   1456 		for (nCnt = 5 + nLevel; nCnt; --nCnt)
+   1457 		{
+   1458 			POINT Pos, Vel;
+   1459 			Pos.x = arand( MAX_COORD * 2 ) - MAX_COORD;
+   1460 			Pos.y = arand( MAX_COORD * 2 ) - MAX_COORD;
+   1461 			Vel.x = Vel.y = 0;
+   1462 			CreateRoid( Pos, Vel, 6 + arand( 2 ),
+   1463 						(BYTE)(arand( 2 ) ? DKYELLOW : DKGREY),
+   1464 						arand( DEGREE_MAX ), 30 + arand( nLevel * 8 ), 0 );
+   1465 		}
+   1466 	}
+   1467 }
+
+
+RestartHyperoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+Vel . . . . . . . . . . . auto                             -0014 
+Pos . . . . . . . . . . . auto                             -0010 
+nCnt. . . . . . . . . . . auto                             -000c 
+npShot. . . . . . . . . . auto                             -000a 
+Vel . . . . . . . . . . . auto                             -0008 
+Pos . . . . . . . . . . . auto                             -0004 
+
+   1468 
+   1469 //
+   1470 // Panic - boss key (or just pause)
+   1471 //
+   1472 
+   1473 VOID NEAR PASCAL Panic( BOOL bPanic )
+   1474 {
+   1475 	if (bPanic && !bPaused)
+   1476 	{
+   1477 		bPaused = TRUE;
+   1478 		KillTimer( hAppWnd, DRAW_TIMER );
+   1479 		SetWindowText( hAppWnd, "Program Manager Help - PROGMAN.HLP" );
+   1480 		ShowWindow( hAppWnd, SW_SHOWMINNOACTIVE );
+   1481 		InvalidateRect( hAppWnd, NULL, TRUE );
+   1482 	}
+   1483 	else if (bPaused) // double-panic == normal
+   1484 	{
+   1485 		bPaused = FALSE;
+   1486 		SetWindowText( hAppWnd, szAppName );
+   1487 		if (bPanic) ShowWindow( hAppWnd, SW_RESTORE );
+   1488 		SetTimer( hAppWnd, DRAW_TIMER, nDrawDelay, NULL );
+   1489 	}
+   1490 }
+
+
+Panic  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+bPanic. . . . . . . . . . param                             0004
+ 
+
+                                                                       PAGE  36
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+   1491 
+   1492 //
+   1493 // PaintHyperoid - paint the hyperoid window
+   1494 //
+   1495 
+   1496 VOID NEAR PASCAL PaintHyperoid( HWND hWnd )
+   1497 {
+   1498 	PAINTSTRUCT     ps;
+   1499 
+   1500 	BeginPaint( hWnd, &ps );
+   1501 	if (bPaused) DrawIcon( ps.hdc, 2, 2, LoadIcon( hAppInst, INTRES(IDI_PA
+         NIC) ) );
+   1502 	EndPaint( hWnd, &ps );
+   1503 }
+
+
+PaintHyperoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+ps. . . . . . . . . . . . auto                             -0020 
+hWnd. . . . . . . . . . . param                             0004
+
+   1504 
+   1505 //
+   1506 // EraseHyperoidBkgnd - fill in the background
+   1507 //
+   1508 
+   1509 BOOL NEAR PASCAL EraseHyperoidBkgnd( HWND hWnd, HDC hDC )
+   1510 {
+   1511 	HBRUSH          hbr;
+   1512 	RECT            rect;
+   1513 
+   1514 	GetClientRect( hWnd, &rect );
+   1515 
+   1516 	if (bPaused)
+   1517 	{
+   1518 		SetBrushOrg( hDC, 0, 0 );
+   1519 		hbr = CreateSolidBrush( GetSysColor( COLOR_BACKGROUND ) );
+   1520 	}
+   1521 	else
+   1522 	{
+   1523 		SelectPalette( hDC, hAppPalette, 0 );
+   1524 		RealizePalette( hDC );
+   1525 		hbr = CreateSolidBrush( PALETTEINDEX( BLACK ) );
+   1526 	}
+   1527 
+   1528 	FillRect( hDC, &rect, hbr );
+   1529 	DeleteObject( hbr );
+   1530 	return( TRUE );
+   1531 }
+
+ 
+
+                                                                       PAGE  37
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+EraseHyperoidBkgnd  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+rect. . . . . . . . . . . auto                             -000a 
+hbr . . . . . . . . . . . auto                             -0002 
+hDC . . . . . . . . . . . param                             0004
+hWnd. . . . . . . . . . . param                             0006
+
+   1532 
+   1533 //
+   1534 // DrawShadowRect - draw a shaded rectangle around an object
+   1535 //
+   1536 
+   1537 VOID NEAR PASCAL DrawShadowRect( HDC hDC, NPRECT npRect, HPEN hHi, HPEN
+          hLo )
+   1538 {
+   1539 	SelectObject( hDC, hHi );
+   1540 	MoveTo( hDC, npRect->right, npRect->top );
+   1541 	LineTo( hDC, npRect->left, npRect->top );
+   1542 	LineTo( hDC, npRect->left, npRect->bottom );
+   1543 	SelectObject( hDC, hLo );
+   1544 	LineTo( hDC, npRect->right, npRect->bottom );
+   1545 	LineTo( hDC, npRect->right, npRect->top );
+   1546 }
+
+
+DrawShadowRect  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hLo . . . . . . . . . . . param                             0004
+hHi . . . . . . . . . . . param                             0006
+npRect. . . . . . . . . . param                             0008
+hDC . . . . . . . . . . . param                             000a
+
+   1547 
+   1548 //
+   1549 // NCPaintHyperoid - paint a custom frame
+   1550 //
+   1551 
+   1552 VOID NEAR PASCAL NCPaintHyperoid( HWND hWnd )
+   1553 {
+   1554 	HDC             hDC, hDCMem;
+   1555 	INT             cx, cy, cyCap, h;
+   1556 	HPEN            hpenHi, hpenLo;
+   1557 	HBRUSH          hbr;
+   1558 	HBITMAP         hbm, hbmOld;
+   1559 	BITMAP          bm;
+   1560 	RECT            rect;
+   1561 
+   1562 	if (IsIconic( hWnd )) return;
+   1563 	hDC = GetWindowDC( hWnd );
+   1564 	GetWindowRect( hWnd, &rect );
+   1565 	rect.right -= rect.left, rect.left = 0;
+   1566 	rect.bottom -= rect.top, rect.top = 0;
+ 
+
+                                                                       PAGE  38
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1567 	cx = GetSystemMetrics( SM_CXFRAME );
+   1568 	cy = GetSystemMetrics( SM_CYFRAME );
+   1569 	cyCap = cy + GetSystemMetrics( SM_CYCAPTION ) - 1;
+   1570 	h = rect.bottom - (cyCap + cy);
+   1571 
+   1572 	SelectPalette( hDC, hAppPalette, 0 );
+   1573 	RealizePalette( hDC );
+   1574 	if (bBW)
+   1575 	{
+   1576 		hbr = SelectObject( hDC, CreateSolidBrush( PALETTEINDEX( WHITE ) ) );
+         
+   1577 		hpenHi = hPen[BLACK];
+   1578 		hpenLo = hPen[BLACK];
+   1579 	}
+   1580 	else
+   1581 	{
+   1582 		hbr = SelectObject( hDC, CreateSolidBrush( PALETTEINDEX( GREY ) ) );
+   1583 		hpenHi = hPen[WHITE];
+   1584 		hpenLo = hPen[DKGREY];
+   1585 	}
+   1586 
+   1587 	PatBlt( hDC, 0, 0, rect.right, cyCap, PATCOPY );
+   1588 	PatBlt( hDC, 0, rect.bottom - cy, rect.right, rect.bottom, PATCOPY );
+   1589 	PatBlt( hDC, 0, cyCap, cx, h, PATCOPY );
+   1590 	PatBlt( hDC, rect.right - cx, cyCap, cx, h, PATCOPY );
+   1591 
+   1592 	--rect.bottom; --rect.right;
+   1593 	DrawShadowRect( hDC, &rect, hpenHi, hpenLo );
+   1594 	--cx; --cy;
+   1595 	rect.left += cx; rect.top += cy;
+   1596 	rect.right -= cx; rect.bottom -= cy;
+   1597 	if (!bBW) DrawShadowRect( hDC, &rect, hpenLo, hpenHi );
+   1598 
+   1599 	// get the title bar rect
+   1600 	++rect.left; ++rect.top; --rect.right;
+   1601 	rect.bottom = rect.top + cyCap - (cy + 2);
+   1602 	DrawShadowRect( hDC, &rect, hpenHi, hpenLo );
+   1603 	++rect.right; // for zoom/restore bitmap
+   1604 
+   1605 	hDCMem = CreateCompatibleDC( hDC );
+   1606 
+   1607 	hbm = LoadBitmap( NULL, INTRES(OBM_CLOSE) );
+   1608 	GetObject( hbm, sizeof(bm), (LPSTR)&bm );
+   1609 	bm.bmWidth /= 2; // they packed two images in here!
+   1610 	hbmOld = SelectObject( hDCMem, hbm );
+   1611 	BitBlt( hDC, rect.left, rect.top, bm.bmWidth, bm.bmHeight, hDCMem, 0, 
+         0, SRCCOPY );
+   1612 	rect.left += bm.bmWidth;
+   1613 
+   1614 	if (IsZoomed( hWnd )) hbm = LoadBitmap( NULL, INTRES(OBM_RESTORE) );
+   1615 	else hbm = LoadBitmap( NULL, INTRES(OBM_ZOOM) );
+   1616 	GetObject( hbm, sizeof(bm), (LPSTR)&bm );
+   1617 	SelectObject( hDCMem, hbm );
+   1618 	rect.right -= bm.bmWidth;
+   1619 	BitBlt( hDC, rect.right, rect.top, bm.bmWidth, bm.bmHeight, hDCMem, 0,
+          0, SRCCOPY );
+ 
+
+                                                                       PAGE  39
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1620 
+   1621 	hbm = LoadBitmap( NULL, INTRES(OBM_REDUCE) );
+   1622 	GetObject( hbm, sizeof(bm), (LPSTR)&bm );
+   1623 	SelectObject( hDCMem, hbm );
+   1624 	rect.right -= bm.bmWidth;
+   1625 	BitBlt( hDC, rect.right, rect.top, bm.bmWidth, bm.bmHeight, hDCMem, 0,
+          0, SRCCOPY );
+   1626 
+   1627 	--rect.right;
+   1628 	DrawShadowRect( hDC, &rect, hpenHi, hpenLo );
+   1629 
+   1630 	// clip the score to the free titlebar area
+   1631 	++rect.left; ++rect.top;
+   1632 	rectScoreClip = rect;
+   1633 
+   1634 	DeleteObject( SelectObject( hDCMem, hbmOld ) );
+   1635 	DeleteObject( SelectObject( hDC, hbr ) );
+   1636 	DeleteDC( hDCMem );
+   1637 	ReleaseDC( hWnd, hDC );
+   1638 
+   1639 	// make sure the score gets redrawn
+   1640 	for (cx = 0; cx < nScoreLen; ++cx) szScore[cx] = '\0';
+   1641 }
+
+
+NCPaintHyperoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hDC . . . . . . . . . . . auto                             -002c 
+bm. . . . . . . . . . . . auto                             -002a 
+hDCMem. . . . . . . . . . auto                             -001c 
+rect. . . . . . . . . . . auto                             -001a 
+cy. . . . . . . . . . . . auto                             -0012 
+hpenHi. . . . . . . . . . auto                             -0010 
+hbr . . . . . . . . . . . auto                             -000e 
+cx. . . . . . . . . . . . auto                             -000c 
+h . . . . . . . . . . . . auto                             -000a 
+hbm . . . . . . . . . . . auto                             -0008 
+hpenLo. . . . . . . . . . auto                             -0006 
+hbmOld. . . . . . . . . . auto                             -0004 
+cyCap . . . . . . . . . . auto                             -0002 
+hWnd. . . . . . . . . . . param                             0004
+
+   1642 
+   1643 //
+   1644 // HyperoidWndProc - the main window proc for Hyperoid
+   1645 //
+   1646 
+   1647 LONG FAR PASCAL EXPORT HyperoidWndProc( HWND hWnd, unsigned message,
+   1648 										WORD wParam, LONG lParam )
+   1649 {
+   1650 	switch (message)
+   1651 	{
+   1652 	case WM_CREATE:
+   1653 		RestartHyperoid();
+ 
+
+                                                                       PAGE  40
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1654 		SetTimer( hWnd, DRAW_TIMER, nDrawDelay, NULL );
+   1655 		NCPaintHyperoid( hWnd );
+   1656 		break;
+   1657 
+   1658 	case WM_TIMER:
+   1659 		switch (wParam)
+   1660 		{
+   1661 		case DRAW_TIMER:
+   1662 			CheckScore( hWnd );
+   1663 			DrawObjects( hWnd );
+   1664 			return( 0 );
+   1665 
+   1666 		case RESTART_TIMER:
+   1667 			KillTimer( hWnd, RESTART_TIMER );
+   1668 			bRestart = FALSE;
+   1669 			RestartHyperoid();
+   1670 			return( 0 );
+   1671 		}
+   1672 		break;
+   1673 
+   1674 	case WM_SYSCOMMAND:
+   1675 		switch (wParam)
+   1676 		{
+   1677 		case IDM_NEW:
+   1678 			NewGame( hWnd );
+   1679 			break;
+   1680 
+   1681 		case IDM_ABOUT:
+   1682 			AboutHyperoid( hWnd );
+   1683 			break;
+   1684 
+   1685 		default:
+   1686 			return( DefWindowProc( hWnd, message, wParam, lParam ) );
+   1687 		}
+   1688 		break;
+   1689 
+   1690 	case WM_QUERYOPEN:
+   1691 		Panic( FALSE );
+   1692 		return( DefWindowProc( hWnd, message, wParam, lParam ) );
+   1693 
+   1694 	case WM_CHAR:
+   1695 		if (wParam == VK_ESCAPE) Panic( TRUE );
+   1696 		break;
+   1697 
+   1698 	case WM_SYSKEYDOWN:
+   1699 	case WM_SYSKEYUP:
+   1700 	case WM_SYSCHAR:
+   1701 		if (lParam & (1L<<29)) // alt key is down
+   1702 		{
+   1703 			return( DefWindowProc( hWnd, message, wParam, lParam ) );
+   1704 		}
+   1705 		switch (wParam)
+   1706 		{
+   1707 		case VK_ESCAPE:
+   1708 			if (message == WM_SYSKEYDOWN) Panic( TRUE );
+   1709 			return( 0 );
+ 
+
+                                                                       PAGE  41
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1710 		case VK_SPACE:
+   1711 		case VK_TAB:
+   1712 			return( 0 );
+   1713 		default:
+   1714 			return( DefWindowProc( hWnd, message, wParam, lParam ) );
+   1715 		}
+   1716 		break;
+   1717 
+   1718 	case WM_ERASEBKGND:
+   1719 		return( EraseHyperoidBkgnd( hWnd, (HDC)wParam ) );
+   1720 
+   1721 	case WM_NCACTIVATE:
+   1722 	case WM_NCPAINT:
+   1723 		NCPaintHyperoid( hWnd );
+   1724 		return( TRUE );
+   1725 
+   1726 	case WM_PAINT:
+   1727 		PaintHyperoid( hWnd );
+   1728 		break;
+   1729 
+   1730 	case WM_QUERYNEWPALETTE:
+   1731 		{
+   1732 			HDC hDC = GetDC( hWnd );
+   1733 			SelectPalette( hDC, hAppPalette, 0 );
+   1734 			RealizePalette( hDC );
+   1735 			ReleaseDC( hWnd, hDC );
+   1736 		}
+   1737 		return( TRUE );
+   1738 
+   1739     case WM_DESTROY:
+   1740 		KillTimer( hWnd, DRAW_TIMER );
+   1741 		KillTimer( hWnd, RESTART_TIMER );
+   1742 		SaveHyperoidWindowPos( hWnd );
+   1743 		PostQuitMessage( 0 );
+   1744         break;
+   1745 
+   1746 	default:
+   1747 		return( DefWindowProc( hWnd, message, wParam, lParam ) );
+   1748     }
+   1749 	return( 0 );
+   1750 }
+
+
+HyperoidWndProc  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hDC . . . . . . . . . . . auto                             -0002 
+lParam. . . . . . . . . . param                             0006
+wParam. . . . . . . . . . param                             000a
+message . . . . . . . . . param                             000c
+hWnd. . . . . . . . . . . param                             000e
+
+   1751 
+   1752 //
+   1753 // InitHyperoid - initialize everything
+ 
+
+                                                                       PAGE  42
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1754 //
+   1755 
+   1756 BOOL NEAR PASCAL InitHyperoid( VOID )
+   1757 {
+   1758 	DOUBLE          dRad;
+   1759 	INT             nCnt;
+   1760 
+   1761 	// allocate the logical palette
+   1762 	hAppPalette = CreateHyperoidPalette();
+   1763 	if (!hAppPalette) return( FALSE );
+   1764 	for (nCnt = 0; nCnt < PALETTE_SIZE; ++nCnt)
+   1765 	{
+   1766 		hPen[nCnt] = CreatePen( PS_SOLID, 1, PALETTEINDEX( nCnt ) );
+   1767 		if (!hPen[nCnt]) return( FALSE );
+   1768 	}
+   1769 	for (nCnt = 0; nCnt < IDB_MAX; ++nCnt)
+   1770 	{
+   1771 		hBitmap[nCnt] = LoadBitmap( hAppInst, INTRES(IDB_blank + nCnt) );
+   1772 		if (!hPen[nCnt]) return( FALSE );
+   1773 	}
+   1774 
+   1775 	// seed the randomizer
+   1776 	dwSeed = GetCurrentTime();
+   1777 
+   1778 	// create the lookup table (should use resources)
+   1779 	for (nCnt = 0; nCnt < DEGREE_SIZE; ++nCnt)
+   1780 	{
+   1781 		dRad = nCnt * 6.2831855 / DEGREE_SIZE;
+   1782 		nCos[nCnt] = (INT)(DEGREE_MAX * cos( dRad ));
+   1783 		nSin[nCnt] = (INT)(DEGREE_MAX * sin( dRad ));
+   1784 	}
+   1785 
+   1786 	// get the initialization file info
+   1787 	GetHyperoidIni();
+   1788 
+   1789 	// allocate all objects as free
+   1790 	for (nCnt = 0; nCnt < MAX_OBJS; ++nCnt)
+   1791 		AddHeadObj( &FreeList, &(Obj[nCnt]) );
+   1792 
+   1793 	// set up the player
+   1794 	npPlayer = RemHeadObj( &FreeList );
+   1795 	npPlayer->byPts = DIM(Player);
+   1796 	npPlayer->nMass = 256;
+   1797 	for (nCnt = 0; nCnt < DIM(Player); ++nCnt)
+   1798 		npPlayer->Pts[nCnt] = Player[nCnt];
+   1799 
+   1800 	return( TRUE );
+   1801 }
+
+
+InitHyperoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+dRad. . . . . . . . . . . auto                             -000a 
+nCnt. . . . . . . . . . . auto                             -0002 
+ 
+
+                                                                       PAGE  43
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+   1802 
+   1803 //
+   1804 // ExitHyperoid - quit the damn game already!
+   1805 //
+   1806 
+   1807 VOID NEAR PASCAL ExitHyperoid( VOID )
+   1808 {
+   1809 	INT             nCnt;
+   1810 
+   1811 	if (hAppPalette) DeleteObject( hAppPalette );
+   1812 	for (nCnt = 0; nCnt < PALETTE_SIZE; ++nCnt)
+   1813 		if (hPen[nCnt]) DeleteObject( hPen[nCnt] );
+   1814 	for (nCnt = 0; nCnt < IDB_MAX; ++nCnt)
+   1815 		if (hBitmap[nCnt]) DeleteObject( hBitmap[nCnt] );
+   1816 }
+
+
+ExitHyperoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+nCnt. . . . . . . . . . . auto                             -0002 
+
+   1817 
+   1818 //
+   1819 // WinMain - everybody has to have one
+   1820 //
+   1821 
+   1822 INT FAR PASCAL WinMain( HANDLE hInstance, HANDLE hPrevInstance,
+   1823 						LPSTR lpszCmdLine, INT nCmdShow )
+   1824 {
+   1825 	MSG         msg;
+   1826 
+   1827 	hAppInst = hInstance;
+   1828 	if (!hPrevInstance)
+   1829 	{
+   1830 		// create the class if we're first
+   1831 		if (!CreateHyperoidClass()) return( FALSE );
+   1832 	}
+   1833 	else
+   1834 	{
+   1835 		// Copy data from previous instance
+   1836 		GetInstanceData( hPrevInstance, (PSTR)szAppName, sizeof(szAppName) );
+         
+   1837 	}
+   1838 	if (!InitHyperoid()) goto Abort; // I LOVE GOTOS! REALLY I DO!
+   1839 	hAppWnd = CreateHyperoidWindow( lpszCmdLine, nCmdShow );
+   1840 	if (!hAppWnd) return( FALSE );
+   1841 
+   1842 	while (GetMessage( &msg, NULL, 0, 0 ))
+   1843 	{
+   1844 		TranslateMessage( &msg );
+   1845 		DispatchMessage( &msg );
+   1846 	}
+   1847 
+ 
+
+                                                                       PAGE  44
+                                                                       09-07-<1
+                                                                       22:28:59
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+   1848 Abort:
+   1849 	ExitHyperoid();
+   1850 	return( msg.wParam );
+   1851 }
+
+
+WinMain  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+msg . . . . . . . . . . . auto                             -0012 
+nCmdShow. . . . . . . . . param                             0006
+lpszCmdLine . . . . . . . param                             0008
+hPrevInstance . . . . . . param                             000c
+hInstance . . . . . . . . param                             000e
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+AboutHyperoid . . . . . . extern  far function       ***     ***
+AccelPlayer . . . . . . . global  near function      ***    1e54
+AddExtraLife. . . . . . . global  near function      ***    03f2
+AddHead . . . . . . . . . global  near function      ***    0062
+BeginPaint. . . . . . . . extern  far function       ***     ***
+BitBlt. . . . . . . . . . extern  far function       ***     ***
+Bonus . . . . . . . . . . static  struct/array        24    005c
+BonusList . . . . . . . . common  struct/array         4     ***
+BreakRoid . . . . . . . . global  near function      ***    18fa
+CheckScore. . . . . . . . global  near function      ***    2268
+CreateBonus . . . . . . . global  near function      ***    08d2
+CreateCompatibleDC. . . . extern  far function       ***     ***
+CreateHunter. . . . . . . global  near function      ***    0e30
+CreateHyperoidClass . . . extern  far function       ***     ***
+CreateHyperoidPalette . . extern  far function       ***     ***
+CreateHyperoidWindow. . . extern  far function       ***     ***
+CreateLetter. . . . . . . global  far function       ***    0762
+CreatePen . . . . . . . . extern  far function       ***     ***
+CreateRoid. . . . . . . . global  near function      ***    17ae
+CreateSolidBrush. . . . . extern  far function       ***     ***
+CreateSpinner . . . . . . global  near function      ***    14ac
+CreateSwarmer . . . . . . global  near function      ***    117a
+DefWindowProc . . . . . . extern  far function       ***     ***
+DeleteDC. . . . . . . . . extern  far function       ***     ***
+DeleteObject. . . . . . . extern  far function       ***     ***
+DispatchMessage . . . . . extern  far function       ***     ***
+DrawBonuses . . . . . . . global  near function      ***    09e6
+DrawFlames. . . . . . . . global  near function      ***    1cf4
+DrawHunterShots . . . . . global  near function      ***    0c8c
+DrawHunters . . . . . . . global  near function      ***    0f2e
+DrawIcon. . . . . . . . . extern  far function       ***     ***
+DrawLetters . . . . . . . global  near function      ***    0872
+DrawObject. . . . . . . . global  near function      ***    011e
+DrawObjects . . . . . . . global  near function      ***    21a8
+DrawPlayer. . . . . . . . global  near function      ***    1faa
+ 
+
+                                                                       PAGE  45
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+DrawRoids . . . . . . . . global  near function      ***    1ad6
+DrawShadowRect. . . . . . global  near function      ***    2878
+DrawShots . . . . . . . . global  near function      ***    1c0c
+DrawSpinners. . . . . . . global  near function      ***    15a4
+DrawSwarmers. . . . . . . global  near function      ***    128a
+EndPaint. . . . . . . . . extern  far function       ***     ***
+EraseHyperoidBkgnd. . . . global  near function      ***    27fe
+ExitHyperoid. . . . . . . global  near function      ***    2f8a
+Explode . . . . . . . . . global  near function      ***    04ea
+ExplodeBadguys. . . . . . global  near function      ***    24f4
+FillRect. . . . . . . . . extern  far function       ***     ***
+FireHunterShot. . . . . . global  near function      ***    0d4e
+FireShot. . . . . . . . . global  near function      ***    1d64
+FlameList . . . . . . . . common  struct/array         4     ***
+FreeList. . . . . . . . . common  struct/array         4     ***
+GetAsyncKeyState. . . . . extern  far function       ***     ***
+GetClientRect . . . . . . extern  far function       ***     ***
+GetCurrentTime. . . . . . extern  far function       ***     ***
+GetDC . . . . . . . . . . extern  far function       ***     ***
+GetHyperoidDC . . . . . . global  near function      ***    2118
+GetHyperoidIni. . . . . . extern  far function       ***     ***
+GetInstanceData . . . . . extern  far function       ***     ***
+GetMessage. . . . . . . . extern  far function       ***     ***
+GetObject . . . . . . . . extern  far function       ***     ***
+GetSysColor . . . . . . . extern  far function       ***     ***
+GetSystemMetrics. . . . . extern  far function       ***     ***
+GetWindowDC . . . . . . . extern  far function       ***     ***
+GetWindowRect . . . . . . extern  far function       ***     ***
+Hit . . . . . . . . . . . global  near function      ***    041a
+HitList . . . . . . . . . global  near function      ***    24c0
+HitPlayer . . . . . . . . global  near function      ***    0656
+Hunter. . . . . . . . . . static  struct/array        32    003c
+HunterList. . . . . . . . common  struct/array         4     ***
+HunterShotList. . . . . . common  struct/array         4     ***
+HyperoidWndProc . . . . . global  far function       ***    2c4e
+InitHyperoid. . . . . . . global  near function      ***    2e14
+IntersectClipRect . . . . extern  far function       ***     ***
+InvalidateRect. . . . . . extern  far function       ***     ***
+IsIconic. . . . . . . . . extern  far function       ***     ***
+IsZoomed. . . . . . . . . extern  far function       ***     ***
+KillTimer . . . . . . . . extern  far function       ***     ***
+LetterList. . . . . . . . common  struct/array         4     ***
+LetterPart. . . . . . . . extern  struct/array       ***     ***
+LineTo. . . . . . . . . . extern  far function       ***     ***
+LoadBitmap. . . . . . . . extern  far function       ***     ***
+LoadIcon. . . . . . . . . extern  far function       ***     ***
+MoveTo. . . . . . . . . . extern  far function       ***     ***
+MulDiv. . . . . . . . . . extern  far function       ***     ***
+NCPaintHyperoid . . . . . global  near function      ***    28ea
+NewGame . . . . . . . . . global  near function      ***    2542
+Obj . . . . . . . . . . . common  struct/array      8800     ***
+ 
+
+                                                                       PAGE  46
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+PaintHyperoid . . . . . . global  near function      ***    27b4
+Panic . . . . . . . . . . global  near function      ***    2718
+PatBlt. . . . . . . . . . extern  far function       ***     ***
+Player. . . . . . . . . . static  struct/array        20    0000
+Polyline. . . . . . . . . extern  far function       ***     ***
+PostQuitMessage . . . . . extern  far function       ***     ***
+PrintLetters. . . . . . . extern  far function       ***     ***
+PrintPlayerMessage. . . . global  near function      ***    03b0
+RealizePalette. . . . . . extern  far function       ***     ***
+ReleaseDC . . . . . . . . extern  far function       ***     ***
+RemHead . . . . . . . . . global  near function      ***    00a4
+Remove. . . . . . . . . . global  near function      ***    00e6
+RestartHyperoid . . . . . global  near function      ***    25ac
+RoidList. . . . . . . . . common  struct/array         4     ***
+SaveHyperoidWindowPos . . extern  far function       ***     ***
+SelectObject. . . . . . . extern  far function       ***     ***
+SelectPalette . . . . . . extern  far function       ***     ***
+SetBrushOrg . . . . . . . extern  far function       ***     ***
+SetIndicator. . . . . . . global  near function      ***    21f0
+SetMapMode. . . . . . . . extern  far function       ***     ***
+SetPixel. . . . . . . . . extern  far function       ***     ***
+SetRestart. . . . . . . . global  near function      ***    0308
+SetTimer. . . . . . . . . extern  far function       ***     ***
+SetViewportExt. . . . . . extern  far function       ***     ***
+SetViewportOrg. . . . . . extern  far function       ***     ***
+SetWindowExt. . . . . . . extern  far function       ***     ***
+SetWindowText . . . . . . extern  far function       ***     ***
+ShotList. . . . . . . . . common  struct/array         4     ***
+ShowWindow. . . . . . . . extern  far function       ***     ***
+SpinLetters . . . . . . . extern  far function       ***     ***
+Spinner . . . . . . . . . static  struct/array        20    0014
+SpinnerList . . . . . . . common  struct/array         4     ***
+Swarmer . . . . . . . . . static  struct/array        20    0028
+SwarmerList . . . . . . . common  struct/array         4     ***
+TranslateMessage. . . . . extern  far function       ***     ***
+WinMain . . . . . . . . . global  far function       ***    2fe2
+_ctype. . . . . . . . . . extern  struct/array       ***     ***
+arand . . . . . . . . . . global  near function      ***    0000
+bBW . . . . . . . . . . . common  int                  2     ***
+bPaused . . . . . . . . . common  int                  2     ***
+bRestart. . . . . . . . . common  int                  2     ***
+cos . . . . . . . . . . . extern  far function       ***     ***
+dwSeed. . . . . . . . . . static  unsigned long        4    0032
+hAppInst. . . . . . . . . common  unsigned int         2     ***
+hAppPalette . . . . . . . common  unsigned int         2     ***
+hAppWnd . . . . . . . . . common  unsigned int         2     ***
+hBitmap . . . . . . . . . common  struct/array        34     ***
+hPen. . . . . . . . . . . common  struct/array        32     ***
+lHighScore. . . . . . . . common  long                 4     ***
+lLastLife . . . . . . . . common  long                 4     ***
+lScore. . . . . . . . . . common  long                 4     ***
+ 
+
+                                                                       PAGE  47
+                                                                       09-07-<1
+                                                                       22:28:59
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+nBadGuys. . . . . . . . . common  int                  2     ***
+nBomb . . . . . . . . . . common  int                  2     ***
+nCos. . . . . . . . . . . common  struct/array       512     ***
+nDrawDelay. . . . . . . . common  int                  2     ***
+nLevel. . . . . . . . . . common  int                  2     ***
+nSafe . . . . . . . . . . common  int                  2     ***
+nScoreLen . . . . . . . . static  int                  2    0030
+nShield . . . . . . . . . common  int                  2     ***
+nSin. . . . . . . . . . . common  struct/array       512     ***
+npPlayer. . . . . . . . . common  near pointer         2     ***
+pLocalHeap. . . . . . . . common  near pointer         2     ***
+rectScoreClip . . . . . . static  struct/array         8    0036
+rectShotClip. . . . . . . static  struct/array         8    0028
+sin . . . . . . . . . . . extern  far function       ***     ***
+strlen. . . . . . . . . . extern  far function       ***     ***
+szAppName . . . . . . . . common  struct/array        32     ***
+szLetterDesc. . . . . . . extern  struct/array       ***     ***
+szNumberDesc. . . . . . . extern  struct/array       ***     ***
+szScore . . . . . . . . . static  struct/array        40    0000
+vkBomb. . . . . . . . . . common  int                  2     ***
+vkClkw. . . . . . . . . . common  int                  2     ***
+vkCtrClkw . . . . . . . . common  int                  2     ***
+vkFire. . . . . . . . . . common  int                  2     ***
+vkRvThrst . . . . . . . . common  int                  2     ***
+vkShld. . . . . . . . . . common  int                  2     ***
+vkThrst . . . . . . . . . common  int                  2     ***
+wsprintf. . . . . . . . . extern  far function       ***     ***
+
+Code size = 3078 (12408)
+Data size = 0106 (262)
+Bss size  = 003e (62)
+
+No errors detected

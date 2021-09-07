@@ -1,0 +1,865 @@
+ 
+
+                                                                       PAGE   1
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+      1 //
+      2 // ROIDSUPP - hyperoid support functions
+      3 //
+      4 // Version: 1.1  Copyright (C) 1991, Hutchins Software
+      5 //      This software is licenced under the GNU General Public Licence
+      6 //      Please read the associated legal documentation
+      7 // Author: Edward Hutchins
+      8 // Revisions:
+      9 // 11/01/91 added GNU General Public License - Ed.
+     10 //
+     11 
+     12 #include "hyperoid.h"
+     13 
+     14 //
+     15 // defines
+     16 //
+     17 
+     18 // you may ask, "why did he embed all these string constants instead of
+         
+     19 // using the resource file?". Good question. The answer is: I feel bett
+         er
+     20 // knowing this stuff is part of the executable, and not part of the re
+         source
+     21 // file (which can be changed by sneaky people). Or maybe I wuz lazy.
+     22 // If you don't like it, then YOU can change it!
+     23 
+     24 #define NL "\x0d\x0a"
+     25 
+     26 #define HYPEROID_HELP \
+     27 "The following keys control your ship:" NL NL \
+     28 "  Left, Right Arrow .... spin left or right" NL \
+     29 "  Down, Up Arrow ..... forward or reverse thrust" NL \
+     30 "  Space Bar .............. fire!" NL \
+     31 "  Tab ......................... shields" NL \
+     32 "  S ............................. smartbomb" NL \
+     33 "  Esc ......................... pause/boss key" NL NL \
+     34 "Note: You have 3 lives, unlimited fuel and firepower, 3 shields and 3 
+         " \
+     35 "smartbombs. Your ship gets darker when you lose a life, but you keep o
+         n " \
+     36 "playing (unless you hit an asteroid). You get an extra life every 100,
+         000 " \
+     37 "points. When you lose the game, you start over immediately and can fin
+         ish " \
+     38 "off the current level (which should now be 0) before starting over at 
+         " \
+     39 "level 1 (There is no waiting around between games)."
+     40 
+     41 #define HYPEROID_HELP2 \
+     42 "The HYPEROID.INI file can be created/modified to change default settin
+         gs " \
+     43 "in Hyperoid. Here are some of the items you can set:" NL \
+     44 NL "[Hyperoid]" NL "Max=<0/1>" NL "{X,Y,W,H}=<n>" NL "Mono=<0/1>" NL \
+     45 "DrawDelay=<ms> ;microseconds/frame" NL \
+     46 NL "[Palette]" NL \
+     47 "{Black,DkGrey,Grey,White," NL \
+ 
+
+                                                                       PAGE   2
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+     48 " DkRed,Red,DkGreen,Green,DkBlue,Blue," NL \
+     49 " DkYellow,Yellow,DkCyan,Cyan," NL \
+     50 " DkMagenta,Magenta}=<r>,<g>,<b>" NL \
+     51 NL "[Keys]" NL \
+     52 "{Shield,Clockwise,CtrClockwise," NL \
+     53 " Thrust,RevThrust,Fire,Bomb}=<virtual keycode>" NL NL \
+     54 "Note: Virtual keycodes usually match the key's ASCII value."
+     55 
+     56 #define HYPEROID_HELPSTYLE (MB_OK | MB_ICONASTERISK)
+     57 
+     58 // this is the part I especially want in the executable image
+     59 
+     60 #define HYPEROID_LICENSE \
+     61 "This program is free software; you can redistribute it and/or modify "
+          \
+     62 "it under the terms of the GNU General Public License as published by "
+          \
+     63 "the Free Software Foundation; either version 1, or (at your option) " 
+         \
+     64 "any later version. " \
+     65 NL NL \
+     66 "This program is distributed in the hope that it will be useful, " \
+     67 "but WITHOUT ANY WARRANTY; without even the implied warranty of " \
+     68 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the " \
+     69 "GNU General Public License for more details. " \
+     70 NL NL \
+     71 "You should have received a copy of the GNU General Public License " \
+     72 "along with this program; if not, write to the Free Software " \
+     73 "Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. "
+     74 
+     75 //
+     76 // imports
+     77 //
+     78 
+     79 IMPORT CHAR         szAppName[32] FROM( hyperoid.c );
+     80 IMPORT HANDLE       hAppInst FROM( hyperoid.c );
+     81 IMPORT BOOL         bBW FROM( hyperoid.c );
+     82 IMPORT INT          nDrawDelay FROM( hyperoid.c );
+     83 IMPORT INT          vkShld FROM( hyperoid.c );
+     84 IMPORT INT          vkClkw FROM( hyperoid.c );
+     85 IMPORT INT          vkCtrClkw FROM( hyperoid.c );
+     86 IMPORT INT          vkThrst FROM( hyperoid.c );
+     87 IMPORT INT          vkRvThrst FROM( hyperoid.c );
+     88 IMPORT INT          vkFire FROM( hyperoid.c );
+     89 IMPORT INT          vkBomb FROM( hyperoid.c );
+     90 IMPORT LONG         lHighScore FROM( hyperoid.c );
+     91 
+     92 //
+     93 // globals
+     94 //
+     95 
+     96 // these parts map to "abcdefghijklm"
+     97 GLOBAL POINT        LetterPart[] =
+     98 {
+     99 	{83, 572}, {64, 512}, {45, 572}, {96, 362}, {32, 362},
+    100 	{128, 256}, {0, 0}, {0, 256},
+ 
+
+                                                                       PAGE   3
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    101 	{160, 362}, {224, 362}, {173, 572}, {192, 512}, {211, 572}
+    102 };
+    103 // here's the vector font
+    104 GLOBAL NPSTR        szNumberDesc[] =
+    105 {
+    106 	"cakmck",       // 0
+    107 	"dbl",          // 1
+    108 	"abekm",        // 2
+    109 	"abegjlk",      // 3
+    110 	"mcfh",         // 4
+    111 	"cbfgjlk",      // 5
+    112 	"bdiljgi",      // 6
+    113 	"acgl",         // 7
+    114 	"bdjlieb",      // 8
+    115 	"ljebdge"       // 9
+    116 };
+    117 GLOBAL NPSTR        szLetterDesc[] =
+    118 {
+    119 	"kdbemhf",      // A
+    120 	"kabegjlk",     // B
+    121 	"cbflm",        // C
+    122 	"kabejlk",      // D
+    123 	"cafgfkm",      // E
+    124 	"cafgfk",       // F
+    125 	"bdiljhg",      // G
+    126 	"kafhcm",       // H
+    127 	"bl",           // I
+    128 	"cjli",         // J
+    129 	"akcgm",        // K
+    130 	"akm",          // L
+    131 	"kagcm",        // M
+    132 	"kamc",         // N
+    133 	"bdiljeb",      // O
+    134 	"kabegf",       // P
+    135 	"mlidbejl",     // Q
+    136 	"kabegfgm",     // R
+    137 	"ebdjli",       // S
+    138 	"lbac",         // T
+    139 	"ailjc",        // U
+    140 	"alc",          // V
+    141 	"akgmc",        // W
+    142 	"amgkc",        // X
+    143 	"aglgc",        // Y
+    144 	"ackm"          // Z
+    145 };
+    146 
+    147 //
+    148 // locals
+    149 //
+    150 
+    151 LOCAL CHAR          szIni[] = "HYPEROID.INI";
+    152 LOCAL CHAR          szLicense[] = "LicenseRead";
+    153 LOCAL CHAR          szDrawDelay[] = "DrawDelay";
+    154 LOCAL CHAR          szMax[] = "Max";
+    155 LOCAL CHAR          szX[] = "X";
+    156 LOCAL CHAR          szY[] = "Y";
+ 
+
+                                                                       PAGE   4
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    157 LOCAL CHAR          szW[] = "W";
+    158 LOCAL CHAR          szH[] = "H";
+    159 LOCAL CHAR          szBW[] = "Mono";
+    160 LOCAL CHAR          szPalette[] = "Palette";
+    161 LOCAL CHAR          szKeys[] = "Keys";
+    162 LOCAL CHAR          szShield[] = "Shield";
+    163 LOCAL CHAR          szClockwise[] = "Clockwise";
+    164 LOCAL CHAR          szCtrClockwise[] = "CtrClockwise";
+    165 LOCAL CHAR          szThrust[] = "Thrust";
+    166 LOCAL CHAR          szRevThrust[] = "RevThrust";
+    167 LOCAL CHAR          szFire[] = "Fire";
+    168 LOCAL CHAR          szBomb[] = "Bomb";
+    169 LOCAL CHAR          szHi[] = "Hi";
+    170 LOCAL CHAR          *szColorName[] =
+    171 {
+    172 	"Black", "DkGrey", "Grey", "White",
+    173 	"DkRed", "Red",  "DkGreen", "Green", "DkBlue", "Blue",
+    174 	"DkYellow", "Yellow", "DkCyan", "Cyan", "DkMagenta", "Magenta"
+    175 };
+    176 LOCAL DWORD         dwColors[] =
+    177 {
+    178 	RGB(0,0,0), RGB(128,128,128),
+    179 	RGB(192,192,192), RGB(255,255,255),
+    180 	RGB(128,0,0), RGB(255,0,0),
+    181 	RGB(0,128,0), RGB(0,255,0),
+    182 	RGB(0,0,128), RGB(0,0,255),
+    183 	RGB(128,128,0), RGB(255,255,0),
+    184 	RGB(0,128,128), RGB(0,255,255),
+    185 	RGB(128,0,128), RGB(255,0,255),
+    186 };
+    187 
+    188 //
+    189 // PrintLetters - create letter objects from a string
+    190 //
+    191 
+    192 VOID FAR PASCAL PrintLetters( NPSTR npszText, POINT Pos, POINT Vel,
+    193 							  BYTE byColor, INT nSize )
+    194 {
+    195 	INT             nLen = strlen( npszText );
+    196 	INT             nCnt = nLen;
+    197 	INT             nSpace = nSize + nSize / 2;
+    198 	INT             nBase = (nLen - 1) * nSpace;
+    199 	INT             nBaseStart = Pos.x + nBase / 2;
+    200 
+    201 	while (nCnt--)
+    202 	{
+    203 		NPOBJ npLtr = CreateLetter( npszText[nCnt], nSize / 2 );
+    204 		if (npLtr)
+    205 		{
+    206 			npLtr->Pos.x = nBaseStart;
+    207 			npLtr->Pos.y = Pos.y;
+    208 			npLtr->Vel = Vel;
+    209 			npLtr->byColor = byColor;
+    210 		}
+    211 		nBaseStart -= nSpace;
+    212 	}
+ 
+
+                                                                       PAGE   5
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    213 }
+
+
+PrintLetters  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npLtr . . . . . . . . . . auto                             -000e 
+nLen. . . . . . . . . . . auto                             -000a 
+nSpace. . . . . . . . . . auto                             -0008 
+nBase . . . . . . . . . . auto                             -0006 
+nBaseStart. . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+nSize . . . . . . . . . . param                             0006
+byColor . . . . . . . . . param                             0008
+Vel . . . . . . . . . . . param                             000a
+Pos . . . . . . . . . . . param                             000e
+npszText. . . . . . . . . param                             0012
+
+    214 
+    215 //
+    216 // SpinLetters - spin letter objects away from center for effect
+    217 //
+    218 
+    219 VOID FAR PASCAL SpinLetters( NPSTR npszText, POINT Pos, POINT Vel,
+    220 							 BYTE byColor, INT nSize )
+    221 {
+    222 	INT             nLen = strlen( npszText );
+    223 	INT             nCnt = nLen;
+    224 	INT             nSpace = nSize + nSize / 2;
+    225 	INT             nBase = (nLen - 1) * nSpace;
+    226 	INT             nBaseStart = Pos.x + nBase / 2;
+    227 
+    228 	while (nCnt--)
+    229 	{
+    230 		NPOBJ npLtr = CreateLetter( npszText[nCnt], nSize / 2 );
+    231 		if (npLtr)
+    232 		{
+    233 			INT nSpin = (nCnt - nLen / 2) * 2;
+    234 			npLtr->Pos.x = nBaseStart;
+    235 			npLtr->Pos.y = Pos.y;
+    236 			npLtr->Vel = Vel;
+    237 			npLtr->Vel.x += nSpin * 16;
+    238 			npLtr->nSpin = -nSpin;
+    239 			npLtr->byColor = byColor;
+    240 		}
+    241 		nBaseStart -= nSpace;
+    242 	}
+    243 }
+
+
+SpinLetters  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+nSpin . . . . . . . . . . auto                             -0010 
+ 
+
+                                                                       PAGE   6
+                                                                       09-07-<1
+                                                                       22:29:04
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+SpinLetters  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+npLtr . . . . . . . . . . auto                             -000e 
+nLen. . . . . . . . . . . auto                             -000a 
+nSpace. . . . . . . . . . auto                             -0008 
+nBase . . . . . . . . . . auto                             -0006 
+nBaseStart. . . . . . . . auto                             -0004 
+nCnt. . . . . . . . . . . auto                             -0002 
+nSize . . . . . . . . . . param                             0006
+byColor . . . . . . . . . param                             0008
+Vel . . . . . . . . . . . param                             000a
+Pos . . . . . . . . . . . param                             000e
+npszText. . . . . . . . . param                             0012
+
+    244 
+    245 //
+    246 // CreateHyperoidPalette - create a logical palette
+    247 //
+    248 
+    249 HPALETTE FAR PASCAL CreateHyperoidPalette( VOID )
+    250 {
+    251 	HPALETTE        hPalette;
+    252 	HDC             hIC = CreateIC( "DISPLAY", NULL, NULL, NULL );
+    253 	INT             t;
+    254 	PALETTEENTRY    Pal[PALETTE_SIZE + 2];
+    255 	NPLOGPALETTE    npLogPalette = (NPLOGPALETTE)Pal;
+    256 
+    257 	// are we forced into using b&w?
+    258 	bBW = FALSE;
+    259 	if (GetDeviceCaps( hIC, NUMCOLORS ) < 8) bBW = TRUE;
+    260 	DeleteDC( hIC );
+    261 	if (GetPrivateProfileInt( szAppName, szBW, FALSE, szIni )) bBW = TRUE;
+         
+    262 
+    263 	npLogPalette->palVersion = 0x0300;
+    264 	npLogPalette->palNumEntries = PALETTE_SIZE;
+    265 
+    266 	for (t = 0; t < PALETTE_SIZE; ++t)
+    267 	{
+    268 		DWORD           dwColor = dwColors[t];
+    269 		CHAR            szBuff[32];
+    270 
+    271 		GetPrivateProfileString( szPalette, szColorName[t], "",
+    272 								 szBuff, sizeof(szBuff), szIni );
+    273 		if (szBuff[0])
+    274 		{
+    275 			INT r, g, b;
+    276 			NPSTR npBuff = szBuff;
+    277 			r = g = b = 255;
+    278 			while (*npBuff == ' ') ++npBuff;
+    279 			r = atoi( npBuff );
+    280 			while (*npBuff && *npBuff != ',') ++npBuff;
+    281 			if (*npBuff == ',') g = atoi( ++npBuff );
+ 
+
+                                                                       PAGE   7
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    282 			while (*npBuff && *npBuff != ',') ++npBuff;
+    283 			if (*npBuff == ',') b = atoi( ++npBuff );
+    284 			dwColor = RGB( r, g, b );
+    285 		}
+    286 		if (bBW) dwColor = ((dwColor == RGB(0,0,0)) ? RGB(0,0,0) : RGB(255,25
+         5,255));
+    287 		npLogPalette->palPalEntry[t].peRed = GetRValue( dwColor );
+    288 		npLogPalette->palPalEntry[t].peGreen = GetGValue( dwColor );
+    289 		npLogPalette->palPalEntry[t].peBlue = GetBValue( dwColor );
+    290 		npLogPalette->palPalEntry[t].peFlags = 0;
+    291 	}
+    292 
+    293 	hPalette = CreatePalette( npLogPalette );
+    294 	return( hPalette );
+    295 }
+
+
+CreateHyperoidPalette  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+g . . . . . . . . . . . . auto                             -007c 
+r . . . . . . . . . . . . auto                             -007a 
+b . . . . . . . . . . . . auto                             -0078 
+npBuff. . . . . . . . . . auto                             -0076 
+dwColor . . . . . . . . . auto                             -0074 
+szBuff. . . . . . . . . . auto                             -0070 
+npLogPalette. . . . . . . auto                             -0050 
+Pal . . . . . . . . . . . auto                             -004e 
+hPalette. . . . . . . . . auto                             -0006 
+hIC . . . . . . . . . . . auto                             -0004 
+t . . . . . . . . . . . . auto                             -0002 
+
+    296 
+    297 //
+    298 // CreateHyperoidClass - create the class of Hyperoid's window
+    299 //
+    300 
+    301 BOOL FAR PASCAL CreateHyperoidClass( VOID )
+    302 {
+    303 	WNDCLASS        Class;
+    304 
+    305 	// load the name from the resource file
+    306 	LoadString( hAppInst, IDS_NAME, szAppName, sizeof(szAppName) );
+    307 
+    308 	Class.style = CS_HREDRAW | CS_VREDRAW;
+    309 	Class.lpfnWndProc = HyperoidWndProc;
+    310 	Class.cbClsExtra = 0;
+    311 	Class.cbWndExtra = 0;
+    312 	Class.hInstance = hAppInst;
+    313 	Class.hIcon = NULL;
+    314 	Class.hCursor = LoadCursor( NULL, IDC_CROSS );
+    315 	Class.hbrBackground = HNULL;
+    316 	Class.lpszMenuName = szAppName;
+    317 	Class.lpszClassName = szAppName;
+    318 
+ 
+
+                                                                       PAGE   8
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    319 	return( RegisterClass( &Class ) );
+    320 }
+
+
+CreateHyperoidClass  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+Class . . . . . . . . . . auto                             -001a 
+
+    321 
+    322 //
+    323 // SetHyperoidMenu - add Hyperoid's menu items to the system menu
+    324 //
+    325 
+    326 VOID NEAR PASCAL SetHyperoidMenu( HWND hWnd, INT nFirstID, INT nLastID 
+         )
+    327 {
+    328 	CHAR            szMenuName[40];
+    329 	HMENU           hMenu;
+    330 
+    331 	hMenu = GetSystemMenu( hWnd, TRUE );
+    332 	if (hMenu == HNULL) hMenu = GetSystemMenu( hWnd, FALSE );
+    333 	if (hMenu == HNULL) return;
+    334 
+    335 	while (nFirstID <= nLastID)
+    336 	{
+    337 		LoadString( hAppInst, nFirstID, szMenuName, sizeof(szMenuName) );
+    338 		ChangeMenu( hMenu, 0, szMenuName, nFirstID, MF_APPEND );
+    339 		++nFirstID;
+    340 	}
+    341 }
+
+
+SetHyperoidMenu  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hMenu . . . . . . . . . . auto                             -002a 
+szMenuName. . . . . . . . auto                             -0028 
+nLastID . . . . . . . . . param                             0004
+nFirstID. . . . . . . . . param                             0006
+hWnd. . . . . . . . . . . param                             0008
+
+    342 
+    343 //
+    344 // CreateHyperoidWindow - open the Hyperoid window
+    345 //
+    346 
+    347 HWND FAR PASCAL CreateHyperoidWindow( LPSTR lpszCmd, INT nCmdShow )
+    348 {
+    349 	HWND            hWnd;
+    350 	INT             x, y, w, h;
+    351 	CHAR            szBuff[32];
+    352 
+    353 	// get the highscore profile here for lack of a better place...
+ 
+
+                                                                       PAGE   9
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    354 	GetPrivateProfileString( szAppName, szHi, "0", szBuff, sizeof(szBuff),
+          szIni );
+    355 	lHighScore = atol( szBuff );
+    356 
+    357 	x = GetPrivateProfileInt( szAppName, szX, CW_USEDEFAULT, szIni );
+    358 	y = GetPrivateProfileInt( szAppName, szY, CW_USEDEFAULT, szIni );
+    359 	w = GetPrivateProfileInt( szAppName, szW, CW_USEDEFAULT, szIni );
+    360 	h = GetPrivateProfileInt( szAppName, szH, CW_USEDEFAULT, szIni );
+    361 	if (GetPrivateProfileInt( szAppName, szMax, FALSE, szIni ) &&
+    362 		nCmdShow == SW_NORMAL) nCmdShow = SW_SHOWMAXIMIZED;
+    363 
+    364 	hWnd = CreateWindow( szAppName, szAppName, WS_OVERLAPPEDWINDOW,
+    365 						 x, y, w, h, HNULL, HNULL, hAppInst, NULL );
+    366 	if (hWnd == HNULL) return( HNULL );
+    367 
+    368 	ShowWindow( hWnd, nCmdShow );
+    369 	UpdateWindow( hWnd );
+    370 	SetHyperoidMenu( hWnd, IDM_NEW, IDM_ABOUT );
+    371 
+    372 	// show the license...
+    373 	if (!GetPrivateProfileInt( szAppName, szLicense, FALSE, szIni ))
+    374 	{
+    375 		MessageBeep( HYPEROID_HELPSTYLE );
+    376 		MessageBox( hWnd, HYPEROID_LICENSE, "Hyperoid License", HYPEROID_HELP
+         STYLE );
+    377 		// ...and never show it again (unless they want to see it)
+    378 		WritePrivateProfileString( szAppName, szLicense, "1", szIni );
+    379 	}
+    380 
+    381 	return( hWnd );
+    382 }
+
+
+CreateHyperoidWindow  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+y . . . . . . . . . . . . auto                             -002a 
+x . . . . . . . . . . . . auto                             -0028 
+h . . . . . . . . . . . . auto                             -0026 
+w . . . . . . . . . . . . auto                             -0024 
+hWnd. . . . . . . . . . . auto                             -0022 
+szBuff. . . . . . . . . . auto                             -0020 
+nCmdShow. . . . . . . . . param                             0006
+lpszCmd . . . . . . . . . param                             0008
+
+    383 
+    384 //
+    385 // SaveHyperoidWindowPos - write out the .ini information
+    386 //
+    387 
+    388 VOID FAR PASCAL SaveHyperoidWindowPos( HWND hWnd )
+    389 {
+    390 	RECT            rect;
+    391 	CHAR            szBuff[32];
+    392 
+ 
+
+                                                                       PAGE  10
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    393 	// save the highscore profile here for lack of a better place...
+    394 	if (lHighScore)
+    395 	{
+    396 		wsprintf( szBuff, "%lu", lHighScore );
+    397 		WritePrivateProfileString( szAppName, szHi, szBuff, szIni );
+    398 	}
+    399 
+    400 	if (IsIconic( hWnd )) return;
+    401 	if (IsZoomed( hWnd ))
+    402 	{
+    403 		WritePrivateProfileString( szAppName, szMax, "1", szIni );
+    404 		return;
+    405 	}
+    406 	else WritePrivateProfileString( szAppName, szMax, NULL, szIni );
+    407 
+    408 	GetWindowRect( hWnd, &rect );
+    409 	wsprintf( szBuff, "%d", rect.left );
+    410 	WritePrivateProfileString( szAppName, szX, szBuff, szIni );
+    411 	wsprintf( szBuff, "%d", rect.top );
+    412 	WritePrivateProfileString( szAppName, szY, szBuff, szIni );
+    413 	wsprintf( szBuff, "%d", rect.right - rect.left );
+    414 	WritePrivateProfileString( szAppName, szW, szBuff, szIni );
+    415 	wsprintf( szBuff, "%d", rect.bottom - rect.top );
+    416 	WritePrivateProfileString( szAppName, szH, szBuff, szIni );
+    417 }
+
+
+SaveHyperoidWindowPos  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+rect. . . . . . . . . . . auto                             -0028 
+szBuff. . . . . . . . . . auto                             -0020 
+hWnd. . . . . . . . . . . param                             0006
+
+    418 
+    419 //
+    420 // GetHyperoidIni - load the ini file information
+    421 //
+    422 
+    423 VOID FAR PASCAL GetHyperoidIni( VOID )
+    424 {
+    425 	nDrawDelay = GetPrivateProfileInt( szAppName, szDrawDelay, DRAW_DELAY,
+          szIni );
+    426 	vkShld = GetPrivateProfileInt( szKeys, szShield, VK_TAB, szIni );
+    427 	vkClkw = GetPrivateProfileInt( szKeys, szClockwise, VK_LEFT, szIni );
+    428 	vkCtrClkw = GetPrivateProfileInt( szKeys, szCtrClockwise, VK_RIGHT, sz
+         Ini );
+    429 	vkThrst = GetPrivateProfileInt( szKeys, szThrust, VK_DOWN, szIni );
+    430 	vkRvThrst = GetPrivateProfileInt( szKeys, szRevThrust, VK_UP, szIni );
+         
+    431 	vkFire = GetPrivateProfileInt( szKeys, szFire, VK_SPACE, szIni );
+    432 	vkBomb = GetPrivateProfileInt( szKeys, szBomb, 'S', szIni );
+    433 }
+    434 
+    435 //
+ 
+
+                                                                       PAGE  11
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    436 // HyperoidHelp - show help
+    437 //
+    438 
+    439 VOID FAR PASCAL HyperoidHelp( HWND hWnd )
+    440 {
+    441 	MessageBox( hWnd, HYPEROID_HELP, "Hyperoid help", HYPEROID_HELPSTYLE )
+         ;
+    442 	MessageBox( hWnd, HYPEROID_HELP2, "Hyperoid.ini help", HYPEROID_HELPST
+         YLE );
+    443 }
+
+
+HyperoidHelp  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+hWnd. . . . . . . . . . . param                             0006
+
+    444 
+    445 //
+    446 // HyperoidAboutDlg - the about box proc
+    447 //
+    448 
+    449 BOOL FAR PASCAL EXPORT HyperoidAboutDlg( HWND hDlg, WORD mess,
+    450 										 WORD wParam, LONG lParam )
+    451 {
+    452 	switch (mess)
+    453 	{
+    454 	case WM_INITDIALOG:
+    455 		if (lHighScore)
+    456 		{
+    457 			CHAR szBuff[40];
+    458 			wsprintf( szBuff, "High Score: %7.7lu", lHighScore );
+    459 			SetDlgItemText( hDlg, IDD_A_HISCORE, szBuff );
+    460 		}
+    461 		break;
+    462 
+    463 	case WM_COMMAND:
+    464 		switch (wParam)
+    465 		{
+    466 		case IDD_A_HELP:
+    467 			HyperoidHelp( hDlg );
+    468 			// fall through...
+    469 		case IDOK:
+    470 			EndDialog( hDlg, 0 );
+    471 			break;
+    472 
+    473 		default:
+    474 			return( FALSE );
+    475 		}
+    476 		break;
+    477 
+    478 	case WM_CLOSE:
+    479 		EndDialog( hDlg, FALSE );
+    480 		break;
+    481 
+ 
+
+                                                                       PAGE  12
+                                                                       09-07-<1
+                                                                       22:29:04
+
+ Line#  Source Line                       Microsoft C Compiler Version 6.00A   
+
+    482 	default:
+    483 		return( FALSE );
+    484 	}
+    485 	return( TRUE );
+    486 }
+
+
+HyperoidAboutDlg  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+szBuff. . . . . . . . . . auto                             -0028 
+lParam. . . . . . . . . . param                             0006
+wParam. . . . . . . . . . param                             000a
+mess. . . . . . . . . . . param                             000c
+hDlg. . . . . . . . . . . param                             000e
+
+    487 
+    488 //
+    489 // AboutHyperoid - show the about box
+    490 //
+    491 
+    492 VOID FAR PASCAL AboutHyperoid( HWND hWnd )
+    493 {
+    494 	FARPROC lpprocAbout = MakeProcInstance( HyperoidAboutDlg, hAppInst );
+    495 	DialogBox( hAppInst, INTRES( IDD_ABOUT ), hWnd, lpprocAbout );
+    496 	FreeProcInstance( lpprocAbout );
+    497 }
+
+
+AboutHyperoid  Local Symbols
+
+Name                      Class   Type              Size   Offset  Register
+
+lpprocAbout . . . . . . . auto                             -0004 
+hWnd. . . . . . . . . . . param                             0006
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+AboutHyperoid . . . . . . global  far function       ***    083e
+ChangeMenu. . . . . . . . extern  far function       ***     ***
+CreateHyperoidClass . . . global  far function       ***    0304
+CreateHyperoidPalette . . global  far function       ***    014e
+CreateHyperoidWindow. . . global  far function       ***    03e2
+CreateIC. . . . . . . . . extern  far function       ***     ***
+CreateLetter. . . . . . . extern  far function       ***     ***
+CreatePalette . . . . . . extern  far function       ***     ***
+CreateWindow. . . . . . . extern  far function       ***     ***
+DeleteDC. . . . . . . . . extern  far function       ***     ***
+DialogBox . . . . . . . . extern  far function       ***     ***
+EndDialog . . . . . . . . extern  far function       ***     ***
+FreeProcInstance. . . . . extern  far function       ***     ***
+GetDeviceCaps . . . . . . extern  far function       ***     ***
+ 
+
+                                                                       PAGE  13
+                                                                       09-07-<1
+                                                                       22:29:04
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+GetHyperoidIni. . . . . . global  far function       ***    06b4
+GetPrivateProfileInt. . . extern  far function       ***     ***
+GetPrivateProfileString . extern  far function       ***     ***
+GetSystemMenu . . . . . . extern  far function       ***     ***
+GetWindowRect . . . . . . extern  far function       ***     ***
+HyperoidAboutDlg. . . . . global  far function       ***    07c4
+HyperoidHelp. . . . . . . global  far function       ***    078e
+HyperoidWndProc . . . . . extern  far function       ***     ***
+IsIconic. . . . . . . . . extern  far function       ***     ***
+IsZoomed. . . . . . . . . extern  far function       ***     ***
+LetterPart. . . . . . . . global  struct/array        52    0156
+LoadCursor. . . . . . . . extern  far function       ***     ***
+LoadString. . . . . . . . extern  far function       ***     ***
+MakeProcInstance. . . . . extern  far function       ***     ***
+MessageBeep . . . . . . . extern  far function       ***     ***
+MessageBox. . . . . . . . extern  far function       ***     ***
+PrintLetters. . . . . . . global  far function       ***    0000
+RegisterClass . . . . . . extern  far function       ***     ***
+SaveHyperoidWindowPos . . global  far function       ***    055a
+SetDlgItemText. . . . . . extern  far function       ***     ***
+SetHyperoidMenu . . . . . global  near function      ***    0374
+ShowWindow. . . . . . . . extern  far function       ***     ***
+SpinLetters . . . . . . . global  far function       ***    008c
+UpdateWindow. . . . . . . extern  far function       ***     ***
+WritePrivateProfileString extern  far function       ***     ***
+atoi. . . . . . . . . . . extern  far function       ***     ***
+atol. . . . . . . . . . . extern  far function       ***     ***
+bBW . . . . . . . . . . . extern  int                  2     ***
+dwColors. . . . . . . . . static  struct/array        64    0278
+hAppInst. . . . . . . . . extern  unsigned int         2     ***
+lHighScore. . . . . . . . extern  long                 4     ***
+nDrawDelay. . . . . . . . extern  int                  2     ***
+pLocalHeap. . . . . . . . common  near pointer         2     ***
+strlen. . . . . . . . . . extern  far function       ***     ***
+szAppName . . . . . . . . extern  struct/array        32     ***
+szBW. . . . . . . . . . . static  struct/array         5    0202
+szBomb. . . . . . . . . . static  struct/array         5    024e
+szClockwise . . . . . . . static  struct/array        10    021e
+szColorName . . . . . . . static  struct/array        32    0258
+szCtrClockwise. . . . . . static  struct/array        13    0228
+szDrawDelay . . . . . . . static  struct/array        10    01ec
+szFire. . . . . . . . . . static  struct/array         5    0248
+szH . . . . . . . . . . . static  struct/array         2    0200
+szHi. . . . . . . . . . . static  struct/array         3    0254
+szIni . . . . . . . . . . static  struct/array        13    01d2
+szKeys. . . . . . . . . . static  struct/array         5    0210
+szLetterDesc. . . . . . . global  struct/array        52    019e
+szLicense . . . . . . . . static  struct/array        12    01e0
+szMax . . . . . . . . . . static  struct/array         4    01f6
+szNumberDesc. . . . . . . global  struct/array        20    018a
+szPalette . . . . . . . . static  struct/array         8    0208
+ 
+
+                                                                       PAGE  14
+                                                                       09-07-<1
+                                                                       22:29:04
+
+                                          Microsoft C Compiler Version 6.00A   
+
+
+Global Symbols
+
+Name                      Class   Type              Size   Offset  
+
+szRevThrust . . . . . . . static  struct/array        10    023e
+szShield. . . . . . . . . static  struct/array         7    0216
+szThrust. . . . . . . . . static  struct/array         7    0236
+szW . . . . . . . . . . . static  struct/array         2    01fe
+szX . . . . . . . . . . . static  struct/array         2    01fa
+szY . . . . . . . . . . . static  struct/array         2    01fc
+vkBomb. . . . . . . . . . extern  int                  2     ***
+vkClkw. . . . . . . . . . extern  int                  2     ***
+vkCtrClkw . . . . . . . . extern  int                  2     ***
+vkFire. . . . . . . . . . extern  int                  2     ***
+vkRvThrst . . . . . . . . extern  int                  2     ***
+vkShld. . . . . . . . . . extern  int                  2     ***
+vkThrst . . . . . . . . . extern  int                  2     ***
+wsprintf. . . . . . . . . extern  far function       ***     ***
+
+Code size = 0884 (2180)
+Data size = 0a74 (2676)
+Bss size  = 0000 (0)
+
+No errors detected
