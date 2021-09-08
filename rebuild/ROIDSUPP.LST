@@ -1,8 +1,8 @@
  
 
                                                                        PAGE   1
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -65,8 +65,8 @@
  
 
                                                                        PAGE   2
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -129,8 +129,8 @@
  
 
                                                                        PAGE   3
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -193,8 +193,8 @@
  
 
                                                                        PAGE   4
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -257,8 +257,8 @@
  
 
                                                                        PAGE   5
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -321,8 +321,8 @@ nSpin . . . . . . . . . . auto                             -0010
  
 
                                                                        PAGE   6
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -385,8 +385,8 @@ npszText. . . . . . . . . param                             0012
  
 
                                                                        PAGE   7
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -449,8 +449,8 @@ t . . . . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE   8
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -513,8 +513,8 @@ hWnd. . . . . . . . . . . param                             0008
  
 
                                                                        PAGE   9
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -577,8 +577,8 @@ lpszCmd . . . . . . . . . param                             0008
  
 
                                                                        PAGE  10
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -641,8 +641,8 @@ hWnd. . . . . . . . . . . param                             0006
  
 
                                                                        PAGE  11
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -705,8 +705,8 @@ hWnd. . . . . . . . . . . param                             0006
  
 
                                                                        PAGE  12
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -769,8 +769,8 @@ GetDeviceCaps . . . . . . extern  far function       ***     ***
  
 
                                                                        PAGE  13
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -833,8 +833,8 @@ szPalette . . . . . . . . static  struct/array         8    0208
  
 
                                                                        PAGE  14
-                                                                       09-07-<1
-                                                                       22:29:04
+                                                                       09-08-<1
+                                                                       10:58:25
 
                                           Microsoft C Compiler Version 6.00A   
 

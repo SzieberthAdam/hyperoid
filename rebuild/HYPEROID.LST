@@ -1,8 +1,8 @@
  
 
                                                                        PAGE   1
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -65,8 +65,8 @@
  
 
                                                                        PAGE   2
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -128,8 +128,8 @@
  
 
                                                                        PAGE   3
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -191,8 +191,8 @@ npList. . . . . . . . . . param                             0006
  
 
                                                                        PAGE   4
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -255,8 +255,8 @@ npList. . . . . . . . . . param                             0006
  
 
                                                                        PAGE   5
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -319,8 +319,8 @@ hDC . . . . . . . . . . . param                             0006
  
 
                                                                        PAGE   6
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -383,8 +383,8 @@ npszText. . . . . . . . . param                             0004
  
 
                                                                        PAGE   7
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -447,8 +447,8 @@ hDC . . . . . . . . . . . param                             0006
  
 
                                                                        PAGE   8
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -511,8 +511,8 @@ hDC . . . . . . . . . . . param                             0006
  
 
                                                                        PAGE   9
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -575,8 +575,8 @@ hDC . . . . . . . . . . . param                             0006
  
 
                                                                        PAGE  10
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -639,8 +639,8 @@ hDC . . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  11
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -703,8 +703,8 @@ nCnt. . . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE  12
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -767,8 +767,8 @@ nCnt. . . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE  13
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -831,8 +831,8 @@ nNextBonus. . . . . . . . static  int                  2    00ba
  
 
                                                                        PAGE  14
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -891,8 +891,8 @@ hDC . . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  15
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -955,8 +955,8 @@ nCnt. . . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE  16
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1019,8 +1019,8 @@ nCnt. . . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE  17
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1080,8 +1080,8 @@ nNextHunter . . . . . . . static  int                  2    00bc
  
 
                                                                        PAGE  18
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -1144,8 +1144,8 @@ Pos . . . . . . . . . . . param                             0008
  
 
                                                                        PAGE  19
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1208,8 +1208,8 @@ nNextSwarmer. . . . . . . static  int                  2    00be
  
 
                                                                        PAGE  20
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1272,8 +1272,8 @@ nCnt. . . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE  21
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1336,8 +1336,8 @@ nNextSpinner. . . . . . . static  int                  2    00c0
  
 
                                                                        PAGE  22
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1400,8 +1400,8 @@ Pos . . . . . . . . . . . param                             0012
  
 
                                                                        PAGE  23
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1464,8 +1464,8 @@ npShot. . . . . . . . . . param                             0004
  
 
                                                                        PAGE  24
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -1523,8 +1523,8 @@ hDC . . . . . . . . . . . param                             0008
  
 
                                                                        PAGE  25
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -1587,8 +1587,8 @@ hDC . . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  26
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -1651,8 +1651,8 @@ hDC . . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  27
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1714,8 +1714,8 @@ npShot. . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE  28
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -1778,8 +1778,8 @@ nDir. . . . . . . . . . . param                             0006
  
 
                                                                        PAGE  29
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1842,8 +1842,8 @@ hWnd. . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  30
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -1906,8 +1906,8 @@ hWnd. . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  31
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -1970,8 +1970,8 @@ npBuff. . . . . . . . . . param                             0008
  
 
                                                                        PAGE  32
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -2034,8 +2034,8 @@ hWnd. . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  33
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -2098,8 +2098,8 @@ hDC . . . . . . . . . . . param                             0006
  
 
                                                                        PAGE  34
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -2162,8 +2162,8 @@ hWnd. . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  35
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -2226,8 +2226,8 @@ bPanic. . . . . . . . . . param                             0004
  
 
                                                                        PAGE  36
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -2287,8 +2287,8 @@ hWnd. . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  37
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -2351,8 +2351,8 @@ hDC . . . . . . . . . . . param                             000a
  
 
                                                                        PAGE  38
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -2415,8 +2415,8 @@ hDC . . . . . . . . . . . param                             000a
  
 
                                                                        PAGE  39
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -2479,8 +2479,8 @@ hWnd. . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  40
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -2543,8 +2543,8 @@ hWnd. . . . . . . . . . . param                             0004
  
 
                                                                        PAGE  41
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -2607,8 +2607,8 @@ hWnd. . . . . . . . . . . param                             000e
  
 
                                                                        PAGE  42
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -2671,8 +2671,8 @@ nCnt. . . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE  43
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -2735,8 +2735,8 @@ nCnt. . . . . . . . . . . auto                             -0002
  
 
                                                                        PAGE  44
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
  Line#  Source Line                       Microsoft C Compiler Version 6.00A   
 
@@ -2799,8 +2799,8 @@ DrawPlayer. . . . . . . . global  near function      ***    1faa
  
 
                                                                        PAGE  45
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -2863,8 +2863,8 @@ Obj . . . . . . . . . . . common  struct/array      8800     ***
  
 
                                                                        PAGE  46
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 
@@ -2927,8 +2927,8 @@ lScore. . . . . . . . . . common  long                 4     ***
  
 
                                                                        PAGE  47
-                                                                       09-07-<1
-                                                                       22:28:59
+                                                                       09-08-<1
+                                                                       10:57:31
 
                                           Microsoft C Compiler Version 6.00A   
 

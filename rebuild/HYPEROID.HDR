@@ -1,5 +1,5 @@
 
-Microsoft (R) EXE File Header Utility  Version 2.01
+Microsoft (R) EXE File Header Utility  Version 2.01    
 Copyright (C) Microsoft Corp 1985-1990.  All rights reserved.
 
 .EXE size (bytes)         cb50
@@ -41,7 +41,7 @@ Movable entry points:     53
 Segment sector size:      16
 Heap allocation:          8000 bytes
 Application type:         WINDOWAPI
-Other module flags:
+Other module flags:       
 no. type address  file  mem   flags
   1 CODE 00007200 03077 03078 EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
                               relocs, (movable), (discardable), (nonshared)
@@ -427,3 +427,4 @@ ord seg offset name
     PTR     0f54  seg   3 offset 2366
     PTR     0f58  seg   3 offset 238d
   12 relocations
+
