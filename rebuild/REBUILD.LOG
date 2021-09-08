@@ -153,11 +153,11 @@ C:\WINDEV\LIB\LIBW.lib(_wsprintf)
 **** ASSIGN ADDRESSES ****
   1 segment "HYPEROID" class "CODE" length 0H bytes
   2 segment "ROIDSUPP" class "CODE" length 0H bytes
-  3 segment "HYPEROID_TEXT" class "CODE" length 3078H bytes
+  3 segment "HYPEROID_TEXT" class "CODE" length 3098H bytes
   4 segment "_DATA" class "DATA" length F32H bytes
   5 segment "CONST" class "CONST" length 18H bytes
   6 segment "_BSS" class "BSS" length 5AH bytes
-  7 segment "ROIDSUPP_TEXT" class "CODE" length 884H bytes
+  7 segment "ROIDSUPP_TEXT" class "CODE" length 8F8H bytes
   8 segment "_TEXT" class "CODE" length 2792H bytes
   9 segment "NULL" class "BEGDATA" length 10H bytes
  10 segment "CDATA" class "DATA" length EH bytes

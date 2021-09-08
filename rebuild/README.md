@@ -78,38 +78,31 @@ The MAP file produced by the linker.
 REBUILD.BAT
 -----------
 
-The batch file which does the rebuild. I prefer this way over using make helpers as a BAT file
-is much more readable and understandable than a MAK. In order to be able to build Hyperoid, you
-will need the following tools:
+The batch file which does the rebuild. I prefer this way over using maker utilities as a BAT
+file is much more readable and understandable than a MAK. In order to be able to build Hyperoid,
+you will need the following tools:
 
-* [Microsoft C Professional Development System 6.0a][] installed into `C:\C600` directory, with
-  combined libraries, all three math options, all memory models (especially medium), default
-  names, componenet libraries kept, and parts into default subdirectories.
+* **Microsoft C Professional Development System 6.0a** installed into default directories
+  (`C:\C600`). Medium memory model and floating point emulator are a must settings. However, I
+  recommend you to enable all math modes and memory models, and also keep the component
+  libraries. This let you all the build settings availabe to toy with.
 
-* [Microsoft Windows 3.0][] installed into `C:\WIN30`.
+* **Microsoft Windows 3.0** installed into `C:\WINDOWS`.
 
-* [Microsoft Windows 3.1][] installed into `C:\WINDOWS`.
-
-* [Microsoft Windows 3.0 SDK][] installed into `C:\WINDEV30`, parts into default subdirectories,
-  Windows set in `C:\WIN30`, both math coporcessors, all memory models (especially medium).
-
-[Microsoft C Professional Development System 6.0a]: https://winworldpc.com/download/45e280a2-46c5-a018-c39a-11c3a4e284a2)
-[Microsoft Windows 3.0]: https://winworldpc.com/download/c2bbc28f-177a-c2b2-5311-c3a4c2ac5a54
-[Microsoft Windows 3.0 SDK]: https://winworldpc.com/download/3d012254-18c3-9a11-c3a4-e284a2c3a570
-[Microsoft Windows 3.1]: https://winworldpc.com/download/41574932-18c3-9a11-c3a4-e284a2c3a570
+* **Microsoft Windows 3.0 SDK** installed into default subdirectories (`C:\WINDEV`).
 
 #### Notes
-
-* This messy build environment is a result of my experiment. It should be fixed as it might be
-  the cause of the rebuild Hyperoid version to not run on Windows 3.0.
 
 * The `/AM /W3 /Ze /O /Ol /Gs /DNDEBUG` CL options were taken from
   [Analysis/HYPEROID/HYPEROID.MAK](../analysis#hyperoidhyperoidmak). This determines the medium
   memory model which is fine as it seems to be the model of the original release too (compare
   the two HDR files).
 
+* Without the `/Gw` option the game crashes _Windows 3.0_ with an _Unrecoverable Application
+  Error_.
+
 * The `/CP:0xffff /SE:0x80 /ST:0x2000` LINK options were taken from
-  [Analysis/HYPEROID/HYPEROID.MAK](../analysis#hyperoidhyperoidmak). Note that the `\NOD` option
+  [Analysis/HYPEROID/HYPEROID.MAK](../analysis#hyperoidhyperoidmak). Note that the `/NOD` option
   got removed because it caused compiler errors
   (see [Analysis/HYPEROID/HYPEROID.DEF](../analysis#hyperoidhyperoiddef)).
 
