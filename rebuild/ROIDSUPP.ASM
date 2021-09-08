@@ -22,7 +22,8 @@
 ;	$S1374_szColorName	EQU	szColorName
 ;	$S1391_dwColors	EQU	dwColors
 	TITLE   ROIDSUPP.C
-	.8087
+	.286p
+	.287
 INCLUDELIB	MLIBCE
 ROIDSUPP_TEXT	SEGMENT  WORD PUBLIC 'CODE'
 ROIDSUPP_TEXT	ENDS
@@ -479,10 +480,8 @@ SPINLETTERS	PROC FAR
 	mov	cx,ax
 	shl	ax,1
 	mov	WORD PTR [bp-20],ax
-	mov	al,5
-	xchg	cx,ax
-	shl	ax,cl
-	mov	WORD PTR [bp-22],ax
+	shl	cx,5
+	mov	WORD PTR [bp-22],cx
 ; Line 228
 	jmp	SHORT $L20015
 $FC1420:
@@ -570,16 +569,14 @@ CREATEHYPEROIDPALETTE	PROC FAR
 ;	b = -122
 ;	npBuff = -120
 ; Line 252
-	mov	ax,OFFSET DGROUP:$SG1428
 	push	ds
-	push	ax
-	sub	ax,ax
-	push	ax
-	push	ax
-	push	ax
-	push	ax
-	push	ax
-	push	ax
+	push	OFFSET DGROUP:$SG1428
+	push	0
+	push	0
+	push	0
+	push	0
+	push	0
+	push	0
 	call	FAR PTR CREATEIC
 	mov	WORD PTR [bp-6],ax	;hIC
 ; Line 255
@@ -589,8 +586,7 @@ CREATEHYPEROIDPALETTE	PROC FAR
 	mov	WORD PTR _bBW,0
 ; Line 259
 	push	WORD PTR [bp-6]	;hIC
-	mov	ax,24
-	push	ax
+	push	24
 	call	FAR PTR GETDEVICECAPS
 	cmp	ax,8
 	jge	$I1432
@@ -600,17 +596,13 @@ $I1432:
 	push	WORD PTR [bp-6]	;hIC
 	call	FAR PTR DELETEDC
 ; Line 261
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1363_szBW
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	sub	ax,ax
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1363_szBW
+	push	0
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	or	ax,ax
 	je	$I1433
@@ -631,29 +623,25 @@ $F1434:
 	mov	WORD PTR [bp-118],ax	;dwColor
 	mov	WORD PTR [bp-116],dx
 ; Line 272
-	mov	ax,OFFSET DGROUP:$S1364_szPalette
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1364_szPalette
 	mov	bx,WORD PTR [bp-130]
 	push	ds
 	push	WORD PTR [bx]
-	mov	ax,OFFSET DGROUP:$SG1439
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$SG1439
 	lea	ax,WORD PTR [bp-114]	;szBuff
 	push	ss
 	push	ax
-	mov	cx,32
-	push	cx
-	mov	cx,OFFSET DGROUP:$S1355_szIni
+	push	32
 	push	ds
-	push	cx
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILESTRING
 ; Line 273
 	cmp	BYTE PTR [bp-114],0	;szBuff
-	jne	$JCC544
+	jne	$JCC534
 	jmp	$I1440
-$JCC544:
+$JCC534:
 ; Line 277
 	mov	ax,255
 	mov	WORD PTR [bp-122],ax	;b
@@ -760,9 +748,9 @@ $I1456:
 	add	WORD PTR [bp-128],4
 	add	WORD PTR [bp-130],2
 	cmp	WORD PTR [bp-130],OFFSET DGROUP:$S1374_szColorName+32
-	jae	$JCC783
+	jae	$JCC773
 	jmp	$F1434
-$JCC783:
+$JCC773:
 ; Line 294
 	lea	ax,WORD PTR [bp-80]	;Pal
 	push	ds
@@ -795,13 +783,10 @@ CREATEHYPEROIDCLASS	PROC FAR
 ;	Class = -28
 ; Line 306
 	push	WORD PTR _hAppInst
-	mov	ax,100
-	push	ax
-	mov	ax,OFFSET _szAppName
+	push	100
 	push	ds
-	push	ax
-	mov	ax,32
-	push	ax
+	push	OFFSET _szAppName
+	push	32
 	call	FAR PTR LOADSTRING
 ; Line 308
 	mov	WORD PTR [bp-28],3	;Class
@@ -819,10 +804,8 @@ CREATEHYPEROIDCLASS	PROC FAR
 	sub	ax,ax
 	mov	WORD PTR [bp-16],ax
 	push	ax
-	mov	ax,32515
-	cwd	
-	push	dx
 	push	ax
+	push	32515
 	call	FAR PTR LOADCURSOR
 	mov	WORD PTR [bp-14],ax
 ; Line 315
@@ -847,6 +830,7 @@ CREATEHYPEROIDCLASS	PROC FAR
 	pop	bp
 	dec	bp
 	ret	
+	nop	
 
 CREATEHYPEROIDCLASS	ENDP
 ; Line 327
@@ -862,8 +846,7 @@ SETHYPEROIDMENU	PROC NEAR
 ;	hMenu = -42
 ; Line 332
 	push	WORD PTR [bp+8]	;hWnd
-	mov	ax,1
-	push	ax
+	push	1
 	call	FAR PTR GETSYSTEMMENU
 	mov	WORD PTR [bp-42],ax	;hMenu
 	or	ax,ax
@@ -887,19 +870,16 @@ $FC1468:
 	lea	ax,WORD PTR [bp-40]	;szMenuName
 	push	ss
 	push	ax
-	mov	ax,40
-	push	ax
+	push	40
 	call	FAR PTR LOADSTRING
 ; Line 338
 	push	WORD PTR [bp-42]	;hMenu
-	sub	ax,ax
-	push	ax
+	push	0
 	lea	ax,WORD PTR [bp-40]	;szMenuName
 	push	ss
 	push	ax
 	push	WORD PTR [bp+6]	;nFirstID
-	mov	ax,256
-	push	ax
+	push	256
 	call	FAR PTR CHANGEMENU
 ; Line 340
 	mov	ax,WORD PTR [bp+4]	;nLastID
@@ -934,23 +914,18 @@ CREATEHYPEROIDWINDOW	PROC FAR
 ;	lpszCmd = 8
 ;	nCmdShow = 6
 ; Line 354
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	cx,OFFSET DGROUP:$S1373_szHi
+	push	OFFSET _szAppName
 	push	ds
-	push	cx
-	mov	cx,OFFSET DGROUP:$SG1479
+	push	OFFSET DGROUP:$S1373_szHi
 	push	ds
-	push	cx
-	lea	cx,WORD PTR [bp-34]	;szBuff
+	push	OFFSET DGROUP:$SG1479
+	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
-	push	cx
-	mov	dx,32
-	push	dx
-	mov	dx,OFFSET DGROUP:$S1355_szIni
+	push	ax
+	push	32
 	push	ds
-	push	dx
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILESTRING
 ; Line 355
 	lea	ax,WORD PTR [bp-34]	;szBuff
@@ -960,73 +935,53 @@ CREATEHYPEROIDWINDOW	PROC FAR
 	mov	WORD PTR _lHighScore,ax
 	mov	WORD PTR _lHighScore+2,dx
 ; Line 357
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1359_szX
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,-32768
-	push	ax
-	mov	cx,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1359_szX
+	push	-32768
 	push	ds
-	push	cx
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR [bp-42],ax	;x
 ; Line 358
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1360_szY
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,-32768
-	push	ax
-	mov	cx,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1360_szY
+	push	-32768
 	push	ds
-	push	cx
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR [bp-44],ax	;y
 ; Line 359
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1361_szW
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,-32768
-	push	ax
-	mov	cx,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1361_szW
+	push	-32768
 	push	ds
-	push	cx
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR [bp-38],ax	;w
 ; Line 360
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1362_szH
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,-32768
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1362_szH
+	push	-32768
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR [bp-40],ax	;h
 ; Line 362
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1358_szMax
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	sub	ax,ax
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1358_szMax
+	push	0
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	or	ax,ax
 	je	$I1480
@@ -1036,25 +991,21 @@ CREATEHYPEROIDWINDOW	PROC FAR
 ; Line 364
 $I1480:
 ; Line 366
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	sub	ax,ax
-	mov	dx,207
-	push	dx
-	push	ax
+	push	OFFSET _szAppName
+	push	207
+	push	0
 	push	WORD PTR [bp-42]	;x
 	push	WORD PTR [bp-44]	;y
 	push	WORD PTR [bp-38]	;w
 	push	WORD PTR [bp-40]	;h
-	push	ax
-	push	ax
+	push	0
+	push	0
 	push	WORD PTR _hAppInst
-	sub	cx,cx
-	push	cx
-	push	cx
+	push	0
+	push	0
 	call	FAR PTR CREATEWINDOW
 	mov	WORD PTR [bp-36],ax	;hWnd
 	or	ax,ax
@@ -1068,54 +1019,40 @@ $I1480:
 	call	FAR PTR UPDATEWINDOW
 ; Line 370
 	push	WORD PTR [bp-36]	;hWnd
-	mov	ax,200
-	push	ax
-	mov	ax,201
-	push	ax
+	push	200
+	push	201
 	call	SETHYPEROIDMENU
 ; Line 373
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1356_szLicense
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	sub	ax,ax
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1356_szLicense
+	push	0
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	or	ax,ax
 	jne	$I1482
 ; Line 375
-	mov	ax,64
-	push	ax
+	push	64
 	call	FAR PTR MESSAGEBEEP
 ; Line 376
 	push	WORD PTR [bp-36]	;hWnd
-	mov	ax,OFFSET DGROUP:$SG1484
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$SG1483
+	push	OFFSET DGROUP:$SG1484
 	push	ds
-	push	ax
-	mov	ax,64
-	push	ax
+	push	OFFSET DGROUP:$SG1483
+	push	64
 	call	FAR PTR MESSAGEBOX
 ; Line 378
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1356_szLicense
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$SG1485
+	push	OFFSET DGROUP:$S1356_szLicense
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$SG1485
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
 ; Line 381
 $I1482:
@@ -1129,7 +1066,6 @@ $EX1472:
 	pop	bp
 	dec	bp
 	ret	6
-	nop	
 
 CREATEHYPEROIDWINDOW	ENDP
 ; Line 389
@@ -1154,66 +1090,56 @@ SAVEHYPEROIDWINDOWPOS	PROC FAR
 ; Line 396
 	push	WORD PTR _lHighScore+2
 	push	WORD PTR _lHighScore
-	mov	ax,OFFSET DGROUP:$SG1491
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$SG1491
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
 	call	FAR PTR _wsprintf
 	add	sp,12
 ; Line 397
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1373_szHi
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1373_szHi
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
 ; Line 400
 $I1490:
 	push	WORD PTR [bp+6]	;hWnd
 	call	FAR PTR ISICONIC
 	or	ax,ax
-	je	$JCC1511
+	je	$JCC1443
 	jmp	$EX1487
-$JCC1511:
+$JCC1443:
 ; Line 401
 	push	WORD PTR [bp+6]	;hWnd
 	call	FAR PTR ISZOOMED
 	or	ax,ax
 	je	$I1493
 ; Line 403
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1358_szMax
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$SG1494
+	push	OFFSET DGROUP:$S1358_szMax
 	push	ds
+	push	OFFSET DGROUP:$SG1494
 	jmp	$L20016
 	nop	
 ; Line 406
 $I1493:
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	cx,OFFSET DGROUP:$S1358_szMax
+	push	OFFSET _szAppName
 	push	ds
-	push	cx
-	sub	cx,cx
-	push	cx
-	push	cx
-	mov	cx,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1358_szMax
+	push	0
+	push	0
 	push	ds
-	push	cx
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
 ; Line 408
 	push	WORD PTR [bp+6]	;hWnd
@@ -1223,104 +1149,88 @@ $I1493:
 	call	FAR PTR GETWINDOWRECT
 ; Line 409
 	push	WORD PTR [bp-42]	;rect
-	mov	ax,OFFSET DGROUP:$SG1496
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$SG1496
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
 	call	FAR PTR _wsprintf
 	add	sp,10
 ; Line 410
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1359_szX
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1359_szX
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
 ; Line 411
 	push	WORD PTR [bp-40]
-	mov	ax,OFFSET DGROUP:$SG1497
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$SG1497
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
 	call	FAR PTR _wsprintf
 	add	sp,10
 ; Line 412
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1360_szY
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1360_szY
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
 ; Line 413
 	mov	ax,WORD PTR [bp-38]
 	sub	ax,WORD PTR [bp-42]	;rect
 	push	ax
-	mov	ax,OFFSET DGROUP:$SG1498
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$SG1498
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
 	call	FAR PTR _wsprintf
 	add	sp,10
 ; Line 414
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1361_szW
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1361_szW
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
 ; Line 415
 	mov	ax,WORD PTR [bp-36]
 	sub	ax,WORD PTR [bp-40]
 	push	ax
-	mov	ax,OFFSET DGROUP:$SG1499
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$SG1499
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
 	call	FAR PTR _wsprintf
 	add	sp,10
 ; Line 416
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1362_szH
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1362_szH
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
+	push	ax
 $L20016:
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
 ; Line 417
 $EX1487:
@@ -1331,7 +1241,6 @@ $EX1487:
 	pop	bp
 	dec	bp
 	ret	2
-	nop	
 
 SAVEHYPEROIDWINDOWPOS	ENDP
 ; Line 424
@@ -1346,115 +1255,83 @@ GETHYPEROIDINI	PROC FAR
 	push	ds
 	mov	ds,ax
 ; Line 425
-	mov	ax,OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1357_szDrawDelay
+	push	OFFSET _szAppName
 	push	ds
-	push	ax
-	mov	ax,50
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1357_szDrawDelay
+	push	50
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR _nDrawDelay,ax
 ; Line 426
-	mov	ax,OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1366_szShield
+	push	OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,9
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1366_szShield
+	push	9
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR _vkShld,ax
 ; Line 427
-	mov	ax,OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1367_szClockwise
+	push	OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,37
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1367_szClockwise
+	push	37
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR _vkClkw,ax
 ; Line 428
-	mov	ax,OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1368_szCtrClockwise
+	push	OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,39
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1368_szCtrClockwise
+	push	39
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR _vkCtrClkw,ax
 ; Line 429
-	mov	ax,OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1369_szThrust
+	push	OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,40
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1369_szThrust
+	push	40
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR _vkThrst,ax
 ; Line 430
-	mov	ax,OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1370_szRevThrust
+	push	OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,38
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1370_szRevThrust
+	push	38
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR _vkRvThrst,ax
 ; Line 431
-	mov	ax,OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1371_szFire
+	push	OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,32
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1371_szFire
+	push	32
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR _vkFire,ax
 ; Line 432
-	mov	ax,OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1372_szBomb
+	push	OFFSET DGROUP:$S1365_szKeys
 	push	ds
-	push	ax
-	mov	ax,83
-	push	ax
-	mov	ax,OFFSET DGROUP:$S1355_szIni
+	push	OFFSET DGROUP:$S1372_szBomb
+	push	83
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR GETPRIVATEPROFILEINT
 	mov	WORD PTR _vkBomb,ax
 ; Line 433
@@ -1481,25 +1358,19 @@ HYPEROIDHELP	PROC FAR
 ;	hWnd = 6
 ; Line 441
 	push	WORD PTR [bp+6]	;hWnd
-	mov	ax,OFFSET DGROUP:$SG1504
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$SG1503
+	push	OFFSET DGROUP:$SG1504
 	push	ds
-	push	ax
-	mov	ax,64
-	push	ax
+	push	OFFSET DGROUP:$SG1503
+	push	64
 	call	FAR PTR MESSAGEBOX
 ; Line 442
 	push	WORD PTR [bp+6]	;hWnd
-	mov	ax,OFFSET DGROUP:$SG1506
 	push	ds
-	push	ax
-	mov	ax,OFFSET DGROUP:$SG1505
+	push	OFFSET DGROUP:$SG1506
 	push	ds
-	push	ax
-	mov	ax,64
-	push	ax
+	push	OFFSET DGROUP:$SG1505
+	push	64
 	call	FAR PTR MESSAGEBOX
 ; Line 443
 	dec	bp
@@ -1550,9 +1421,8 @@ $SC1516:
 ; Line 458
 	push	WORD PTR _lHighScore+2
 	push	WORD PTR _lHighScore
-	mov	ax,OFFSET DGROUP:$SG1519
 	push	ds
-	push	ax
+	push	OFFSET DGROUP:$SG1519
 	lea	ax,WORD PTR [bp-42]	;szBuff
 	push	ss
 	push	ax
@@ -1560,8 +1430,7 @@ $SC1516:
 	add	sp,12
 ; Line 459
 	push	WORD PTR [bp+14]	;hDlg
-	mov	ax,502
-	push	ax
+	push	502
 	lea	ax,WORD PTR [bp-42]	;szBuff
 	push	ss
 	push	ax
@@ -1585,8 +1454,7 @@ $SC1520:
 $SC1526:
 ; Line 470
 	push	WORD PTR [bp+14]	;hDlg
-	sub	ax,ax
-	push	ax
+	push	0
 	call	FAR PTR ENDDIALOG
 ; Line 484
 $SB1513:
@@ -1601,6 +1469,7 @@ $EX1511:
 	pop	bp
 	dec	bp
 	ret	10
+	nop	
 
 HYPEROIDABOUTDLG	ENDP
 ; Line 493
@@ -1618,23 +1487,19 @@ ABOUTHYPEROID	PROC FAR
 ;	hWnd = 6
 ;	lpprocAbout = -6
 ; Line 494
-	mov	ax,OFFSET HYPEROIDABOUTDLG
-	mov	dx,SEG HYPEROIDABOUTDLG
-	push	dx
-	push	ax
+	push	SEG HYPEROIDABOUTDLG
+	push	OFFSET HYPEROIDABOUTDLG
 	push	WORD PTR _hAppInst
 	call	FAR PTR MAKEPROCINSTANCE
 	mov	WORD PTR [bp-6],ax	;lpprocAbout
 	mov	WORD PTR [bp-4],dx
 ; Line 495
 	push	WORD PTR _hAppInst
-	mov	ax,500
-	cwd	
+	push	0
+	push	500
+	push	WORD PTR [bp+6]	;hWnd
 	push	dx
 	push	ax
-	push	WORD PTR [bp+6]	;hWnd
-	push	WORD PTR [bp-4]
-	push	WORD PTR [bp-6]	;lpprocAbout
 	call	FAR PTR DIALOGBOX
 ; Line 496
 	push	WORD PTR [bp-4]
@@ -1648,7 +1513,6 @@ ABOUTHYPEROID	PROC FAR
 	pop	bp
 	dec	bp
 	ret	2
-	nop	
 
 ABOUTHYPEROID	ENDP
 ROIDSUPP_TEXT	ENDS

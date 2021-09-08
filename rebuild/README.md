@@ -15,24 +15,6 @@ Product of URSoft W32Dasm v8.93, a 32/16 bit disassembler/debugger. Applied on
 * A mysterious `___EXPORTEDSTUB` appeared in the exports, in Segment 3. Check out
   [HYPEROID.HDR](#hyperoidhdr) and [HYPEROID.MAP](#hyperoidmap) for more info about it.
 
-* Instead of doing `push CONSTANT` instructions like the original EXE, the rebuilt one usually
-  put the constant to the AX and does a `push ax`. Example:
-  ```
-  ANALYSIS\HYPEROID.ALF; Line 7270:
-  :0002.04A9 68FC02                 push 02FC
-  :0002.04AC 6A00                   push 0000
-  :0002.04AE 1E                     push ds
-
-  REBUILD\\HYPEROID.ALF; Line 7497:
-  :0002.04C3 B8FC02                 mov ax, 02FC
-  :0002.04C6 1E                     push ds
-  :0002.04C7 50                     push ax
-  :0002.04C8 2BC0                   sub ax, ax
-  :0002.04CA 50                     push ax
-  ```
-  I was unable to change this behavior. I tried many many compiler and linker options alone and
-  in combinations without success.
-
 
 
 HYPEROID.EXE

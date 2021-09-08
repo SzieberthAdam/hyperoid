@@ -12,5 +12,5 @@ _Thank you Edward Hutchins for this wonderful and high quality Win16 game and th
 Issues
 ------
 
-* My build has an extra ___EXPORTEDSTUB export in it and the stack handling is also different.
+* My build has an extra ___EXPORTEDSTUB export in it and the disassembly is still different.
   For more, see [Hyperoid Re-Build Project Notes/HYPEROID.ALF](rebuild#hyperoidalf).
