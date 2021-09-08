@@ -1,3 +1,4 @@
 rebuild/hyperoid.bak
 rebuild/hyperoid.wpj
-rebuildenv/c
+rebuildenv/c/**
+!rebuildenv/c/README.md
