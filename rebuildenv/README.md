@@ -17,6 +17,9 @@ Once there, you have to install some propertiary tools in order to be able to bu
   recommend you to enable all math modes and memory models, and also keep the component
   libraries. This let you all the build settings availabe to toy with.
 
-* **Microsoft Windows 3.0** installed into `C:\WINDOWS`.
+* **[Microsoft Windows 3.0][]** installed into `C:\WINDOWS`.
 
-* **Microsoft Windows 3.0 SDK** installed into default subdirectories (`C:\WINDEV`).
+* **[Microsoft Windows 3.0 SDK][]** installed into default subdirectories (`C:\WINDEV`).
+
+[Microsoft Windows 3.0]: https://archive.org/details/windows-3.0-cd-rom.ver.-3.0.-multi-eng
+[Microsoft Windows 3.0 SDK]: https://archive.org/details/microsoft-windows-software-development-kit-v3.0

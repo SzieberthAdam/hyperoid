@@ -1,0 +1,5 @@
+rebuild/*.obj linguist-vendored
+rebuild/*.res linguist-vendored
+rebuildenv/c/** linguist-vendored
+rebuildenv/c/README.md linguist-vendored=false
+rebuildenv/dosbox/** linguist-vendored
