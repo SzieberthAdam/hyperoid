@@ -2,9 +2,9 @@
 Microsoft (R) EXE File Header Utility  Version 2.01    
 Copyright (C) Microsoft Corp 1985-1990.  All rights reserved.
 
-.EXE size (bytes)         c9f0
+.EXE size (bytes)         cb30
 Magic number:             5a4d
-Bytes on last page:       003a
+Bytes on last page:       0040
 Pages in file:            0004
 Relocations:              0000
 Paragraphs in header:     0020
@@ -29,402 +29,405 @@ Initial SS:SP:            seg   4 offset 0000
 Extra stack allocation:   1000 bytes
 DGROUP:                   seg   4
 Linker version:           5.10
-32-bit Checksum:          4a06be4b
+32-bit Checksum:          daa7eece
 Segment Table:            00000440 length 0020 (32)
 Resource Table:           00000460 length 0170 (368)
-Resident Names Table:     000005d0 length 000c (12)
-Module Reference Table:   000005dc length 0008 (8)
-Imported Names Table:     000005e4 length 0019 (25)
-Entry Table:              000005fd length 0142 (322)
-Non-resident Names Table: 0000073f length 006b (107)
-Movable entry points:     53
+Resident Names Table:     000005d0 length 001e (30)
+Module Reference Table:   000005ee length 0008 (8)
+Imported Names Table:     000005f6 length 0019 (25)
+Entry Table:              0000060f length 0148 (328)
+Non-resident Names Table: 00000757 length 0059 (89)
+Movable entry points:     54
 Segment sector size:      16
 Heap allocation:          8000 bytes
 Application type:         WINDOWAPI
 Other module flags:       
 no. type address  file  mem   flags
-  1 CODE 00007200 02f3c 02f3c EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
+  1 CODE 00007260 03005 03006 EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
                               relocs, (movable), (discardable), (nonshared)
-  2 CODE 0000a3b0 00863 00864 EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
+  2 CODE 0000a4e0 00874 00874 EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
                               relocs, (movable), (discardable), (nonshared)
-  3 CODE 000007e0 02792 02792 EXECUTEREAD, PRELOAD, NONCONFORMING, NOIOPL,
+  3 CODE 000007e0 027e6 027e6 EXECUTEREAD, PRELOAD, NONCONFORMING, NOIOPL,
                               relocs, (movable), (discardable), (nonshared)
-  4 DATA 000036e0 03a7e 03a7e READWRITE, NONSHARED, PRELOAD, NOEXPANDDOWN,
+  4 DATA 00003740 03a8e 03a8e READWRITE, NONSHARED, PRELOAD, NOEXPANDDOWN,
                               NOIOPL, relocs, (movable), (nondiscardable)
 
 
 Exports:
 ord seg offset name
-  2   2  079a  HYPEROIDABOUTDLG exported
-  3   3  0506  ___EXPORTEDSTUB exported
-  1   1  2b18  HYPEROIDWNDPROC exported
+  3   3  055a  ___EXPORTEDSTUB exported
+  2   2  079e  HYPEROIDABOUTDLG exported
+  1   1  2bda  HYPEROIDWNDPROC exported
 
   1 type   offset target
-    PTR     07d6  seg   3 offset 0678
-    PTR     2bca  seg   2 offset 0554
-    PTR     2c64  seg   2 offset 081a
-    PTR     2ee4  seg   2 offset 03fa
-    PTR     2eba  seg   2 offset 031e
-    PTR     2de3  seg   2 offset 06a0
-    PTR     2d9d  seg   3 offset 2254
-    PTR     2db7  seg   3 offset 1ffe
-    PTR     2d8b  seg   3 offset 2004
-    PTR     2ce0  seg   2 offset 0160
-    PTR     2bf5  imp USER.107
-    PTR     2efb  imp USER.108
-    PTR     2f09  imp USER.113
-    PTR     2f13  imp USER.114
-    PTR     0820  imp GDI.128
-    PTR     1f23  imp USER.249
-    PTR     2083  imp GDI.3
-    PTR     2667  imp USER.125
-    OFFSET  2dc3  os #5, additive
-    OFFSET  2dc0  os #5, additive
-    OFFSET  2db1  os #5, additive
-    OFFSET  2da8  os #5, additive
-    OFFSET  2d97  os #5, additive
-    OFFSET  2d94  os #5, additive
-    OFFSET  2d85  os #5, additive
-    OFFSET  2d7c  os #5, additive
-    OFFSET  2d77  os #5, additive
-    OFFSET  2d73  os #5, additive
-    PTR     208f  imp GDI.12
-    PTR     20bc  imp GDI.13
-    PTR     20b2  imp GDI.14
-    PTR     2bd1  imp USER.6
-    PTR     2ba1  imp USER.10
-    PTR     279f  imp GDI.19
-    PTR     278f  imp GDI.20
-    PTR     2720  imp GDI.148
-    PTR     2c8c  imp USER.12
-    PTR     22e6  imp GDI.22
-    PTR     2d60  imp USER.15
-    PTR     29f1  imp USER.272
-    PTR     28c7  imp GDI.29
-    PTR     02c3  imp GDI.31
-    PTR     2cb1  imp USER.282
-    PTR     29e3  imp GDI.34
-    PTR     2cb9  imp USER.283
-    PTR     0237  imp GDI.37
-    PTR     27f2  imp USER.31
-    PTR     2811  imp USER.32
-    OFFSET  2db4  os #6, additive
-    OFFSET  2d88  os #6, additive
-    PTR     270d  imp USER.33
-    PTR     2208  imp USER.420
-    PTR     28a1  imp GDI.45
-    PTR     264d  imp USER.37
-    PTR     2ecf  imp KERNEL.54
-    PTR     26c5  imp USER.39
-    PTR     26f3  imp USER.40
-    PTR     2658  imp USER.42
-    PTR     298d  imp GDI.52
-    PTR     26e0  imp USER.174
-    PTR     2d3d  imp USER.175
-    PTR     282c  imp USER.179
-    PTR     2727  imp USER.180
-    PTR     2d07  imp GDI.61
-    PTR     274c  imp GDI.66
-    PTR     2ae2  imp GDI.68
-    PTR     2e5a  imp GDI.69
-    PTR     2ca2  imp USER.66
-    PTR     2801  imp USER.67
-    PTR     2cc4  imp USER.68
-    PTR     29ab  imp GDI.82
-    PTR     275f  imp USER.81
-    PTR     26e6  imp USER.84
-    PTR     24f9  seg   2 offset 0000
-    PTR     0357  seg   2 offset 0096
-    PTR     1d8e  seg   3 offset 083e
-    PTR     1ddf  seg   3 offset 08d8
-  77 relocations
+    PTR     1e4a  seg   3 offset 092c
+    PTR     0807  seg   3 offset 06cc
+    PTR     2d4c  seg   2 offset 0544
+    PTR     2ca8  seg   2 offset 0824
+    PTR     2fc0  seg   2 offset 03e4
+    PTR     2f95  seg   2 offset 0306
+    PTR     2ea6  seg   2 offset 0694
+    PTR     2e61  seg   3 offset 22a8
+    PTR     2e81  seg   3 offset 2052
+    PTR     2e4f  seg   3 offset 2058
+    PTR     2dab  seg   2 offset 0158
+    PTR     2c95  imp USER.107
+    PTR     2fee  imp USER.108
+    PTR     2fd4  imp USER.113
+    PTR     2fde  imp USER.114
+    PTR     084e  imp GDI.128
+    PTR     1f97  imp USER.249
+    PTR     2101  imp GDI.3
+    PTR     270e  imp USER.125
+    OFFSET  2e8d  os #5, additive
+    OFFSET  2e8a  os #5, additive
+    OFFSET  2e79  os #5, additive
+    OFFSET  2e6e  os #5, additive
+    OFFSET  2e5b  os #5, additive
+    OFFSET  2e58  os #5, additive
+    OFFSET  2e49  os #5, additive
+    OFFSET  2e3e  os #5, additive
+    OFFSET  2e39  os #5, additive
+    OFFSET  2e35  os #5, additive
+    PTR     210f  imp GDI.12
+    PTR     213d  imp GDI.13
+    PTR     2133  imp GDI.14
+    PTR     2d53  imp USER.6
+    PTR     2c37  imp USER.10
+    PTR     2854  imp GDI.19
+    PTR     2844  imp GDI.20
+    PTR     27cf  imp GDI.148
+    PTR     2c6a  imp USER.12
+    PTR     236b  imp GDI.22
+    PTR     2e25  imp USER.15
+    PTR     2ab2  imp USER.272
+    PTR     2983  imp GDI.29
+    PTR     02d9  imp GDI.31
+    PTR     2aa4  imp GDI.34
+    PTR     2d1b  imp USER.282
+    PTR     2d23  imp USER.283
+    PTR     0263  imp GDI.37
+    PTR     28ad  imp USER.31
+    PTR     28cc  imp USER.32
+    OFFSET  2e7c  os #6, additive
+    OFFSET  2e4c  os #6, additive
+    OFFSET  2e42  os #6, additive
+    PTR     27bc  imp USER.33
+    PTR     22b4  imp USER.420
+    PTR     293e  imp GDI.45
+    PTR     26f4  imp USER.37
+    PTR     2fab  imp KERNEL.54
+    PTR     2770  imp USER.39
+    PTR     279e  imp USER.40
+    PTR     26ff  imp USER.42
+    PTR     2a4b  imp GDI.52
+    PTR     278b  imp USER.174
+    PTR     2e0e  imp USER.175
+    PTR     28e7  imp USER.179
+    PTR     27d6  imp USER.180
+    PTR     2dda  imp GDI.61
+    PTR     2938  imp GDI.66
+    PTR     2ba7  imp GDI.68
+    PTR     2f27  imp GDI.69
+    PTR     2d0c  imp USER.66
+    PTR     28bc  imp USER.67
+    PTR     2d2e  imp USER.68
+    PTR     2a6a  imp GDI.82
+    PTR     280d  imp USER.81
+    PTR     2791  imp USER.84
+    PTR     2596  seg   2 offset 0000
+    PTR     0363  seg   2 offset 009c
+    PTR     2da5  seg   3 offset 023c
+    PTR     1dcb  seg   3 offset 0892
+  79 relocations
 
   2 type   offset target
-    PTR     0310  imp GDI.360
-    PTR     0012  seg   3 offset 0678
-    BASE    0828  seg   2 offset 0000
-    PTR     051c  imp USER.104
-    PTR     023e  seg   3 offset 0694
-    PTR     004f  seg   1 offset 073c
-    PTR     0428  seg   3 offset 0698
-    BASE    0349  seg   1 offset 0000
-    PTR     0446  imp KERNEL.127
-    PTR     041f  imp KERNEL.128
-    PTR     0543  imp KERNEL.129
-    PTR     04f2  imp USER.124
-    PTR     077a  imp USER.1
-    PTR     05ac  imp USER.272
-    PTR     0180  imp GDI.153
-    PTR     03e5  imp USER.153
-    PTR     039e  imp USER.156
-    PTR     059d  imp USER.31
-    PTR     05e2  imp USER.32
-    PTR     0832  imp KERNEL.51
-    PTR     07d7  imp USER.420
-    PTR     0856  imp KERNEL.52
-    PTR     04da  imp USER.41
-    PTR     04ea  imp USER.42
-    PTR     0364  imp USER.173
-    PTR     03d0  imp USER.176
-    PTR     0385  imp USER.57
-    PTR     01ac  imp GDI.68
-    OFFSET  0344  seg   1 offset 2b18
-    OFFSET  082b  seg   2 offset 079a
-    PTR     0199  imp GDI.80
-    PTR     084b  imp USER.87
-    PTR     0808  imp USER.88
-    PTR     07ea  imp USER.92
-  34 relocations
+    PTR     02f7  imp GDI.360
+    BASE    0837  seg   2 offset 0000
+    PTR     0017  seg   3 offset 06cc
+    PTR     050b  imp USER.104
+    PTR     01e9  seg   3 offset 06e8
+    PTR     0059  seg   1 offset 076a
+    PTR     0417  seg   3 offset 06ec
+    BASE    0336  seg   1 offset 0000
+    PTR     0435  imp KERNEL.127
+    PTR     040e  imp KERNEL.128
+    PTR     0532  imp KERNEL.129
+    PTR     04e1  imp USER.124
+    PTR     077d  imp USER.1
+    PTR     05a1  imp USER.272
+    PTR     017b  imp GDI.153
+    PTR     03ce  imp USER.153
+    PTR     038f  imp USER.156
+    PTR     0592  imp USER.31
+    PTR     05d6  imp USER.32
+    PTR     0841  imp KERNEL.51
+    PTR     07dd  imp USER.420
+    PTR     0865  imp KERNEL.52
+    PTR     04c9  imp USER.41
+    PTR     04d9  imp USER.42
+    PTR     0351  imp USER.173
+    PTR     03b9  imp USER.176
+    PTR     0372  imp USER.57
+    PTR     01a7  imp GDI.68
+    OFFSET  0331  seg   1 offset 2bda
+    OFFSET  083a  seg   2 offset 079e
+    PTR     0194  imp GDI.80
+    PTR     085a  imp USER.87
+    PTR     0813  imp USER.88
+    PTR     07f0  imp USER.92
+    PTR     076b  seg   3 offset 023c
+  35 relocations
 
   3 type   offset target
-    PTR     1fe1  seg   3 offset 0678
-    OFFSET  1501  os #4, additive
-    OFFSET  1542  os #4, additive
-    OFFSET  180e  os #4, additive
-    OFFSET  1c06  os #4, additive
-    OFFSET  1bf2  os #4, additive
-    PTR     04b7  imp KERNEL.115
+    OFFSET  1555  os #4, additive
+    OFFSET  1596  os #4, additive
+    OFFSET  1862  os #4, additive
+    OFFSET  1c5a  os #4, additive
+    OFFSET  1c46  os #4, additive
+    PTR     2035  seg   3 offset 06cc
+    PTR     050b  imp KERNEL.115
     PTR     0040  seg   3 offset 008a
-    PTR     0045  seg   3 offset 021c
-    PTR     004a  seg   3 offset 03ae
-    PTR     0078  seg   1 offset 2ea0
-    PTR     0458  imp KERNEL.1
+    PTR     0045  seg   3 offset 0270
+    PTR     004a  seg   3 offset 0402
+    PTR     04ac  imp KERNEL.1
+    PTR     0078  seg   1 offset 2f76
     PTR     007e  seg   3 offset 0149
     PTR     0086  seg   3 offset 0157
-    PTR     04d8  seg   3 offset 051a
-    PTR     05bf  seg   3 offset 0520
-    PTR     0545  imp KERNEL.5
-    PTR     0615  seg   3 offset 0570
-    PTR     05e9  imp KERNEL.6
-    PTR     0566  imp KERNEL.7
-    PTR     06c5  seg   3 offset 2292
-    PTR     1cf1  seg   3 offset 0646
-    PTR     044f  imp KERNEL.137
-    PTR     1cb4  seg   3 offset 073a
-    PTR     1c7d  seg   3 offset 22f2
-    PTR     1e7c  seg   3 offset 07f4
-    PTR     1be3  seg   3 offset 069c
-    PTR     058e  imp KERNEL.15
-    PTR     1bfc  seg   3 offset 2764
-    PTR     0638  imp KERNEL.16
-    OFFSET  090a  os #5, additive
-    OFFSET  0919  os #5, additive
-    OFFSET  0920  os #5, additive
-    OFFSET  0926  os #5, additive
-    OFFSET  094c  os #5, additive
-    OFFSET  095b  os #5, additive
-    OFFSET  0962  os #5, additive
-    OFFSET  0968  os #5, additive
-    OFFSET  0970  os #5, additive
-    OFFSET  0976  os #5, additive
-    OFFSET  0979  os #5, additive
-    OFFSET  097d  os #5, additive
-    OFFSET  09b2  os #5, additive
-    OFFSET  09b5  os #5, additive
-    OFFSET  09be  os #5, additive
-    OFFSET  09c1  os #5, additive
+    PTR     052c  seg   3 offset 056e
+    PTR     0599  imp KERNEL.5
+    PTR     0613  seg   3 offset 0574
+    PTR     063d  imp KERNEL.6
+    PTR     0669  seg   3 offset 05c4
+    PTR     05ba  imp KERNEL.7
+    PTR     0719  seg   3 offset 22e6
+    PTR     04a3  imp KERNEL.137
+    PTR     1d45  seg   3 offset 069a
+    PTR     1d08  seg   3 offset 078e
+    PTR     1cd1  seg   3 offset 2346
+    PTR     1ed0  seg   3 offset 0848
+    PTR     05e2  imp KERNEL.15
+    PTR     1c37  seg   3 offset 06f0
+    PTR     068c  imp KERNEL.16
+    OFFSET  095e  os #5, additive
+    OFFSET  096d  os #5, additive
+    OFFSET  0974  os #5, additive
+    OFFSET  097a  os #5, additive
+    OFFSET  09a0  os #5, additive
+    OFFSET  09af  os #5, additive
+    OFFSET  09b6  os #5, additive
+    OFFSET  09bc  os #5, additive
     OFFSET  09c4  os #5, additive
-    OFFSET  09c8  os #5, additive
-    OFFSET  09cb  os #5, additive
-    OFFSET  09ce  os #5, additive
-    OFFSET  09d5  os #5, additive
-    OFFSET  09e0  os #5, additive
-    OFFSET  09e3  os #5, additive
-    OFFSET  09e6  os #5, additive
-    OFFSET  0a05  os #5, additive
-    OFFSET  0a0e  os #5, additive
+    OFFSET  09ca  os #5, additive
+    OFFSET  09cd  os #5, additive
+    OFFSET  09d1  os #5, additive
+    OFFSET  0a06  os #5, additive
+    OFFSET  0a09  os #5, additive
+    OFFSET  0a12  os #5, additive
+    OFFSET  0a15  os #5, additive
     OFFSET  0a18  os #5, additive
-    OFFSET  0a1b  os #5, additive
-    OFFSET  0a21  os #5, additive
-    OFFSET  0a24  os #5, additive
-    OFFSET  0a2d  os #5, additive
-    OFFSET  0a30  os #5, additive
-    OFFSET  0a38  os #5, additive
-    OFFSET  0a3f  os #5, additive
-    OFFSET  0a45  os #5, additive
-    OFFSET  0a48  os #5, additive
-    OFFSET  0a8f  os #5, additive
-    OFFSET  0a92  os #5, additive
-    OFFSET  0aa6  os #5, additive
-    OFFSET  0ab3  os #5, additive
-    OFFSET  0ab6  os #5, additive
-    OFFSET  0ab9  os #5, additive
-    OFFSET  0ac3  os #5, additive
-    OFFSET  0ac6  os #5, additive
-    OFFSET  0ac9  os #5, additive
-    OFFSET  0acc  os #5, additive
-    OFFSET  0ad8  os #5, additive
-    OFFSET  0adc  os #5, additive
-    OFFSET  0ae1  os #5, additive
-    OFFSET  0ae4  os #5, additive
-    OFFSET  0aeb  os #5, additive
-    OFFSET  0af9  os #5, additive
-    OFFSET  0aff  os #5, additive
-    OFFSET  0b06  os #5, additive
-    OFFSET  0b09  os #5, additive
+    OFFSET  0a1c  os #5, additive
+    OFFSET  0a1f  os #5, additive
+    OFFSET  0a22  os #5, additive
+    OFFSET  0a29  os #5, additive
+    OFFSET  0a34  os #5, additive
+    OFFSET  0a37  os #5, additive
+    OFFSET  0a3a  os #5, additive
+    OFFSET  0a59  os #5, additive
+    OFFSET  0a62  os #5, additive
+    OFFSET  0a6c  os #5, additive
+    OFFSET  0a6f  os #5, additive
+    OFFSET  0a75  os #5, additive
+    OFFSET  0a78  os #5, additive
+    OFFSET  0a81  os #5, additive
+    OFFSET  0a84  os #5, additive
+    OFFSET  0a8c  os #5, additive
+    OFFSET  0a93  os #5, additive
+    OFFSET  0a99  os #5, additive
+    OFFSET  0a9c  os #5, additive
+    OFFSET  0ae3  os #5, additive
+    OFFSET  0ae6  os #5, additive
+    OFFSET  0afa  os #5, additive
+    OFFSET  0b07  os #5, additive
+    OFFSET  0b0a  os #5, additive
+    OFFSET  0b0d  os #5, additive
+    OFFSET  0b17  os #5, additive
+    OFFSET  0b1a  os #5, additive
+    OFFSET  0b1d  os #5, additive
     OFFSET  0b20  os #5, additive
-    OFFSET  0b23  os #5, additive
-    OFFSET  0b26  os #5, additive
-    OFFSET  0b42  os #5, additive
-    OFFSET  0b45  os #5, additive
-    OFFSET  0b48  os #5, additive
+    OFFSET  0b2c  os #5, additive
+    OFFSET  0b30  os #5, additive
+    OFFSET  0b35  os #5, additive
+    OFFSET  0b38  os #5, additive
+    OFFSET  0b3f  os #5, additive
     OFFSET  0b4d  os #5, additive
-    OFFSET  0b50  os #5, additive
-    OFFSET  0b5c  os #5, additive
-    OFFSET  0b5f  os #5, additive
-    OFFSET  0b62  os #5, additive
-    OFFSET  0b65  os #5, additive
-    OFFSET  0b6e  os #5, additive
-    OFFSET  0b71  os #5, additive
+    OFFSET  0b53  os #5, additive
+    OFFSET  0b5a  os #5, additive
+    OFFSET  0b5d  os #5, additive
     OFFSET  0b74  os #5, additive
     OFFSET  0b77  os #5, additive
-    OFFSET  0b7b  os #5, additive
-    OFFSET  0b7e  os #5, additive
-    OFFSET  0b84  os #5, additive
-    OFFSET  0b9d  os #5, additive
-    OFFSET  0bb2  os #5, additive
-    OFFSET  0bb5  os #5, additive
-    OFFSET  0bb8  os #5, additive
-    OFFSET  0bbb  os #5, additive
-    OFFSET  0bbe  os #5, additive
-    OFFSET  0bc1  os #5, additive
+    OFFSET  0b7a  os #5, additive
+    OFFSET  0b96  os #5, additive
+    OFFSET  0b99  os #5, additive
+    OFFSET  0b9c  os #5, additive
+    OFFSET  0ba1  os #5, additive
+    OFFSET  0ba4  os #5, additive
+    OFFSET  0bb0  os #5, additive
+    OFFSET  0bb3  os #5, additive
+    OFFSET  0bb6  os #5, additive
+    OFFSET  0bb9  os #5, additive
+    OFFSET  0bc2  os #5, additive
+    OFFSET  0bc5  os #5, additive
     OFFSET  0bc8  os #5, additive
+    OFFSET  0bcb  os #5, additive
     OFFSET  0bcf  os #5, additive
-    OFFSET  0bd7  os #5, additive
-    OFFSET  0be0  os #5, additive
-    OFFSET  0be5  os #5, additive
-    OFFSET  0bf9  os #5, additive
+    OFFSET  0bd2  os #5, additive
+    OFFSET  0bd8  os #5, additive
+    OFFSET  0bf1  os #5, additive
     OFFSET  0c06  os #5, additive
-    OFFSET  0c0b  os #5, additive
-    OFFSET  0c17  os #5, additive
+    OFFSET  0c09  os #5, additive
+    OFFSET  0c0c  os #5, additive
+    OFFSET  0c0f  os #5, additive
+    OFFSET  0c12  os #5, additive
+    OFFSET  0c15  os #5, additive
     OFFSET  0c1c  os #5, additive
-    OFFSET  0c1f  os #5, additive
-    OFFSET  0c22  os #5, additive
-    OFFSET  0c25  os #5, additive
+    OFFSET  0c23  os #5, additive
+    OFFSET  0c2b  os #5, additive
     OFFSET  0c34  os #5, additive
     OFFSET  0c39  os #5, additive
-    OFFSET  0c3c  os #5, additive
-    OFFSET  0c52  os #5, additive
+    OFFSET  0c4d  os #5, additive
     OFFSET  0c5a  os #5, additive
-    OFFSET  0c63  os #5, additive
-    OFFSET  0c66  os #5, additive
-    OFFSET  0c69  os #5, additive
-    OFFSET  0c6d  os #5, additive
-    OFFSET  0d1f  os #5, additive
-    OFFSET  0d2e  os #5, additive
-    OFFSET  0d33  os #5, additive
-    OFFSET  0d36  os #5, additive
-    OFFSET  0d39  os #5, additive
-    OFFSET  0d78  os #5, additive
-    OFFSET  0d7b  os #5, additive
-    OFFSET  0d91  os #5, additive
-    OFFSET  0d95  os #5, additive
-    OFFSET  0d98  os #5, additive
-    OFFSET  0fde  os #5, additive
-    OFFSET  14eb  os #5, additive
-    OFFSET  14fa  os #5, additive
-    OFFSET  1538  os #5, additive
-    OFFSET  153b  os #5, additive
-    OFFSET  155b  os #5, additive
-    OFFSET  17f3  os #5, additive
-    OFFSET  17f7  os #5, additive
-    OFFSET  1804  os #5, additive
-    OFFSET  180a  os #5, additive
-    OFFSET  1812  os #5, additive
-    OFFSET  1816  os #5, additive
-    OFFSET  1819  os #5, additive
-    OFFSET  1bec  os #5, additive
-    OFFSET  1baf  os #5, additive
-    OFFSET  1bac  os #5, additive
-    OFFSET  1ba7  os #5, additive
-    OFFSET  1ba4  os #5, additive
-    PTR     1ff4  seg   3 offset 07ac
-    OFFSET  20c1  os #5, additive
-    OFFSET  20c4  os #5, additive
-    OFFSET  20c9  os #5, additive
-    OFFSET  20cc  os #5, additive
-    OFFSET  20f1  os #5, additive
-    OFFSET  210c  os #5, additive
-    OFFSET  2110  os #5, additive
-    OFFSET  2126  os #5, additive
-    OFFSET  2139  os #5, additive
-    OFFSET  213c  os #5, additive
-    OFFSET  2141  os #5, additive
-    OFFSET  2159  os #5, additive
-    OFFSET  2161  os #5, additive
-    OFFSET  21a5  os #5, additive
-    OFFSET  21a9  os #5, additive
-    OFFSET  21b4  os #5, additive
-    OFFSET  21b8  os #5, additive
-    OFFSET  21ca  os #5, additive
-    OFFSET  21cd  os #5, additive
-    OFFSET  21d2  os #5, additive
-    OFFSET  21d5  os #5, additive
-    OFFSET  21e1  os #5, additive
-    OFFSET  21e4  os #5, additive
-    OFFSET  21eb  os #5, additive
-    OFFSET  21ee  os #5, additive
-    OFFSET  21f3  os #5, additive
-    OFFSET  21f6  os #5, additive
-    OFFSET  2243  os #5, additive
-    OFFSET  2248  os #5, additive
-    OFFSET  224d  os #5, additive
-    OFFSET  2265  os #5, additive
-    OFFSET  2274  os #5, additive
-    OFFSET  2278  os #5, additive
-    OFFSET  227c  os #5, additive
-    OFFSET  2786  os #5, additive
-    PTR     05a4  imp KERNEL.17
-    PTR     2200  seg   3 offset 237a
-    PTR     2237  seg   3 offset 0822
-    PTR     223d  seg   3 offset 0493
+    OFFSET  0c5f  os #5, additive
+    OFFSET  0c6b  os #5, additive
+    OFFSET  0c70  os #5, additive
+    OFFSET  0c73  os #5, additive
+    OFFSET  0c76  os #5, additive
+    OFFSET  0c79  os #5, additive
+    OFFSET  0c88  os #5, additive
+    OFFSET  0c8d  os #5, additive
+    OFFSET  0c90  os #5, additive
+    OFFSET  0ca6  os #5, additive
+    OFFSET  0cae  os #5, additive
+    OFFSET  0cb7  os #5, additive
+    OFFSET  0cba  os #5, additive
+    OFFSET  0cbd  os #5, additive
+    OFFSET  0cc1  os #5, additive
+    OFFSET  0d73  os #5, additive
+    OFFSET  0d82  os #5, additive
+    OFFSET  0d87  os #5, additive
+    OFFSET  0d8a  os #5, additive
+    OFFSET  0d8d  os #5, additive
+    OFFSET  0dcc  os #5, additive
+    OFFSET  0dcf  os #5, additive
+    OFFSET  0de5  os #5, additive
+    OFFSET  0de9  os #5, additive
+    OFFSET  0dec  os #5, additive
+    OFFSET  1032  os #5, additive
+    OFFSET  153f  os #5, additive
+    OFFSET  154e  os #5, additive
+    OFFSET  158c  os #5, additive
+    OFFSET  158f  os #5, additive
+    OFFSET  15af  os #5, additive
+    OFFSET  1847  os #5, additive
+    OFFSET  184b  os #5, additive
+    OFFSET  1858  os #5, additive
+    OFFSET  185e  os #5, additive
+    OFFSET  1866  os #5, additive
+    OFFSET  186a  os #5, additive
+    OFFSET  186d  os #5, additive
+    PTR     1c50  seg   3 offset 27b8
+    OFFSET  1c40  os #5, additive
+    OFFSET  1c03  os #5, additive
+    OFFSET  1c00  os #5, additive
+    OFFSET  1bfb  os #5, additive
+    OFFSET  1bf8  os #5, additive
+    OFFSET  2115  os #5, additive
+    OFFSET  2118  os #5, additive
+    OFFSET  211d  os #5, additive
+    OFFSET  2120  os #5, additive
+    OFFSET  2145  os #5, additive
+    OFFSET  2160  os #5, additive
+    OFFSET  2164  os #5, additive
+    OFFSET  217a  os #5, additive
+    OFFSET  218d  os #5, additive
+    OFFSET  2190  os #5, additive
+    OFFSET  2195  os #5, additive
+    OFFSET  21ad  os #5, additive
+    OFFSET  21b5  os #5, additive
+    OFFSET  21f9  os #5, additive
+    OFFSET  21fd  os #5, additive
+    OFFSET  2208  os #5, additive
+    OFFSET  220c  os #5, additive
+    OFFSET  221e  os #5, additive
+    OFFSET  2221  os #5, additive
+    OFFSET  2226  os #5, additive
+    OFFSET  2229  os #5, additive
+    OFFSET  2235  os #5, additive
+    OFFSET  2238  os #5, additive
+    OFFSET  223f  os #5, additive
+    OFFSET  2242  os #5, additive
+    OFFSET  2247  os #5, additive
+    OFFSET  224a  os #5, additive
+    OFFSET  2297  os #5, additive
+    OFFSET  229c  os #5, additive
+    OFFSET  22a1  os #5, additive
+    OFFSET  22b9  os #5, additive
+    OFFSET  22c8  os #5, additive
+    OFFSET  22cc  os #5, additive
+    OFFSET  22d0  os #5, additive
+    OFFSET  27da  os #5, additive
+    PTR     05f8  imp KERNEL.17
+    PTR     2048  seg   3 offset 0800
+    PTR     2254  seg   3 offset 23ce
+    PTR     228b  seg   3 offset 0876
     PTR     005b  imp USER.5
-    PTR     2353  seg   3 offset 04f6
-    PTR     052c  imp KERNEL.23
-    PTR     0551  imp KERNEL.24
+    PTR     2291  seg   3 offset 04e7
+    PTR     23a7  seg   3 offset 054a
+    PTR     0580  imp KERNEL.23
+    PTR     05a5  imp KERNEL.24
     PTR     0052  imp KERNEL.30
-    OFFSET  092e  os #6, additive
-    OFFSET  0a4d  os #6, additive
-    OFFSET  0ad0  os #6, additive
-    OFFSET  0b0d  os #6, additive
-    OFFSET  0b54  os #6, additive
-    OFFSET  0b69  os #6, additive
-    OFFSET  0be9  os #6, additive
-    OFFSET  0c0f  os #6, additive
-    OFFSET  0c29  os #6, additive
-    OFFSET  0c75  os #2, additive
-    OFFSET  0c79  os #6, additive
-    OFFSET  0d24  os #6, additive
-    OFFSET  0d3c  os #6, additive
-    OFFSET  0d80  os #6, additive
-    OFFSET  0d9d  os #6, additive
-    OFFSET  14ef  os #6, additive
-    OFFSET  154c  os #6, additive
-    OFFSET  1c0a  os #6, additive
-    OFFSET  1bb3  os #6, additive
-    OFFSET  2145  os #6, additive
-    OFFSET  2165  os #6, additive
-    OFFSET  21d9  os #6, additive
-    OFFSET  2269  os #6, additive
-    OFFSET  0d74  os #3, additive
-    OFFSET  0d8d  os #3, additive
-    OFFSET  0fda  os #3, additive
-    OFFSET  1556  os #3, additive
+    OFFSET  0982  os #6, additive
+    OFFSET  0aa1  os #6, additive
+    OFFSET  0b24  os #6, additive
+    OFFSET  0b61  os #6, additive
+    OFFSET  0ba8  os #6, additive
+    OFFSET  0bbd  os #6, additive
+    OFFSET  0c3d  os #6, additive
+    OFFSET  0c63  os #6, additive
+    OFFSET  0c7d  os #6, additive
+    OFFSET  0cc9  os #2, additive
+    OFFSET  0ccd  os #6, additive
+    OFFSET  0d78  os #6, additive
+    OFFSET  0d90  os #6, additive
+    OFFSET  0dd4  os #6, additive
+    OFFSET  0df1  os #6, additive
+    OFFSET  1543  os #6, additive
+    OFFSET  15a0  os #6, additive
+    OFFSET  1c5e  os #6, additive
+    OFFSET  1c07  os #6, additive
+    OFFSET  2199  os #6, additive
+    OFFSET  21b9  os #6, additive
+    OFFSET  222d  os #6, additive
+    OFFSET  22bd  os #6, additive
+    OFFSET  0dc8  os #3, additive
+    OFFSET  0de1  os #3, additive
+    OFFSET  102e  os #3, additive
+    OFFSET  15aa  os #3, additive
     PTR     0015  imp KERNEL.91
  234 relocations
 
   4 type   offset target
-    PTR     0f44  imp win87em.1
-    PTR     0bfc  seg   3 offset 0216
-    PTR     0f4c  seg   3 offset 2342
-    PTR     0f50  seg   3 offset 201e
-    PTR     0f20  seg   3 offset 1f78
-    PTR     0f24  seg   3 offset 1b1a
-    PTR     0f28  seg   3 offset 1bca
-    PTR     0f2c  seg   3 offset 1aa6
-    PTR     0f30  seg   3 offset 1b94
-    PTR     0f34  seg   3 offset 2702
-    PTR     0f54  seg   3 offset 2366
-    PTR     0f58  seg   3 offset 238d
+    PTR     0f48  imp win87em.1
+    PTR     0c00  seg   3 offset 0216
+    PTR     0f50  seg   3 offset 2396
+    PTR     0f54  seg   3 offset 2072
+    PTR     0f24  seg   3 offset 1fcc
+    PTR     0f28  seg   3 offset 1b6e
+    PTR     0f2c  seg   3 offset 1c1e
+    PTR     0f30  seg   3 offset 1afa
+    PTR     0f34  seg   3 offset 1be8
+    PTR     0f38  seg   3 offset 2756
+    PTR     0f58  seg   3 offset 23ba
+    PTR     0f5c  seg   3 offset 23e1
   12 relocations
 

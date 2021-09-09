@@ -56,6 +56,7 @@ EXTRN	GETPRIVATEPROFILESTRING:FAR
 EXTRN	WRITEPRIVATEPROFILESTRING:FAR
 EXTRN	ENDDIALOG:FAR
 EXTRN	SETDLGITEMTEXT:FAR
+EXTRN	__aFchkstk:FAR
 EXTRN	_wsprintf:FAR
 EXTRN	UPDATEWINDOW:FAR
 EXTRN	REGISTERCLASS:FAR
@@ -337,43 +338,48 @@ PRINTLETTERS	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,16
+	mov	ax,16
+	call	FAR PTR __aFchkstk
 	push	si
-;	npszText = 18
-;	Pos = 14
-;	Vel = 10
-;	byColor = 8
-;	nSize = 6
 ;	nLen = -12
 ;	nCnt = -4
 ;	nSpace = -10
 ;	nBase = -8
 ;	nBaseStart = -6
-;	npLtr = -16
+;	npszText = 18
+;	Pos = 14
+;	Vel = 10
+;	byColor = 8
+;	nSize = 6
 ; Line 196
 	push	WORD PTR [bp+18]	;npszText
 	call	FAR PTR _strlen
 	add	sp,2
+	mov	WORD PTR [bp-12],ax	;nLen
 	mov	WORD PTR [bp-4],ax	;nCnt
 ; Line 197
-	mov	cx,ax
 	mov	ax,WORD PTR [bp+6]	;nSize
 	cwd	
 	sub	ax,dx
 	sar	ax,1
 	add	ax,WORD PTR [bp+6]	;nSize
 	mov	WORD PTR [bp-10],ax	;nSpace
-; Line 199
+; Line 198
+	mov	cx,WORD PTR [bp-12]	;nLen
 	dec	cx
 	imul	cx
+; Line 199
 	cwd	
 	sub	ax,dx
 	sar	ax,1
 	add	ax,WORD PTR [bp+14]	;Pos
 	mov	WORD PTR [bp-6],ax	;nBaseStart
 ; Line 201
-	jmp	SHORT $L20014
+	jmp	SHORT $L20003
+	nop	
 $FC1404:
+; Line 202
+;	npLtr = -16
 ; Line 204
 	mov	bx,WORD PTR [bp-4]	;nCnt
 	mov	si,WORD PTR [bp+18]	;npszText
@@ -385,30 +391,31 @@ $FC1404:
 	sar	ax,1
 	push	ax
 	call	FAR PTR CREATELETTER
-	mov	WORD PTR [bp-16],ax	;npLtr
 	or	ax,ax
 	je	$I1407
+; Line 205
 ; Line 206
-	mov	ax,WORD PTR [bp-6]	;nBaseStart
-	mov	bx,WORD PTR [bp-16]	;npLtr
-	mov	WORD PTR [bx+4],ax
+	mov	bx,ax
+	mov	cx,WORD PTR [bp-6]	;nBaseStart
+	mov	WORD PTR [bx+4],cx
 ; Line 207
-	mov	ax,WORD PTR [bp+16]
-	mov	WORD PTR [bx+6],ax
+	mov	cx,WORD PTR [bp+16]
+	mov	WORD PTR [bx+6],cx
 ; Line 208
-	mov	ax,WORD PTR [bp+10]	;Vel
+	mov	cx,WORD PTR [bp+10]	;Vel
 	mov	dx,WORD PTR [bp+12]
-	mov	WORD PTR [bx+8],ax
+	mov	WORD PTR [bx+8],cx
 	mov	WORD PTR [bx+10],dx
 ; Line 209
-	mov	al,BYTE PTR [bp+8]	;byColor
-	mov	BYTE PTR [bx+22],al
+	mov	cl,BYTE PTR [bp+8]	;byColor
+	mov	BYTE PTR [bx+22],cl
+; Line 210
 ; Line 211
 $I1407:
 	mov	ax,WORD PTR [bp-10]	;nSpace
 	sub	WORD PTR [bp-6],ax	;nBaseStart
 ; Line 212
-$L20014:
+$L20003:
 	mov	ax,WORD PTR [bp-4]	;nCnt
 	dec	WORD PTR [bp-4]	;nCnt
 	or	ax,ax
@@ -435,20 +442,19 @@ SPINLETTERS	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,22
+	mov	ax,18
+	call	FAR PTR __aFchkstk
 	push	si
-;	npszText = 18
-;	Pos = 14
-;	Vel = 10
-;	byColor = 8
-;	nSize = 6
 ;	nLen = -12
 ;	nCnt = -4
 ;	nSpace = -10
 ;	nBase = -8
 ;	nBaseStart = -6
-;	npLtr = -16
-;	nSpin = -18
+;	npszText = 18
+;	Pos = 14
+;	Vel = 10
+;	byColor = 8
+;	nSize = 6
 ; Line 223
 	push	WORD PTR [bp+18]	;npszText
 	call	FAR PTR _strlen
@@ -462,29 +468,22 @@ SPINLETTERS	PROC FAR
 	sar	ax,1
 	add	ax,WORD PTR [bp+6]	;nSize
 	mov	WORD PTR [bp-10],ax	;nSpace
-; Line 226
+; Line 225
 	mov	cx,WORD PTR [bp-12]	;nLen
 	dec	cx
 	imul	cx
+; Line 226
 	cwd	
 	sub	ax,dx
 	sar	ax,1
 	add	ax,WORD PTR [bp+14]	;Pos
 	mov	WORD PTR [bp-6],ax	;nBaseStart
-	mov	ax,WORD PTR [bp-12]	;nLen
-	cwd	
-	sub	ax,dx
-	sar	ax,1
-	sub	ax,WORD PTR [bp-12]	;nLen
-	neg	ax
-	mov	cx,ax
-	shl	ax,1
-	mov	WORD PTR [bp-20],ax
-	shl	cx,5
-	mov	WORD PTR [bp-22],cx
 ; Line 228
-	jmp	SHORT $L20015
+	jmp	SHORT $L20004
+	nop	
 $FC1420:
+; Line 229
+;	npLtr = -16
 ; Line 231
 	mov	bx,WORD PTR [bp-4]	;nCnt
 	mov	si,WORD PTR [bp+18]	;npszText
@@ -496,39 +495,47 @@ $FC1420:
 	sar	ax,1
 	push	ax
 	call	FAR PTR CREATELETTER
-	mov	WORD PTR [bp-16],ax	;npLtr
 	or	ax,ax
 	je	$I1423
+; Line 232
+;	nSpin = -18
 ; Line 234
-	mov	ax,WORD PTR [bp-6]	;nBaseStart
-	mov	bx,WORD PTR [bp-16]	;npLtr
-	mov	WORD PTR [bx+4],ax
+	mov	bx,ax
+	mov	cx,WORD PTR [bp-6]	;nBaseStart
+	mov	WORD PTR [bx+4],cx
 ; Line 235
-	mov	ax,WORD PTR [bp+16]
-	mov	WORD PTR [bx+6],ax
+	mov	cx,WORD PTR [bp+16]
+	mov	WORD PTR [bx+6],cx
 ; Line 236
-	mov	ax,WORD PTR [bp+10]	;Vel
+	mov	cx,WORD PTR [bp+10]	;Vel
 	mov	dx,WORD PTR [bp+12]
-	mov	WORD PTR [bx+8],ax
+	mov	WORD PTR [bx+8],cx
 	mov	WORD PTR [bx+10],dx
 ; Line 237
-	mov	ax,WORD PTR [bp-22]
+	mov	ax,WORD PTR [bp-12]	;nLen
+	cwd	
+	sub	ax,dx
+	sar	ax,1
+	sub	ax,WORD PTR [bp-4]	;nCnt
+	neg	ax
+	shl	ax,1
+	mov	WORD PTR [bp-18],ax	;nSpin
+	shl	ax,4
 	add	WORD PTR [bx+8],ax
 ; Line 238
-	mov	ax,WORD PTR [bp-20]
+	mov	ax,WORD PTR [bp-18]	;nSpin
 	neg	ax
 	mov	WORD PTR [bx+16],ax
 ; Line 239
 	mov	al,BYTE PTR [bp+8]	;byColor
 	mov	BYTE PTR [bx+22],al
+; Line 240
 ; Line 241
 $I1423:
 	mov	ax,WORD PTR [bp-10]	;nSpace
 	sub	WORD PTR [bp-6],ax	;nBaseStart
 ; Line 242
-$L20015:
-	sub	WORD PTR [bp-20],2
-	sub	WORD PTR [bp-22],32
+$L20004:
 	mov	ax,WORD PTR [bp-4]	;nCnt
 	dec	WORD PTR [bp-4]	;nCnt
 	or	ax,ax
@@ -555,19 +562,13 @@ CREATEHYPEROIDPALETTE	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,130
-	push	si
+	mov	ax,126
+	call	FAR PTR __aFchkstk
 ;	hPalette = -8
 ;	hIC = -6
 ;	t = -4
 ;	Pal = -80
 ;	npLogPalette = -82
-;	dwColor = -118
-;	szBuff = -114
-;	r = -124
-;	g = -126
-;	b = -122
-;	npBuff = -120
 ; Line 252
 	push	ds
 	push	OFFSET DGROUP:$SG1428
@@ -609,88 +610,51 @@ $I1432:
 	mov	WORD PTR _bBW,1
 ; Line 263
 $I1433:
-	mov	WORD PTR [bp-80],768	;Pal
+	mov	bx,WORD PTR [bp-82]	;npLogPalette
+	mov	WORD PTR [bx],768
 ; Line 264
-	mov	WORD PTR [bp-78],16
-	mov	WORD PTR [bp-128],0
-	mov	WORD PTR [bp-130],OFFSET DGROUP:$S1374_szColorName
+	mov	WORD PTR [bx+2],16
 ; Line 266
-$F1434:
-; Line 268
-	mov	bx,WORD PTR [bp-128]
-	mov	ax,WORD PTR $S1391_dwColors[bx]
-	mov	dx,WORD PTR $S1391_dwColors[bx+2]
-	mov	WORD PTR [bp-118],ax	;dwColor
-	mov	WORD PTR [bp-116],dx
-; Line 272
-	push	ds
-	push	OFFSET DGROUP:$S1364_szPalette
-	mov	bx,WORD PTR [bp-130]
-	push	ds
-	push	WORD PTR [bx]
-	push	ds
-	push	OFFSET DGROUP:$SG1439
-	lea	ax,WORD PTR [bp-114]	;szBuff
-	push	ss
-	push	ax
-	push	32
-	push	ds
-	push	OFFSET DGROUP:$S1355_szIni
-	call	FAR PTR GETPRIVATEPROFILESTRING
-; Line 273
-	cmp	BYTE PTR [bp-114],0	;szBuff
-	jne	$JCC534
-	jmp	$I1440
-$JCC534:
-; Line 277
-	mov	ax,255
-	mov	WORD PTR [bp-122],ax	;b
-	mov	WORD PTR [bp-126],ax	;g
-; Line 278
-	lea	bx,WORD PTR [bp-114]	;szBuff
-	mov	WORD PTR [bp-120],bx	;npBuff
-	cmp	BYTE PTR [bx],32
-	jne	$FB1447
+	mov	WORD PTR [bp-4],0	;t
+	jmp	$F1434
 $FC1446:
 	inc	WORD PTR [bp-120]	;npBuff
+$L20005:
 	mov	bx,WORD PTR [bp-120]	;npBuff
 	cmp	BYTE PTR [bx],32
 	je	$FC1446
-$FB1447:
 ; Line 279
-	push	WORD PTR [bp-120]	;npBuff
+	push	bx
 	call	FAR PTR _atoi
 	add	sp,2
 	mov	WORD PTR [bp-124],ax	;r
 ; Line 280
-	mov	bx,WORD PTR [bp-120]	;npBuff
-	cmp	BYTE PTR [bx],0
-	je	$FB1450
+	jmp	SHORT $L20006
+	nop	
 $FC1449:
 	cmp	BYTE PTR [bx],44
 	je	$FB1450
 	inc	WORD PTR [bp-120]	;npBuff
+$L20006:
 	mov	bx,WORD PTR [bp-120]	;npBuff
 	cmp	BYTE PTR [bx],0
 	jne	$FC1449
 $FB1450:
 ; Line 281
 	cmp	BYTE PTR [bx],44
-	jne	$L20005
+	jne	$L20007
 	inc	WORD PTR [bp-120]	;npBuff
 	push	WORD PTR [bp-120]	;npBuff
 	call	FAR PTR _atoi
 	add	sp,2
 	mov	WORD PTR [bp-126],ax	;g
-$L20005:
 ; Line 282
-	mov	bx,WORD PTR [bp-120]	;npBuff
-	cmp	BYTE PTR [bx],0
-	je	$FB1454
+	jmp	SHORT $L20007
 $FC1453:
 	cmp	BYTE PTR [bx],44
 	je	$FB1454
 	inc	WORD PTR [bp-120]	;npBuff
+$L20007:
 	mov	bx,WORD PTR [bp-120]	;npBuff
 	cmp	BYTE PTR [bx],0
 	jne	$FC1453
@@ -698,9 +662,8 @@ $FB1454:
 ; Line 283
 	cmp	BYTE PTR [bx],44
 	jne	$I1455
-	mov	ax,bx
-	inc	ax
-	push	ax
+	inc	WORD PTR [bp-120]	;npBuff
+	push	WORD PTR [bp-120]	;npBuff
 	call	FAR PTR _atoi
 	add	sp,2
 	mov	WORD PTR [bp-122],ax	;b
@@ -712,52 +675,97 @@ $I1455:
 	sub	ch,ch
 	mov	WORD PTR [bp-118],ax	;dwColor
 	mov	WORD PTR [bp-116],cx
+; Line 285
 ; Line 286
 $I1440:
 	cmp	WORD PTR _bBW,0
 	je	$I1456
 	mov	ax,WORD PTR [bp-116]
 	or	ax,WORD PTR [bp-118]	;dwColor
-	jne	$L20010
+	jne	$L20001
 	sub	ax,ax
 	cwd	
-	jmp	SHORT $L20011
+	jmp	SHORT $L20002
 	nop	
-$L20010:
+$L20001:
 	mov	ax,-1
 	mov	dx,255
-$L20011:
+$L20002:
 	mov	WORD PTR [bp-118],ax	;dwColor
 	mov	WORD PTR [bp-116],dx
 ; Line 287
 $I1456:
 	mov	al,BYTE PTR [bp-118]	;dwColor
-	mov	si,WORD PTR [bp-128]
-	mov	BYTE PTR [bp-76][si],al
+	mov	bx,WORD PTR [bp-4]	;t
+	shl	bx,2
+	add	bx,WORD PTR [bp-82]	;npLogPalette
+	mov	BYTE PTR [bx+4],al
 ; Line 288
 	mov	al,BYTE PTR [bp-117]
-	mov	si,WORD PTR [bp-128]
-	mov	BYTE PTR [bp-75][si],al
+	mov	BYTE PTR [bx+5],al
 ; Line 289
 	mov	al,BYTE PTR [bp-116]
-	mov	si,WORD PTR [bp-128]
-	mov	BYTE PTR [bp-74][si],al
+	mov	BYTE PTR [bx+6],al
 ; Line 290
-	mov	si,WORD PTR [bp-128]
-	mov	BYTE PTR [bp-73][si],0
-	add	WORD PTR [bp-128],4
-	add	WORD PTR [bp-130],2
-	cmp	WORD PTR [bp-130],OFFSET DGROUP:$S1374_szColorName+32
-	jae	$JCC773
-	jmp	$F1434
-$JCC773:
-; Line 294
-	lea	ax,WORD PTR [bp-80]	;Pal
+	mov	BYTE PTR [bx+7],0
+; Line 291
+	inc	WORD PTR [bp-4]	;t
+$F1434:
+	cmp	WORD PTR [bp-4],16	;t
+	jge	$FB1436
+; Line 267
+;	dwColor = -118
+;	szBuff = -114
+; Line 268
+	mov	bx,WORD PTR [bp-4]	;t
+	shl	bx,2
+	mov	ax,WORD PTR $S1391_dwColors[bx]
+	mov	dx,WORD PTR $S1391_dwColors[bx+2]
+	mov	WORD PTR [bp-118],ax	;dwColor
+	mov	WORD PTR [bp-116],dx
+; Line 272
 	push	ds
+	push	OFFSET DGROUP:$S1364_szPalette
+	mov	bx,WORD PTR [bp-4]	;t
+	shl	bx,1
+	push	ds
+	push	WORD PTR $S1374_szColorName[bx]
+	push	ds
+	push	OFFSET DGROUP:$SG1439
+	lea	ax,WORD PTR [bp-114]	;szBuff
+	push	ss
 	push	ax
+	push	32
+	push	ds
+	push	OFFSET DGROUP:$S1355_szIni
+	call	FAR PTR GETPRIVATEPROFILESTRING
+; Line 273
+	cmp	BYTE PTR [bp-114],0	;szBuff
+	jne	$JCC728
+	jmp	$I1440
+$JCC728:
+; Line 274
+;	r = -124
+;	g = -126
+;	b = -122
+;	npBuff = -120
+; Line 276
+	lea	ax,WORD PTR [bp-114]	;szBuff
+	mov	WORD PTR [bp-120],ax	;npBuff
+; Line 277
+	mov	ax,255
+	mov	WORD PTR [bp-122],ax	;b
+	mov	WORD PTR [bp-126],ax	;g
+	mov	WORD PTR [bp-124],ax	;r
+; Line 278
+	jmp	$L20005
+$FB1436:
+; Line 294
+	push	ds
+	push	WORD PTR [bp-82]	;npLogPalette
 	call	FAR PTR CREATEPALETTE
+	mov	WORD PTR [bp-8],ax	;hPalette
 ; Line 295
-	pop	si
 	dec	bp
 	dec	bp
 	mov	sp,bp
@@ -765,7 +773,6 @@ $JCC773:
 	pop	bp
 	dec	bp
 	ret	
-	nop	
 
 CREATEHYPEROIDPALETTE	ENDP
 ; Line 302
@@ -779,7 +786,8 @@ CREATEHYPEROIDCLASS	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,28
+	mov	ax,28
+	call	FAR PTR __aFchkstk
 ;	Class = -28
 ; Line 306
 	push	WORD PTR _hAppInst
@@ -830,7 +838,6 @@ CREATEHYPEROIDCLASS	PROC FAR
 	pop	bp
 	dec	bp
 	ret	
-	nop	
 
 CREATEHYPEROIDCLASS	ENDP
 ; Line 327
@@ -838,12 +845,13 @@ CREATEHYPEROIDCLASS	ENDP
 SETHYPEROIDMENU	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,42
+	mov	ax,42
+	call	FAR PTR __aFchkstk
+;	szMenuName = -40
+;	hMenu = -42
 ;	hWnd = 8
 ;	nFirstID = 6
 ;	nLastID = 4
-;	szMenuName = -40
-;	hMenu = -42
 ; Line 332
 	push	WORD PTR [bp+8]	;hWnd
 	push	1
@@ -860,16 +868,15 @@ $I1465:
 	or	ax,ax
 	je	$EX1462
 ; Line 335
-	mov	ax,WORD PTR [bp+6]	;nFirstID
-	cmp	WORD PTR [bp+4],ax	;nLastID
-	jl	$EX1462
+	jmp	SHORT $L20008
 $FC1468:
+; Line 336
 ; Line 337
 	push	WORD PTR _hAppInst
-	push	WORD PTR [bp+6]	;nFirstID
-	lea	ax,WORD PTR [bp-40]	;szMenuName
-	push	ss
 	push	ax
+	lea	cx,WORD PTR [bp-40]	;szMenuName
+	push	ss
+	push	cx
 	push	40
 	call	FAR PTR LOADSTRING
 ; Line 338
@@ -881,16 +888,19 @@ $FC1468:
 	push	WORD PTR [bp+6]	;nFirstID
 	push	256
 	call	FAR PTR CHANGEMENU
-; Line 340
-	mov	ax,WORD PTR [bp+4]	;nLastID
+; Line 339
 	inc	WORD PTR [bp+6]	;nFirstID
-	cmp	WORD PTR [bp+6],ax	;nFirstID
-	jle	$FC1468
+; Line 340
+$L20008:
+	mov	ax,WORD PTR [bp+6]	;nFirstID
+	cmp	WORD PTR [bp+4],ax	;nLastID
+	jge	$FC1468
 ; Line 341
 $EX1462:
 	mov	sp,bp
 	pop	bp
 	ret	6
+	nop	
 
 SETHYPEROIDMENU	ENDP
 ; Line 348
@@ -904,7 +914,8 @@ CREATEHYPEROIDWINDOW	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,44
+	mov	ax,44
+	call	FAR PTR __aFchkstk
 ;	hWnd = -36
 ;	x = -42
 ;	y = -44
@@ -1033,6 +1044,7 @@ $I1480:
 	call	FAR PTR GETPRIVATEPROFILEINT
 	or	ax,ax
 	jne	$I1482
+; Line 374
 ; Line 375
 	push	64
 	call	FAR PTR MESSAGEBEEP
@@ -1054,6 +1066,7 @@ $I1480:
 	push	ds
 	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
+; Line 379
 ; Line 381
 $I1482:
 	mov	ax,WORD PTR [bp-36]	;hWnd
@@ -1066,6 +1079,7 @@ $EX1472:
 	pop	bp
 	dec	bp
 	ret	6
+	nop	
 
 CREATEHYPEROIDWINDOW	ENDP
 ; Line 389
@@ -1079,14 +1093,16 @@ SAVEHYPEROIDWINDOWPOS	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,42
-;	hWnd = 6
+	mov	ax,42
+	call	FAR PTR __aFchkstk
 ;	rect = -42
 ;	szBuff = -34
+;	hWnd = 6
 ; Line 394
 	mov	ax,WORD PTR _lHighScore+2
 	or	ax,WORD PTR _lHighScore
 	je	$I1490
+; Line 395
 ; Line 396
 	push	WORD PTR _lHighScore+2
 	push	WORD PTR _lHighScore
@@ -1108,19 +1124,21 @@ SAVEHYPEROIDWINDOWPOS	PROC FAR
 	push	ds
 	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
+; Line 398
 ; Line 400
 $I1490:
 	push	WORD PTR [bp+6]	;hWnd
 	call	FAR PTR ISICONIC
 	or	ax,ax
-	je	$JCC1443
+	je	$JCC1432
 	jmp	$EX1487
-$JCC1443:
+$JCC1432:
 ; Line 401
 	push	WORD PTR [bp+6]	;hWnd
 	call	FAR PTR ISZOOMED
 	or	ax,ax
 	je	$I1493
+; Line 402
 ; Line 403
 	push	ds
 	push	OFFSET _szAppName
@@ -1128,9 +1146,7 @@ $JCC1443:
 	push	OFFSET DGROUP:$S1358_szMax
 	push	ds
 	push	OFFSET DGROUP:$SG1494
-	jmp	$L20016
-	nop	
-; Line 406
+	jmp	$L20009
 $I1493:
 	push	ds
 	push	OFFSET _szAppName
@@ -1228,7 +1244,7 @@ $I1493:
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
-$L20016:
+$L20009:
 	push	ds
 	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
@@ -1254,6 +1270,8 @@ GETHYPEROIDINI	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
+	xor	ax,ax
+	call	FAR PTR __aFchkstk
 ; Line 425
 	push	ds
 	push	OFFSET _szAppName
@@ -1342,6 +1360,7 @@ GETHYPEROIDINI	PROC FAR
 	pop	bp
 	dec	bp
 	ret	
+	nop	
 
 GETHYPEROIDINI	ENDP
 ; Line 440
@@ -1355,6 +1374,8 @@ HYPEROIDHELP	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
+	xor	ax,ax
+	call	FAR PTR __aFchkstk
 ;	hWnd = 6
 ; Line 441
 	push	WORD PTR [bp+6]	;hWnd
@@ -1380,6 +1401,7 @@ HYPEROIDHELP	PROC FAR
 	pop	bp
 	dec	bp
 	ret	2
+	nop	
 
 HYPEROIDHELP	ENDP
 ; Line 451
@@ -1393,31 +1415,30 @@ HYPEROIDABOUTDLG	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,42
+	mov	ax,42
+	call	FAR PTR __aFchkstk
 ;	hDlg = 14
 ;	mess = 12
 ;	wParam = 10
 ;	lParam = 6
-;	szBuff = -42
 ; Line 452
 	mov	ax,WORD PTR [bp+12]	;mess
-; Line 484
 	sub	ax,16
 	je	$SC1526
 	sub	ax,256
 	je	$SC1516
 	dec	ax
 	je	$SC1520
-; Line 483
-$L20017:
-	sub	ax,ax
-	jmp	SHORT $EX1511
-	nop	
+	jmp	SHORT $SD1527
+; Line 453
+; Line 454
 $SC1516:
 ; Line 455
 	mov	ax,WORD PTR _lHighScore+2
 	or	ax,WORD PTR _lHighScore
 	je	$SB1513
+; Line 456
+;	szBuff = -42
 ; Line 458
 	push	WORD PTR _lHighScore+2
 	push	WORD PTR _lHighScore
@@ -1435,17 +1456,25 @@ $SC1516:
 	push	ss
 	push	ax
 	call	FAR PTR SETDLGITEMTEXT
+; Line 460
 ; Line 461
 	jmp	SHORT $SB1513
 ; Line 463
 $SC1520:
 ; Line 464
 	mov	ax,WORD PTR [bp+10]	;wParam
-; Line 475
 	dec	ax
 	je	$SC1526
 	sub	ax,500
-	jne	$L20017
+	je	$SC1525
+$SD1527:
+; Line 474
+	sub	ax,ax
+	jmp	SHORT $EX1511
+; Line 465
+	nop	
+; Line 466
+$SC1525:
 ; Line 467
 	push	WORD PTR [bp+14]	;hDlg
 	push	cs
@@ -1456,7 +1485,7 @@ $SC1526:
 	push	WORD PTR [bp+14]	;hDlg
 	push	0
 	call	FAR PTR ENDDIALOG
-; Line 484
+; Line 476
 $SB1513:
 ; Line 485
 	mov	ax,1
@@ -1469,7 +1498,6 @@ $EX1511:
 	pop	bp
 	dec	bp
 	ret	10
-	nop	
 
 HYPEROIDABOUTDLG	ENDP
 ; Line 493
@@ -1483,9 +1511,10 @@ ABOUTHYPEROID	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,6
-;	hWnd = 6
+	mov	ax,6
+	call	FAR PTR __aFchkstk
 ;	lpprocAbout = -6
+;	hWnd = 6
 ; Line 494
 	push	SEG HYPEROIDABOUTDLG
 	push	OFFSET HYPEROIDABOUTDLG
@@ -1513,6 +1542,7 @@ ABOUTHYPEROID	PROC FAR
 	pop	bp
 	dec	bp
 	ret	2
+	nop	
 
 ABOUTHYPEROID	ENDP
 ROIDSUPP_TEXT	ENDS

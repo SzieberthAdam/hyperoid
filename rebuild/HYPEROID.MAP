@@ -1,118 +1,117 @@
-Stack Allocation = 8192 bytes
 
  HYPEROID
 
  Start     Length     Name                   Class
  0001:0000 00000H     HYPEROID               CODE
  0001:0000 00000H     ROIDSUPP               CODE
- 0001:0000 02F3CH     HYPEROID_TEXT          CODE
- 0002:0000 00864H     ROIDSUPP_TEXT          CODE
- 0003:0000 02792H     _TEXT                  CODE
+ 0001:0000 03006H     HYPEROID_TEXT          CODE
+ 0002:0000 00874H     ROIDSUPP_TEXT          CODE
+ 0003:0000 027E6H     _TEXT                  CODE
  0004:0000 00010H     NULL                   BEGDATA
- 0004:0010 00F32H     _DATA                  DATA
- 0004:0F42 0000EH     CDATA                  DATA
- 0004:0F50 00000H     XIFB                   DATA
- 0004:0F50 00000H     XIF                    DATA
- 0004:0F50 00000H     XIFE                   DATA
- 0004:0F50 00000H     XIB                    DATA
- 0004:0F50 0000CH     XI                     DATA
- 0004:0F5C 00000H     XIE                    DATA
- 0004:0F5C 00000H     XPB                    DATA
- 0004:0F5C 00000H     XP                     DATA
- 0004:0F5C 00000H     XPE                    DATA
- 0004:0F5C 00000H     XCB                    DATA
- 0004:0F5C 00000H     XC                     DATA
- 0004:0F5C 00000H     XCE                    DATA
- 0004:0F5C 00000H     XCFB                   DATA
- 0004:0F5C 00000H     XCF                    DATA
- 0004:0F5C 00000H     XCFE                   DATA
- 0004:0F5C 0000CH     DBDATA                 DATA
- 0004:0F68 00002H     XIQC                   DATA
- 0004:0F6A 00018H     CONST                  CONST
- 0004:0F82 00019H     HDR                    MSG
- 0004:0F9B 00361H     MSG                    MSG
- 0004:12FC 00002H     PAD                    MSG
- 0004:12FE 00001H     EPAD                   MSG
- 0004:1300 0005AH     _BSS                   BSS
- 0004:135A 00000H     XOB                    BSS
- 0004:135A 00000H     XO                     BSS
- 0004:135A 00000H     XOE                    BSS
- 0004:1360 0271EH     c_common               BSS
+ 0004:0010 00F36H     _DATA                  DATA
+ 0004:0F46 0000EH     CDATA                  DATA
+ 0004:0F54 00000H     XIFB                   DATA
+ 0004:0F54 00000H     XIF                    DATA
+ 0004:0F54 00000H     XIFE                   DATA
+ 0004:0F54 00000H     XIB                    DATA
+ 0004:0F54 0000CH     XI                     DATA
+ 0004:0F60 00000H     XIE                    DATA
+ 0004:0F60 00000H     XPB                    DATA
+ 0004:0F60 00000H     XP                     DATA
+ 0004:0F60 00000H     XPE                    DATA
+ 0004:0F60 00000H     XCB                    DATA
+ 0004:0F60 00000H     XC                     DATA
+ 0004:0F60 00000H     XCE                    DATA
+ 0004:0F60 00000H     XCFB                   DATA
+ 0004:0F60 00000H     XCF                    DATA
+ 0004:0F60 00000H     XCFE                   DATA
+ 0004:0F60 0000CH     DBDATA                 DATA
+ 0004:0F6C 00002H     XIQC                   DATA
+ 0004:0F6E 00018H     CONST                  CONST
+ 0004:0F86 00019H     HDR                    MSG
+ 0004:0F9F 00361H     MSG                    MSG
+ 0004:1300 00002H     PAD                    MSG
+ 0004:1302 00001H     EPAD                   MSG
+ 0004:1310 0005AH     _BSS                   BSS
+ 0004:136A 00000H     XOB                    BSS
+ 0004:136A 00000H     XO                     BSS
+ 0004:136A 00000H     XOE                    BSS
+ 0004:1370 0271EH     c_common               BSS
 
  Origin   Group
  0004:0   DGROUP
 
  Address   Export                  Alias
 
- 0002:079A HyperoidAboutDlg        HyperoidAboutDlg
- 0001:2B18 HyperoidWndProc         HyperoidWndProc
- 0003:0506 ___ExportedStub         ___ExportedStub
+ 0002:079E HyperoidAboutDlg        HyperoidAboutDlg
+ 0001:2BDA HyperoidWndProc         HyperoidWndProc
+ 0003:055A ___ExportedStub         ___ExportedStub
 
   Address         Publics by Name
 
- 0003:0FFC       $I10_OUTPUT
- 0003:0CE6       $i8_output
- 0003:0FA7       $i8_tpwr10
- 0002:081A       ABOUTHYPEROID
- 0001:1DA4       ACCELPLAYER
- 0001:03DE       ADDEXTRALIFE
- 0001:005E       ADDHEAD
+ 0003:1050       $I10_OUTPUT
+ 0003:0D3A       $i8_output
+ 0003:0FFB       $i8_tpwr10
+ 0002:0824       ABOUTHYPEROID
+ 0001:1E0A       ACCELPLAYER
+ 0001:03FE       ADDEXTRALIFE
+ 0001:0064       ADDHEAD
  0001:0000       ARAND
  0000:0000  Imp  BEGINPAINT           (USER.39)
  0000:0000  Imp  BITBLT               (GDI.34)
- 0001:186E       BREAKROID
+ 0001:18CC       BREAKROID
  0000:0000  Imp  CHANGEMENU           (USER.153)
- 0001:219C       CHECKSCORE
- 0001:08B2       CREATEBONUS
+ 0001:2242       CHECKSCORE
+ 0001:08D0       CREATEBONUS
  0000:0000  Imp  CREATECOMPATIBLEDC   (GDI.52)
- 0001:0DF0       CREATEHUNTER
- 0002:031E       CREATEHYPEROIDCLASS
- 0002:0160       CREATEHYPEROIDPALETTE
- 0002:03FA       CREATEHYPEROIDWINDOW
+ 0001:0E3C       CREATEHUNTER
+ 0002:0306       CREATEHYPEROIDCLASS
+ 0002:0158       CREATEHYPEROIDPALETTE
+ 0002:03E4       CREATEHYPEROIDWINDOW
  0000:0000  Imp  CREATEIC             (GDI.153)
- 0001:073C       CREATELETTER
+ 0001:076A       CREATELETTER
  0000:0000  Imp  CREATEPALETTE        (GDI.360)
  0000:0000  Imp  CREATEPEN            (GDI.61)
- 0001:1732       CREATEROID
+ 0001:179C       CREATEROID
  0000:0000  Imp  CREATESOLIDBRUSH     (GDI.66)
- 0001:143E       CREATESPINNER
- 0001:1124       CREATESWARMER
+ 0001:149C       CREATESPINNER
+ 0001:1184       CREATESWARMER
  0000:0000  Imp  CREATEWINDOW         (USER.41)
  0000:0000  Imp  DEFWINDOWPROC        (USER.107)
  0000:0000  Imp  DELETEDC             (GDI.68)
  0000:0000  Imp  DELETEOBJECT         (GDI.69)
  0000:0000  Imp  DIALOGBOX            (USER.87)
  0000:0000  Imp  DISPATCHMESSAGE      (USER.114)
- 0001:09BC       DRAWBONUSES
- 0001:1C4E       DRAWFLAMES
- 0001:0EE6       DRAWHUNTERS
- 0001:0C58       DRAWHUNTERSHOTS
+ 0001:09E2       DRAWBONUSES
+ 0001:1CB4       DRAWFLAMES
+ 0001:0F3C       DRAWHUNTERS
+ 0001:0C8A       DRAWHUNTERSHOTS
  0000:0000  Imp  DRAWICON             (USER.84)
- 0001:0854       DRAWLETTERS
- 0001:011A       DRAWOBJECT
- 0001:20DC       DRAWOBJECTS
- 0001:1EEA       DRAWPLAYER
- 0001:1A36       DRAWROIDS
- 0001:2774       DRAWSHADOWRECT
- 0001:1B68       DRAWSHOTS
- 0001:1530       DRAWSPINNERS
- 0001:122C       DRAWSWARMERS
+ 0001:0874       DRAWLETTERS
+ 0001:0132       DRAWOBJECT
+ 0001:2162       DRAWOBJECTS
+ 0001:1F58       DRAWPLAYER
+ 0001:1A92       DRAWROIDS
+ 0001:2822       DRAWSHADOWRECT
+ 0001:1BCE       DRAWSHOTS
+ 0001:1596       DRAWSPINNERS
+ 0001:1284       DRAWSWARMERS
  0000:0000  Imp  ENDDIALOG            (USER.88)
  0000:0000  Imp  ENDPAINT             (USER.40)
- 0001:26FE       ERASEHYPEROIDBKGND
- 0001:2E48       EXITHYPEROID
- 0001:04D2       EXPLODE
- 0001:241C       EXPLODEBADGUYS
+ 0001:27A8       ERASEHYPEROIDBKGND
+ 0001:2F10       EXITHYPEROID
+ 0001:0500       EXPLODE
+ 0001:24A2       EXPLODEBADGUYS
  0000:0000  Imp  FATALAPPEXIT         (KERNEL.137)
  0000:0000  Imp  FATALEXIT            (KERNEL.1)
- 0003:0A0A       fFYTOX
+ 0003:0A5E       fFYTOX
  0000:FE32  Abs  FIARQQ
  0000:0E32  Abs  FICRQQ
  0000:5C32  Abs  FIDRQQ
  0000:1632  Abs  FIERQQ
  0000:0000  Imp  FILLRECT             (USER.81)
- 0001:0D18       FIREHUNTERSHOT
- 0001:1CBC       FIRESHOT
+ 0001:0D4E       FIREHUNTERSHOT
+ 0001:1D1E       FIRESHOT
  0000:0632  Abs  FISRQQ
  0000:A23D  Abs  FIWRQQ
  0000:4000  Abs  FJARQQ
@@ -124,8 +123,8 @@ Stack Allocation = 8192 bytes
  0000:0000  Imp  GETCURRENTTIME       (USER.15)
  0000:0000  Imp  GETDC                (USER.66)
  0000:0000  Imp  GETDEVICECAPS        (GDI.80)
- 0001:204E       GETHYPEROIDDC
- 0002:06A0       GETHYPEROIDINI
+ 0001:20C6       GETHYPEROIDDC
+ 0002:0694       GETHYPEROIDINI
  0000:0000  Imp  GETINSTANCEDATA      (KERNEL.54)
  0000:0000  Imp  GETMESSAGE           (USER.108)
  0000:0000  Imp  GETOBJECT            (GDI.82)
@@ -139,14 +138,14 @@ Stack Allocation = 8192 bytes
  0000:0000  Imp  GLOBALALLOC          (KERNEL.15)
  0000:0000  Imp  GLOBALFREE           (KERNEL.17)
  0000:0000  Imp  GLOBALREALLOC        (KERNEL.16)
- 0001:040A       HIT
- 0001:23E8       HITLIST
- 0001:0632       HITPLAYER
- 0002:079A       HyperoidAboutDlg
- 0002:0762       HYPEROIDHELP
- 0001:2B18       HyperoidWndProc
+ 0001:0432       HIT
+ 0001:2470       HITLIST
+ 0001:065A       HITPLAYER
+ 0002:079E       HyperoidAboutDlg
+ 0002:075E       HYPEROIDHELP
+ 0001:2BDA       HyperoidWndProc
  0000:0000  Imp  INITAPP              (USER.5)
- 0001:2CD8       INITHYPEROID
+ 0001:2D9E       INITHYPEROID
  0000:0000  Imp  INITTASK             (KERNEL.91)
  0000:0000  Imp  INTERSECTCLIPRECT    (GDI.22)
  0000:0000  Imp  INVALIDATERECT       (USER.125)
@@ -167,207 +166,211 @@ Stack Allocation = 8192 bytes
  0000:0000  Imp  MESSAGEBOX           (USER.1)
  0000:0000  Imp  MOVETO               (GDI.20)
  0000:0000  Imp  MULDIV               (GDI.128)
- 0001:27E6       NCPAINTHYPEROID
- 0001:2468       NEWGAME
+ 0001:289C       NCPAINTHYPEROID
+ 0001:24F4       NEWGAME
  0000:0000  Imp  OUTPUTDEBUGSTRING    (KERNEL.115)
- 0001:26B6       PAINTHYPEROID
- 0001:2624       PANIC
+ 0001:275C       PAINTHYPEROID
+ 0001:26C4       PANIC
  0000:0000  Imp  PATBLT               (GDI.29)
  0000:0008  Abs  pAtomTable
  0000:0006  Abs  PLOCALHEAP
  0000:0000  Imp  POLYLINE             (GDI.37)
  0000:0000  Imp  POSTQUITMESSAGE      (USER.6)
  0002:0000       PRINTLETTERS
- 0001:039E       PRINTPLAYERMESSAGE
+ 0001:03BA       PRINTPLAYERMESSAGE
  0000:000E  Abs  pStackBot
  0000:000C  Abs  pStackMin
  0000:000A  Abs  pStackTop
  0000:0000  Imp  REALIZEPALETTE       (USER.283)
  0000:0000  Imp  REGISTERCLASS        (USER.57)
  0000:0000  Imp  RELEASEDC            (USER.68)
- 0001:00A0       REMHEAD
- 0001:00E2       REMOVE
- 0001:24CC       RESTARTHYPEROID
+ 0001:00AC       REMHEAD
+ 0001:00F2       REMOVE
+ 0001:255E       RESTARTHYPEROID
  0004:0004       rsrvptrs
- 0002:0554       SAVEHYPEROIDWINDOWPOS
+ 0002:0544       SAVEHYPEROIDWINDOWPOS
  0000:0000  Imp  SELECTOBJECT         (GDI.45)
  0000:0000  Imp  SELECTPALETTE        (USER.282)
  0000:0000  Imp  SETBRUSHORG          (GDI.148)
  0000:0000  Imp  SETDLGITEMTEXT       (USER.92)
- 0002:0392       SETHYPEROIDMENU
- 0001:2124       SETINDICATOR
+ 0002:037E       SETHYPEROIDMENU
+ 0001:21C2       SETINDICATOR
  0000:0000  Imp  SETMAPMODE           (GDI.3)
  0000:0000  Imp  SETPIXEL             (GDI.31)
- 0001:02FE       SETRESTART
+ 0001:0314       SETRESTART
  0000:0000  Imp  SETTIMER             (USER.10)
  0000:0000  Imp  SETVIEWPORTEXT       (GDI.14)
  0000:0000  Imp  SETVIEWPORTORG       (GDI.13)
  0000:0000  Imp  SETWINDOWEXT         (GDI.12)
  0000:0000  Imp  SETWINDOWTEXT        (USER.37)
  0000:0000  Imp  SHOWWINDOW           (USER.42)
- 0002:0096       SPINLETTERS
+ 0002:009C       SPINLETTERS
  0004:0B80       STKHQQ
  0000:0000  Imp  TRANSLATEMESSAGE     (USER.113)
  0000:0000  Imp  UNLOCKSEGMENT        (KERNEL.24)
  0000:0000  Imp  UPDATEWINDOW         (USER.124)
  0000:0000  Imp  WAITEVENT            (KERNEL.30)
- 0001:2EA0       WINMAIN
+ 0001:2F76       WINMAIN
  0000:0000  Imp  WRITEPRIVATEPROFILESTRING (KERNEL.129)
- 0003:069C       _atof
- 0003:0694       _atoi
- 0003:0698       _atol
- 0004:1364       _bBW
- 0004:3A42       _BonusList
- 0004:3A4C       _bPaused
- 0004:3A3A       _bRestart
- 0003:2004       _cos
- 0004:1300       _edata
- 0004:3A7E       _end
+ 0003:06F0       _atof
+ 0003:06E8       _atoi
+ 0003:06EC       _atol
+ 0004:1374       _bBW
+ 0004:3A52       _BonusList
+ 0004:3A5C       _bPaused
+ 0004:3A4A       _bRestart
+ 0003:2058       _cos
+ 0004:1310       _edata
+ 0004:3A8E       _end
  0004:0BCF       _environ
  0004:0BA8       _errno
  0003:0149       _exit
- 0004:37F4       _FlameList
- 0004:3A48       _FreeList
- 0004:3822       _hAppInst
- 0004:3A5A       _hAppPalette
- 0004:3A46       _hAppWnd
- 0004:156E       _hBitmap
- 0004:3802       _hPen
- 0004:0F38       _HUGE
- 0004:3824       _HunterList
- 0004:1368       _HunterShotList
- 0004:1360       _LetterList
+ 0004:3804       _FlameList
+ 0004:3A58       _FreeList
+ 0004:3832       _hAppInst
+ 0004:3A6A       _hAppPalette
+ 0004:3A56       _hAppWnd
+ 0004:157E       _hBitmap
+ 0004:3812       _hPen
+ 0004:0F3C       _HUGE
+ 0004:3834       _HunterList
+ 0004:1378       _HunterShotList
+ 0004:1370       _LetterList
  0004:025C       _LetterPart
- 0004:3A32       _lHighScore
- 0004:37FA       _lLastLife
- 0004:382C       _lScore
- 0003:051A       _malloc
- 0003:237A       _matherr
- 0003:07AC       _memmove
- 0003:07F4       _memset
- 0004:3A38       _nBadGuys
- 0004:3A3C       _nBomb
- 0004:136E       _nCos
- 0004:3A36       _nDrawDelay
- 0004:3800       _nLevel
- 0004:136C       _npPlayer
- 0004:1366       _nSafe
- 0004:3A7C       _nShield
- 0004:3832       _nSin
- 0004:1590       _Obj
- 0004:3A52       _RoidList
- 0004:3A4E       _ShotList
- 0003:1FFE       _sin
- 0004:3828       _SpinnerList
- 0003:0646       _strcpy
- 0003:0678       _strlen
- 0004:3A3E       _SwarmerList
- 0004:3A5C       _szAppName
+ 0004:3A42       _lHighScore
+ 0004:380A       _lLastLife
+ 0004:383C       _lScore
+ 0003:056E       _malloc
+ 0003:23CE       _matherr
+ 0003:0800       _memmove
+ 0003:0848       _memset
+ 0004:3A48       _nBadGuys
+ 0004:3A4C       _nBomb
+ 0004:137E       _nCos
+ 0004:3A46       _nDrawDelay
+ 0004:3810       _nLevel
+ 0004:137C       _npPlayer
+ 0004:1376       _nSafe
+ 0004:3A8C       _nShield
+ 0004:3842       _nSin
+ 0004:15A0       _Obj
+ 0004:3A62       _RoidList
+ 0004:3A5E       _ShotList
+ 0003:2052       _sin
+ 0004:3838       _SpinnerList
+ 0003:069A       _strcpy
+ 0003:06CC       _strlen
+ 0004:3A4E       _SwarmerList
+ 0004:3A6C       _szAppName
  0004:02A4       _szLetterDesc
  0004:0290       _szNumberDesc
- 0003:2009       _tan
- 0004:37F0       _vkBomb
- 0004:3A58       _vkClkw
- 0004:3830       _vkCtrClkw
- 0004:37FE       _vkFire
- 0004:3A56       _vkRvThrst
- 0004:37F2       _vkShld
- 0004:37F8       _vkThrst
+ 0003:205D       _tan
+ 0004:3800       _vkBomb
+ 0004:3A68       _vkClkw
+ 0004:3840       _vkCtrClkw
+ 0004:380E       _vkFire
+ 0004:3A66       _vkRvThrst
+ 0004:3802       _vkShld
+ 0004:3808       _vkThrst
  0000:0000  Imp  _wsprintf            (USER.420)
- 0004:0EC4       __80x87
+ 0004:0EC8       __80x87
+ 0004:0BE2       __aaltstkovr
  0004:0B8C       __acfinfo
  0000:9876  Abs  __acrtmsg
  0000:9876  Abs  __acrtused
  0000:9876  Abs  __acrtused2
  0000:D6D6  Abs  __aDBdoswp
  0004:0BDE       __adbgmsg
- 0004:0F60       __aDBrterr
- 0003:2014       __aFCIcos
- 0003:200E       __aFCIsin
- 0003:2019       __aFCItan
- 0003:2254       __aFftol
- 0003:083E       __aFldiv
- 0003:08D8       __aFlmul
- 0003:08D8       __aFulmul
+ 0004:0F64       __aDBrterr
+ 0003:023C       __aFchkstk
+ 0003:2068       __aFCIcos
+ 0003:2062       __aFCIsin
+ 0003:206D       __aFCItan
+ 0003:22A8       __aFftol
+ 0003:0892       __aFldiv
+ 0003:092C       __aFlmul
+ 0003:092C       __aFulmul
  0004:0B9A       __aintdiv
- 0004:0BE6       __amblksiz
- 0003:043F       __amsg_exit
- 0004:0C04       __asizeC
- 0004:0C05       __asizeD
+ 0004:0BEA       __amblksiz
+ 0003:0493       __amsg_exit
+ 0003:021C       __aNchkstk
+ 0004:0C08       __asizeC
+ 0004:0C09       __asizeD
  0003:0011       __astart
- 0003:2764       __atold
- 0004:0F8A       __caption
- 0003:06E6       __catox
+ 0003:27B8       __atold
+ 0004:0F8E       __caption
+ 0003:073A       __catox
  0003:0166       __cexit
- 0003:1F78       __cfltcvt
- 0004:0BE8       __cfltcvt_tab
- 0003:1C2C       __cftoe
- 0003:1D92       __cftof
- 0003:1EBC       __cftog
+ 0003:1FCC       __cfltcvt
+ 0004:0BEC       __cfltcvt_tab
+ 0003:1C80       __cftoe
+ 0003:1DE6       __cftof
+ 0003:1F10       __cftog
  0004:0BD6       __child
+ 0003:023C       __chkstk
  0003:008A       __cinit
- 0003:043A       __cintDIV
- 0003:20D3       __cintrindisp1
- 0003:20A3       __cintrindisp2
- 0003:2702       __cldcvt
- 0003:2394       __cldtoe
- 0003:2536       __cldtof
- 0003:268C       __cldtog
- 0004:0E02       __cosjmptab
- 0004:0E32       __cotanjmptab
- 0004:0D1C       __cpower
- 0003:1B1A       __cropzeros
+ 0003:048E       __cintDIV
+ 0003:2127       __cintrindisp1
+ 0003:20F7       __cintrindisp2
+ 0003:2756       __cldcvt
+ 0003:23E8       __cldtoe
+ 0003:258A       __cldtof
+ 0003:26E0       __cldtog
+ 0004:0E06       __cosjmptab
+ 0004:0E36       __cotanjmptab
+ 0004:0D20       __cpower
+ 0003:1B6E       __cropzeros
  0003:01D5       __ctermsub
- 0003:2119       __ctrandisp1
- 0003:20FF       __ctrandisp2
- 0004:0C06       __ctype
- 0004:0C06       __ctype_
+ 0003:216D       __ctrandisp1
+ 0003:2153       __ctrandisp2
+ 0004:0C0A       __ctype
+ 0004:0C0A       __ctype_
  0003:0177       __c_exit
  0004:0BB3       __doserrno
  0004:0BB0       __dosvermajor
  0004:0BB1       __dosverminor
  0003:0157       __exit
- 0004:0DC0       __expjmptab
+ 0004:0DC4       __expjmptab
  0004:0B9E       __fac
- 0003:1BCA       __fassign
- 0003:0B8F       __fFCOS
- 0003:0A16       __fFEXP
- 0003:0B3E       __ffexpm1
- 0003:0AC3       __fFLN
- 0003:059C       __ffree
- 0003:0BA8       __fFSIN
- 0003:2292       __fltin
- 0003:22F2       __fltout
+ 0003:1C1E       __fassign
+ 0003:0BE3       __fFCOS
+ 0003:0A6A       __fFEXP
+ 0003:0B92       __ffexpm1
+ 0003:0B17       __fFLN
+ 0003:05F0       __ffree
+ 0003:0BFC       __fFSIN
+ 0003:22E6       __fltin
+ 0003:2346       __fltout
  0000:9876  Abs  __fltused
- 0003:0570       __fmalloc
- 0003:1AA6       __forcdecpt
- 0004:0F44       __fpinit
+ 0003:05C4       __fmalloc
+ 0003:1AFA       __forcdecpt
+ 0004:0F48       __fpinit
  0000:0000  Imp  __fpmath             (win87em.1)
- 0003:2342       __fpsignal
+ 0003:2396       __fpsignal
  0000:9876  Abs  __fptaskdata
- 0003:073A       __fptostr
+ 0003:078E       __fptostr
  0003:0216       __fptrap
- 0003:0602       __frealloc
- 0003:2254       __ftol
- 0003:04F6       __GetDGROUP
- 0004:0D08       __indefinite
- 0004:0D2E       __infinity
- 0003:201E       __Init80x87
+ 0003:0656       __frealloc
+ 0003:22A8       __ftol
+ 0003:054A       __GetDGROUP
+ 0004:0D0C       __indefinite
+ 0004:0D32       __infinity
+ 0003:2072       __Init80x87
  0004:0BD9       __intno
- 0003:1597       __LD12MULT
- 0003:14C2       __LD12MULTTENPOWER
- 0004:0DA8       __lnjmptab
- 0004:0D38       __logemax
- 0004:0D90       __logjmptab
- 0003:171C       __MANTOLD12
- 0004:0F40       __matherr_flag
- 0003:04C8       __myalloc
+ 0003:15EB       __LD12MULT
+ 0003:1516       __LD12MULTTENPOWER
+ 0004:0DAC       __lnjmptab
+ 0004:0D3C       __logemax
+ 0004:0D94       __logjmptab
+ 0003:1770       __MANTOLD12
+ 0004:0F44       __matherr_flag
+ 0003:051C       __myalloc
  0004:0BB5       __nfile
- 0003:055E       __nfree
- 0003:0520       __nmalloc
- 0003:045C       __NMSG_TEXT
- 0003:0493       __NMSG_WRITE
- 0003:05AE       __nrealloc
+ 0003:05B2       __nfree
+ 0003:0574       __nmalloc
+ 0003:04B0       __NMSG_TEXT
+ 0003:04E7       __NMSG_WRITE
+ 0003:0602       __nrealloc
  0004:0BB3       __oserr
  0004:0BB7       __osfile
  0004:0BB0       __osmajor
@@ -377,50 +380,50 @@ Stack Allocation = 8192 bytes
  0004:0BD8       __ovlflag
  0004:0BDA       __ovlvec
  0004:0BD1       __pgmptr
- 0004:0D12       __piby2
- 0003:1B94       __positive
+ 0004:0D16       __piby2
+ 0003:1BE8       __positive
  0004:0BAE       __psp
  0004:0BAC       __pspadr
- 0003:09D2       __rtbignan
- 0003:0A01       __rtchsifneg
- 0003:09F8       __rtifprojnpop
- 0003:09D9       __rtifprojpop
- 0003:09E3       __rtindfnpop
- 0003:09E0       __rtindfpop
- 0003:0B23       __rtinfnpop
- 0003:0AB6       __rtinfnpopse
- 0003:0B20       __rtinfpop
- 0003:0AB3       __rtinfpopse
- 0003:09B5       __rtnospop
- 0003:09B9       __rtnospopde
- 0003:09CB       __rtonenpop
- 0003:09C8       __rtonepop
- 0003:09B8       __rttosnpop
- 0003:09F1       __rttosnpopde
- 0003:09B2       __rttospop
- 0003:09AF       __rttospopde
- 0003:09C1       __rtzeronpop
- 0003:09BE       __rtzeropop
- 0003:021C       __setargv
- 0003:03AE       __setenvp
- 0004:0C02       __sigintoff
- 0004:0C00       __sigintseg
- 0004:0DEA       __sinjmptab
- 0003:17D6       __STRINGTOD
- 0003:183E       __STRINGTOLD
- 0004:0E1A       __tanjmptab
- 0003:090A       __trandisp1
- 0003:094C       __trandisp2
+ 0003:0A26       __rtbignan
+ 0003:0A55       __rtchsifneg
+ 0003:0A4C       __rtifprojnpop
+ 0003:0A2D       __rtifprojpop
+ 0003:0A37       __rtindfnpop
+ 0003:0A34       __rtindfpop
+ 0003:0B77       __rtinfnpop
+ 0003:0B0A       __rtinfnpopse
+ 0003:0B74       __rtinfpop
+ 0003:0B07       __rtinfpopse
+ 0003:0A09       __rtnospop
+ 0003:0A0D       __rtnospopde
+ 0003:0A1F       __rtonenpop
+ 0003:0A1C       __rtonepop
+ 0003:0A0C       __rttosnpop
+ 0003:0A45       __rttosnpopde
+ 0003:0A06       __rttospop
+ 0003:0A03       __rttospopde
+ 0003:0A15       __rtzeronpop
+ 0003:0A12       __rtzeropop
+ 0003:0270       __setargv
+ 0003:0402       __setenvp
+ 0004:0C06       __sigintoff
+ 0004:0C04       __sigintseg
+ 0004:0DEE       __sinjmptab
+ 0003:182A       __STRINGTOD
+ 0003:1892       __STRINGTOLD
+ 0004:0E1E       __tanjmptab
+ 0003:095E       __trandisp1
+ 0003:09A0       __trandisp2
  0004:0BAA       __umaskval
- 0003:0822       __wrt2err
- 0004:0D60       __ytoxjmptab
- 0004:0F62       ___aDBexit
- 0004:0F5E       ___aDBswpchk
- 0004:0F5C       ___aDBswpflg
+ 0003:0876       __wrt2err
+ 0004:0D64       __ytoxjmptab
+ 0004:0F66       ___aDBexit
+ 0004:0F62       ___aDBswpchk
+ 0004:0F60       ___aDBswpflg
  0004:0BCB       ___argc
  0004:0BCD       ___argv
- 0003:0506       ___ExportedStub
- 0004:0F68       ___qczrinit
+ 0003:055A       ___ExportedStub
+ 0004:0F6C       ___qczrinit
 
   Address         Publics by Value
 
@@ -432,13 +435,13 @@ Stack Allocation = 8192 bytes
  0000:0000  Imp  POLYLINE             (GDI.37)
  0000:0000  Imp  __fpmath             (win87em.1)
  0000:0000  Imp  CREATEPALETTE        (GDI.360)
- 0000:0000  Imp  FILLRECT             (USER.81)
+ 0000:0000  Imp  GLOBALALLOC          (KERNEL.15)
  0000:0000  Imp  GETPRIVATEPROFILEINT (KERNEL.127)
  0000:0000  Imp  GETWINDOWRECT        (USER.32)
  0000:0000  Imp  SELECTPALETTE        (USER.282)
  0000:0000  Imp  CHANGEMENU           (USER.153)
  0000:0000  Imp  INITTASK             (KERNEL.91)
- 0000:0000  Imp  CREATESOLIDBRUSH     (GDI.66)
+ 0000:0000  Imp  CREATEPEN            (GDI.61)
  0000:0000  Imp  FATALAPPEXIT         (KERNEL.137)
  0000:0000  Imp  BEGINPAINT           (USER.39)
  0000:0000  Imp  INITAPP              (USER.5)
@@ -448,22 +451,22 @@ Stack Allocation = 8192 bytes
  0000:0000  Imp  DIALOGBOX            (USER.87)
  0000:0000  Imp  GLOBALREALLOC        (KERNEL.16)
  0000:0000  Imp  GETINSTANCEDATA      (KERNEL.54)
- 0000:0000  Imp  GETSYSTEMMENU        (USER.156)
+ 0000:0000  Imp  LOADCURSOR           (USER.173)
  0000:0000  Imp  SELECTOBJECT         (GDI.45)
- 0000:0000  Imp  MOVETO               (GDI.20)
+ 0000:0000  Imp  SETMAPMODE           (GDI.3)
  0000:0000  Imp  BITBLT               (GDI.34)
  0000:0000  Imp  INVALIDATERECT       (USER.125)
  0000:0000  Imp  CREATEWINDOW         (USER.41)
  0000:0000  Imp  SETWINDOWTEXT        (USER.37)
  0000:0000  Imp  GLOBALFREE           (KERNEL.17)
- 0000:0000  Imp  REGISTERCLASS        (USER.57)
- 0000:0000  Imp  SETBRUSHORG          (GDI.148)
- 0000:0000  Imp  WAITEVENT            (KERNEL.30)
  0000:0000  Imp  MESSAGEBEEP          (USER.104)
- 0000:0000  Imp  SETMAPMODE           (GDI.3)
+ 0000:0000  Imp  SETBRUSHORG          (GDI.148)
+ 0000:0000  Imp  CREATEIC             (GDI.153)
+ 0000:0000  Imp  GETSYSTEMMENU        (USER.156)
+ 0000:0000  Imp  MOVETO               (GDI.20)
  0000:0000  Imp  LOCALALLOC           (KERNEL.5)
  0000:0000  Imp  GETCLIENTRECT        (USER.33)
- 0000:0000  Imp  CREATEIC             (GDI.153)
+ 0000:0000  Imp  WAITEVENT            (KERNEL.30)
  0000:0000  Imp  MULDIV               (GDI.128)
  0000:0000  Imp  LOCALREALLOC         (KERNEL.6)
  0000:0000  Imp  SHOWWINDOW           (USER.42)
@@ -473,30 +476,30 @@ Stack Allocation = 8192 bytes
  0000:0000  Imp  DEFWINDOWPROC        (USER.107)
  0000:0000  Imp  GETASYNCKEYSTATE     (USER.249)
  0000:0000  Imp  RELEASEDC            (USER.68)
- 0000:0000  Imp  GETOBJECT            (GDI.82)
+ 0000:0000  Imp  LOCALFREE            (KERNEL.7)
  0000:0000  Imp  FATALEXIT            (KERNEL.1)
  0000:0000  Imp  POSTQUITMESSAGE      (USER.6)
  0000:0000  Imp  DELETEDC             (GDI.68)
+ 0000:0000  Imp  GETOBJECT            (GDI.82)
  0000:0000  Imp  WRITEPRIVATEPROFILESTRING (KERNEL.129)
- 0000:0000  Imp  DRAWICON             (USER.84)
  0000:0000  Imp  MESSAGEBOX           (USER.1)
  0000:0000  Imp  SETPIXEL             (GDI.31)
- 0000:0000  Imp  LOCALFREE            (KERNEL.7)
- 0000:0000  Imp  GLOBALALLOC          (KERNEL.15)
+ 0000:0000  Imp  FREEPROCINSTANCE     (KERNEL.52)
+ 0000:0000  Imp  DRAWICON             (USER.84)
  0000:0000  Imp  SETVIEWPORTEXT       (GDI.14)
- 0000:0000  Imp  LOADCURSOR           (USER.173)
+ 0000:0000  Imp  FILLRECT             (USER.81)
  0000:0000  Imp  DISPATCHMESSAGE      (USER.114)
- 0000:0000  Imp  UPDATEWINDOW         (USER.124)
  0000:0000  Imp  ISICONIC             (USER.31)
+ 0000:0000  Imp  UPDATEWINDOW         (USER.124)
+ 0000:0000  Imp  REGISTERCLASS        (USER.57)
  0000:0000  Imp  LOADSTRING           (USER.176)
  0000:0000  Imp  GETDC                (USER.66)
- 0000:0000  Imp  CREATEPEN            (GDI.61)
  0000:0000  Imp  KILLTIMER            (USER.12)
+ 0000:0000  Imp  OUTPUTDEBUGSTRING    (KERNEL.115)
  0000:0000  Imp  LINETO               (GDI.19)
  0000:0000  Imp  INTERSECTCLIPRECT    (GDI.22)
- 0000:0000  Imp  OUTPUTDEBUGSTRING    (KERNEL.115)
- 0000:0000  Imp  GETWINDOWDC          (USER.67)
  0000:0000  Imp  GETSYSTEMMETRICS     (USER.179)
+ 0000:0000  Imp  GETWINDOWDC          (USER.67)
  0000:0000  Imp  DELETEOBJECT         (GDI.69)
  0000:0000  Imp  GETSYSCOLOR          (USER.180)
  0000:0000  Imp  GETDEVICECAPS        (GDI.80)
@@ -506,10 +509,10 @@ Stack Allocation = 8192 bytes
  0000:0000  Imp  ENDPAINT             (USER.40)
  0000:0000  Imp  UNLOCKSEGMENT        (KERNEL.24)
  0000:0000  Imp  LOCKSEGMENT          (KERNEL.23)
- 0000:0000  Imp  FREEPROCINSTANCE     (KERNEL.52)
- 0000:0000  Imp  MAKEPROCINSTANCE     (KERNEL.51)
- 0000:0000  Imp  SETVIEWPORTORG       (GDI.13)
  0000:0000  Imp  GETCURRENTTIME       (USER.15)
+ 0000:0000  Imp  SETVIEWPORTORG       (GDI.13)
+ 0000:0000  Imp  CREATESOLIDBRUSH     (GDI.66)
+ 0000:0000  Imp  MAKEPROCINSTANCE     (KERNEL.51)
  0000:0006  Abs  PLOCALHEAP
  0000:0008  Abs  pAtomTable
  0000:000A  Abs  pStackTop
@@ -531,64 +534,64 @@ Stack Allocation = 8192 bytes
  0000:D6D6  Abs  __aDBdoswp
  0000:FE32  Abs  FIARQQ
  0001:0000       ARAND
- 0001:005E       ADDHEAD
- 0001:00A0       REMHEAD
- 0001:00E2       REMOVE
- 0001:011A       DRAWOBJECT
- 0001:02FE       SETRESTART
- 0001:039E       PRINTPLAYERMESSAGE
- 0001:03DE       ADDEXTRALIFE
- 0001:040A       HIT
- 0001:04D2       EXPLODE
- 0001:0632       HITPLAYER
- 0001:073C       CREATELETTER
- 0001:0854       DRAWLETTERS
- 0001:08B2       CREATEBONUS
- 0001:09BC       DRAWBONUSES
- 0001:0C58       DRAWHUNTERSHOTS
- 0001:0D18       FIREHUNTERSHOT
- 0001:0DF0       CREATEHUNTER
- 0001:0EE6       DRAWHUNTERS
- 0001:1124       CREATESWARMER
- 0001:122C       DRAWSWARMERS
- 0001:143E       CREATESPINNER
- 0001:1530       DRAWSPINNERS
- 0001:1732       CREATEROID
- 0001:186E       BREAKROID
- 0001:1A36       DRAWROIDS
- 0001:1B68       DRAWSHOTS
- 0001:1C4E       DRAWFLAMES
- 0001:1CBC       FIRESHOT
- 0001:1DA4       ACCELPLAYER
- 0001:1EEA       DRAWPLAYER
- 0001:204E       GETHYPEROIDDC
- 0001:20DC       DRAWOBJECTS
- 0001:2124       SETINDICATOR
- 0001:219C       CHECKSCORE
- 0001:23E8       HITLIST
- 0001:241C       EXPLODEBADGUYS
- 0001:2468       NEWGAME
- 0001:24CC       RESTARTHYPEROID
- 0001:2624       PANIC
- 0001:26B6       PAINTHYPEROID
- 0001:26FE       ERASEHYPEROIDBKGND
- 0001:2774       DRAWSHADOWRECT
- 0001:27E6       NCPAINTHYPEROID
- 0001:2B18       HyperoidWndProc
- 0001:2CD8       INITHYPEROID
- 0001:2E48       EXITHYPEROID
- 0001:2EA0       WINMAIN
+ 0001:0064       ADDHEAD
+ 0001:00AC       REMHEAD
+ 0001:00F2       REMOVE
+ 0001:0132       DRAWOBJECT
+ 0001:0314       SETRESTART
+ 0001:03BA       PRINTPLAYERMESSAGE
+ 0001:03FE       ADDEXTRALIFE
+ 0001:0432       HIT
+ 0001:0500       EXPLODE
+ 0001:065A       HITPLAYER
+ 0001:076A       CREATELETTER
+ 0001:0874       DRAWLETTERS
+ 0001:08D0       CREATEBONUS
+ 0001:09E2       DRAWBONUSES
+ 0001:0C8A       DRAWHUNTERSHOTS
+ 0001:0D4E       FIREHUNTERSHOT
+ 0001:0E3C       CREATEHUNTER
+ 0001:0F3C       DRAWHUNTERS
+ 0001:1184       CREATESWARMER
+ 0001:1284       DRAWSWARMERS
+ 0001:149C       CREATESPINNER
+ 0001:1596       DRAWSPINNERS
+ 0001:179C       CREATEROID
+ 0001:18CC       BREAKROID
+ 0001:1A92       DRAWROIDS
+ 0001:1BCE       DRAWSHOTS
+ 0001:1CB4       DRAWFLAMES
+ 0001:1D1E       FIRESHOT
+ 0001:1E0A       ACCELPLAYER
+ 0001:1F58       DRAWPLAYER
+ 0001:20C6       GETHYPEROIDDC
+ 0001:2162       DRAWOBJECTS
+ 0001:21C2       SETINDICATOR
+ 0001:2242       CHECKSCORE
+ 0001:2470       HITLIST
+ 0001:24A2       EXPLODEBADGUYS
+ 0001:24F4       NEWGAME
+ 0001:255E       RESTARTHYPEROID
+ 0001:26C4       PANIC
+ 0001:275C       PAINTHYPEROID
+ 0001:27A8       ERASEHYPEROIDBKGND
+ 0001:2822       DRAWSHADOWRECT
+ 0001:289C       NCPAINTHYPEROID
+ 0001:2BDA       HyperoidWndProc
+ 0001:2D9E       INITHYPEROID
+ 0001:2F10       EXITHYPEROID
+ 0001:2F76       WINMAIN
  0002:0000       PRINTLETTERS
- 0002:0096       SPINLETTERS
- 0002:0160       CREATEHYPEROIDPALETTE
- 0002:031E       CREATEHYPEROIDCLASS
- 0002:0392       SETHYPEROIDMENU
- 0002:03FA       CREATEHYPEROIDWINDOW
- 0002:0554       SAVEHYPEROIDWINDOWPOS
- 0002:06A0       GETHYPEROIDINI
- 0002:0762       HYPEROIDHELP
- 0002:079A       HyperoidAboutDlg
- 0002:081A       ABOUTHYPEROID
+ 0002:009C       SPINLETTERS
+ 0002:0158       CREATEHYPEROIDPALETTE
+ 0002:0306       CREATEHYPEROIDCLASS
+ 0002:037E       SETHYPEROIDMENU
+ 0002:03E4       CREATEHYPEROIDWINDOW
+ 0002:0544       SAVEHYPEROIDWINDOWPOS
+ 0002:0694       GETHYPEROIDINI
+ 0002:075E       HYPEROIDHELP
+ 0002:079E       HyperoidAboutDlg
+ 0002:0824       ABOUTHYPEROID
  0003:0011       __astart
  0003:008A       __cinit
  0003:0149       _exit
@@ -597,101 +600,104 @@ Stack Allocation = 8192 bytes
  0003:0177       __c_exit
  0003:01D5       __ctermsub
  0003:0216       __fptrap
- 0003:021C       __setargv
- 0003:03AE       __setenvp
- 0003:043A       __cintDIV
- 0003:043F       __amsg_exit
- 0003:045C       __NMSG_TEXT
- 0003:0493       __NMSG_WRITE
- 0003:04C8       __myalloc
- 0003:04F6       __GetDGROUP
- 0003:0506       ___ExportedStub
- 0003:051A       _malloc
- 0003:0520       __nmalloc
- 0003:055E       __nfree
- 0003:0570       __fmalloc
- 0003:059C       __ffree
- 0003:05AE       __nrealloc
- 0003:0602       __frealloc
- 0003:0646       _strcpy
- 0003:0678       _strlen
- 0003:0694       _atoi
- 0003:0698       _atol
- 0003:069C       _atof
- 0003:06E6       __catox
- 0003:073A       __fptostr
- 0003:07AC       _memmove
- 0003:07F4       _memset
- 0003:0822       __wrt2err
- 0003:083E       __aFldiv
- 0003:08D8       __aFulmul
- 0003:08D8       __aFlmul
- 0003:090A       __trandisp1
- 0003:094C       __trandisp2
- 0003:09AF       __rttospopde
- 0003:09B2       __rttospop
- 0003:09B5       __rtnospop
- 0003:09B8       __rttosnpop
- 0003:09B9       __rtnospopde
- 0003:09BE       __rtzeropop
- 0003:09C1       __rtzeronpop
- 0003:09C8       __rtonepop
- 0003:09CB       __rtonenpop
- 0003:09D2       __rtbignan
- 0003:09D9       __rtifprojpop
- 0003:09E0       __rtindfpop
- 0003:09E3       __rtindfnpop
- 0003:09F1       __rttosnpopde
- 0003:09F8       __rtifprojnpop
- 0003:0A01       __rtchsifneg
- 0003:0A0A       fFYTOX
- 0003:0A16       __fFEXP
- 0003:0AB3       __rtinfpopse
- 0003:0AB6       __rtinfnpopse
- 0003:0AC3       __fFLN
- 0003:0B20       __rtinfpop
- 0003:0B23       __rtinfnpop
- 0003:0B3E       __ffexpm1
- 0003:0B8F       __fFCOS
- 0003:0BA8       __fFSIN
- 0003:0CE6       $i8_output
- 0003:0FA7       $i8_tpwr10
- 0003:0FFC       $I10_OUTPUT
- 0003:14C2       __LD12MULTTENPOWER
- 0003:1597       __LD12MULT
- 0003:171C       __MANTOLD12
- 0003:17D6       __STRINGTOD
- 0003:183E       __STRINGTOLD
- 0003:1AA6       __forcdecpt
- 0003:1B1A       __cropzeros
- 0003:1B94       __positive
- 0003:1BCA       __fassign
- 0003:1C2C       __cftoe
- 0003:1D92       __cftof
- 0003:1EBC       __cftog
- 0003:1F78       __cfltcvt
- 0003:1FFE       _sin
- 0003:2004       _cos
- 0003:2009       _tan
- 0003:200E       __aFCIsin
- 0003:2014       __aFCIcos
- 0003:2019       __aFCItan
- 0003:201E       __Init80x87
- 0003:20A3       __cintrindisp2
- 0003:20D3       __cintrindisp1
- 0003:20FF       __ctrandisp2
- 0003:2119       __ctrandisp1
- 0003:2254       __ftol
- 0003:2254       __aFftol
- 0003:2292       __fltin
- 0003:22F2       __fltout
- 0003:2342       __fpsignal
- 0003:237A       _matherr
- 0003:2394       __cldtoe
- 0003:2536       __cldtof
- 0003:268C       __cldtog
- 0003:2702       __cldcvt
- 0003:2764       __atold
+ 0003:021C       __aNchkstk
+ 0003:023C       __aFchkstk
+ 0003:023C       __chkstk
+ 0003:0270       __setargv
+ 0003:0402       __setenvp
+ 0003:048E       __cintDIV
+ 0003:0493       __amsg_exit
+ 0003:04B0       __NMSG_TEXT
+ 0003:04E7       __NMSG_WRITE
+ 0003:051C       __myalloc
+ 0003:054A       __GetDGROUP
+ 0003:055A       ___ExportedStub
+ 0003:056E       _malloc
+ 0003:0574       __nmalloc
+ 0003:05B2       __nfree
+ 0003:05C4       __fmalloc
+ 0003:05F0       __ffree
+ 0003:0602       __nrealloc
+ 0003:0656       __frealloc
+ 0003:069A       _strcpy
+ 0003:06CC       _strlen
+ 0003:06E8       _atoi
+ 0003:06EC       _atol
+ 0003:06F0       _atof
+ 0003:073A       __catox
+ 0003:078E       __fptostr
+ 0003:0800       _memmove
+ 0003:0848       _memset
+ 0003:0876       __wrt2err
+ 0003:0892       __aFldiv
+ 0003:092C       __aFulmul
+ 0003:092C       __aFlmul
+ 0003:095E       __trandisp1
+ 0003:09A0       __trandisp2
+ 0003:0A03       __rttospopde
+ 0003:0A06       __rttospop
+ 0003:0A09       __rtnospop
+ 0003:0A0C       __rttosnpop
+ 0003:0A0D       __rtnospopde
+ 0003:0A12       __rtzeropop
+ 0003:0A15       __rtzeronpop
+ 0003:0A1C       __rtonepop
+ 0003:0A1F       __rtonenpop
+ 0003:0A26       __rtbignan
+ 0003:0A2D       __rtifprojpop
+ 0003:0A34       __rtindfpop
+ 0003:0A37       __rtindfnpop
+ 0003:0A45       __rttosnpopde
+ 0003:0A4C       __rtifprojnpop
+ 0003:0A55       __rtchsifneg
+ 0003:0A5E       fFYTOX
+ 0003:0A6A       __fFEXP
+ 0003:0B07       __rtinfpopse
+ 0003:0B0A       __rtinfnpopse
+ 0003:0B17       __fFLN
+ 0003:0B74       __rtinfpop
+ 0003:0B77       __rtinfnpop
+ 0003:0B92       __ffexpm1
+ 0003:0BE3       __fFCOS
+ 0003:0BFC       __fFSIN
+ 0003:0D3A       $i8_output
+ 0003:0FFB       $i8_tpwr10
+ 0003:1050       $I10_OUTPUT
+ 0003:1516       __LD12MULTTENPOWER
+ 0003:15EB       __LD12MULT
+ 0003:1770       __MANTOLD12
+ 0003:182A       __STRINGTOD
+ 0003:1892       __STRINGTOLD
+ 0003:1AFA       __forcdecpt
+ 0003:1B6E       __cropzeros
+ 0003:1BE8       __positive
+ 0003:1C1E       __fassign
+ 0003:1C80       __cftoe
+ 0003:1DE6       __cftof
+ 0003:1F10       __cftog
+ 0003:1FCC       __cfltcvt
+ 0003:2052       _sin
+ 0003:2058       _cos
+ 0003:205D       _tan
+ 0003:2062       __aFCIsin
+ 0003:2068       __aFCIcos
+ 0003:206D       __aFCItan
+ 0003:2072       __Init80x87
+ 0003:20F7       __cintrindisp2
+ 0003:2127       __cintrindisp1
+ 0003:2153       __ctrandisp2
+ 0003:216D       __ctrandisp1
+ 0003:22A8       __ftol
+ 0003:22A8       __aFftol
+ 0003:22E6       __fltin
+ 0003:2346       __fltout
+ 0003:2396       __fpsignal
+ 0003:23CE       _matherr
+ 0003:23E8       __cldtoe
+ 0003:258A       __cldtof
+ 0003:26E0       __cldtog
+ 0003:2756       __cldcvt
+ 0003:27B8       __atold
  0004:0004       rsrvptrs
  0004:025C       _LetterPart
  0004:0290       _szNumberDesc
@@ -704,14 +710,14 @@ Stack Allocation = 8192 bytes
  0004:0BAA       __umaskval
  0004:0BAC       __pspadr
  0004:0BAE       __psp
- 0004:0BB0       __dosvermajor
  0004:0BB0       __osmajor
  0004:0BB0       __osversion
- 0004:0BB1       __dosverminor
+ 0004:0BB0       __dosvermajor
  0004:0BB1       __osminor
+ 0004:0BB1       __dosverminor
  0004:0BB2       __osmode
- 0004:0BB3       __oserr
  0004:0BB3       __doserrno
+ 0004:0BB3       __oserr
  0004:0BB5       __nfile
  0004:0BB7       __osfile
  0004:0BCB       ___argc
@@ -723,78 +729,79 @@ Stack Allocation = 8192 bytes
  0004:0BD9       __intno
  0004:0BDA       __ovlvec
  0004:0BDE       __adbgmsg
- 0004:0BE6       __amblksiz
- 0004:0BE8       __cfltcvt_tab
- 0004:0C00       __sigintseg
- 0004:0C02       __sigintoff
- 0004:0C04       __asizeC
- 0004:0C05       __asizeD
- 0004:0C06       __ctype_
- 0004:0C06       __ctype
- 0004:0D08       __indefinite
- 0004:0D12       __piby2
- 0004:0D1C       __cpower
- 0004:0D2E       __infinity
- 0004:0D38       __logemax
- 0004:0D60       __ytoxjmptab
- 0004:0D90       __logjmptab
- 0004:0DA8       __lnjmptab
- 0004:0DC0       __expjmptab
- 0004:0DEA       __sinjmptab
- 0004:0E02       __cosjmptab
- 0004:0E1A       __tanjmptab
- 0004:0E32       __cotanjmptab
- 0004:0EC4       __80x87
- 0004:0F38       _HUGE
- 0004:0F40       __matherr_flag
- 0004:0F44       __fpinit
- 0004:0F5C       ___aDBswpflg
- 0004:0F5E       ___aDBswpchk
- 0004:0F60       __aDBrterr
- 0004:0F62       ___aDBexit
- 0004:0F68       ___qczrinit
- 0004:0F8A       __caption
- 0004:1300       _edata
- 0004:1360       _LetterList
- 0004:1364       _bBW
- 0004:1366       _nSafe
- 0004:1368       _HunterShotList
- 0004:136C       _npPlayer
- 0004:136E       _nCos
- 0004:156E       _hBitmap
- 0004:1590       _Obj
- 0004:37F0       _vkBomb
- 0004:37F2       _vkShld
- 0004:37F4       _FlameList
- 0004:37F8       _vkThrst
- 0004:37FA       _lLastLife
- 0004:37FE       _vkFire
- 0004:3800       _nLevel
- 0004:3802       _hPen
- 0004:3822       _hAppInst
- 0004:3824       _HunterList
- 0004:3828       _SpinnerList
- 0004:382C       _lScore
- 0004:3830       _vkCtrClkw
- 0004:3832       _nSin
- 0004:3A32       _lHighScore
- 0004:3A36       _nDrawDelay
- 0004:3A38       _nBadGuys
- 0004:3A3A       _bRestart
- 0004:3A3C       _nBomb
- 0004:3A3E       _SwarmerList
- 0004:3A42       _BonusList
- 0004:3A46       _hAppWnd
- 0004:3A48       _FreeList
- 0004:3A4C       _bPaused
- 0004:3A4E       _ShotList
- 0004:3A52       _RoidList
- 0004:3A56       _vkRvThrst
- 0004:3A58       _vkClkw
- 0004:3A5A       _hAppPalette
- 0004:3A5C       _szAppName
- 0004:3A7C       _nShield
- 0004:3A7E       _end
+ 0004:0BE2       __aaltstkovr
+ 0004:0BEA       __amblksiz
+ 0004:0BEC       __cfltcvt_tab
+ 0004:0C04       __sigintseg
+ 0004:0C06       __sigintoff
+ 0004:0C08       __asizeC
+ 0004:0C09       __asizeD
+ 0004:0C0A       __ctype_
+ 0004:0C0A       __ctype
+ 0004:0D0C       __indefinite
+ 0004:0D16       __piby2
+ 0004:0D20       __cpower
+ 0004:0D32       __infinity
+ 0004:0D3C       __logemax
+ 0004:0D64       __ytoxjmptab
+ 0004:0D94       __logjmptab
+ 0004:0DAC       __lnjmptab
+ 0004:0DC4       __expjmptab
+ 0004:0DEE       __sinjmptab
+ 0004:0E06       __cosjmptab
+ 0004:0E1E       __tanjmptab
+ 0004:0E36       __cotanjmptab
+ 0004:0EC8       __80x87
+ 0004:0F3C       _HUGE
+ 0004:0F44       __matherr_flag
+ 0004:0F48       __fpinit
+ 0004:0F60       ___aDBswpflg
+ 0004:0F62       ___aDBswpchk
+ 0004:0F64       __aDBrterr
+ 0004:0F66       ___aDBexit
+ 0004:0F6C       ___qczrinit
+ 0004:0F8E       __caption
+ 0004:1310       _edata
+ 0004:1370       _LetterList
+ 0004:1374       _bBW
+ 0004:1376       _nSafe
+ 0004:1378       _HunterShotList
+ 0004:137C       _npPlayer
+ 0004:137E       _nCos
+ 0004:157E       _hBitmap
+ 0004:15A0       _Obj
+ 0004:3800       _vkBomb
+ 0004:3802       _vkShld
+ 0004:3804       _FlameList
+ 0004:3808       _vkThrst
+ 0004:380A       _lLastLife
+ 0004:380E       _vkFire
+ 0004:3810       _nLevel
+ 0004:3812       _hPen
+ 0004:3832       _hAppInst
+ 0004:3834       _HunterList
+ 0004:3838       _SpinnerList
+ 0004:383C       _lScore
+ 0004:3840       _vkCtrClkw
+ 0004:3842       _nSin
+ 0004:3A42       _lHighScore
+ 0004:3A46       _nDrawDelay
+ 0004:3A48       _nBadGuys
+ 0004:3A4A       _bRestart
+ 0004:3A4C       _nBomb
+ 0004:3A4E       _SwarmerList
+ 0004:3A52       _BonusList
+ 0004:3A56       _hAppWnd
+ 0004:3A58       _FreeList
+ 0004:3A5C       _bPaused
+ 0004:3A5E       _ShotList
+ 0004:3A62       _RoidList
+ 0004:3A66       _vkRvThrst
+ 0004:3A68       _vkClkw
+ 0004:3A6A       _hAppPalette
+ 0004:3A6C       _szAppName
+ 0004:3A8C       _nShield
+ 0004:3A8E       _end
 
 Program entry point at 0003:0011
 
