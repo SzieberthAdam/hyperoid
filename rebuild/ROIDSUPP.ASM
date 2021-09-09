@@ -56,7 +56,6 @@ EXTRN	GETPRIVATEPROFILESTRING:FAR
 EXTRN	WRITEPRIVATEPROFILESTRING:FAR
 EXTRN	ENDDIALOG:FAR
 EXTRN	SETDLGITEMTEXT:FAR
-EXTRN	__aFchkstk:FAR
 EXTRN	_wsprintf:FAR
 EXTRN	UPDATEWINDOW:FAR
 EXTRN	REGISTERCLASS:FAR
@@ -338,8 +337,7 @@ PRINTLETTERS	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	mov	ax,16
-	call	FAR PTR __aFchkstk
+	sub	sp,16
 	push	si
 ;	nLen = -12
 ;	nCnt = -4
@@ -375,8 +373,7 @@ PRINTLETTERS	PROC FAR
 	add	ax,WORD PTR [bp+14]	;Pos
 	mov	WORD PTR [bp-6],ax	;nBaseStart
 ; Line 201
-	jmp	SHORT $L20003
-	nop	
+	jmp	SHORT $L20002
 $FC1404:
 ; Line 202
 ;	npLtr = -16
@@ -415,7 +412,7 @@ $I1407:
 	mov	ax,WORD PTR [bp-10]	;nSpace
 	sub	WORD PTR [bp-6],ax	;nBaseStart
 ; Line 212
-$L20003:
+$L20002:
 	mov	ax,WORD PTR [bp-4]	;nCnt
 	dec	WORD PTR [bp-4]	;nCnt
 	or	ax,ax
@@ -442,8 +439,7 @@ SPINLETTERS	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	mov	ax,18
-	call	FAR PTR __aFchkstk
+	sub	sp,18
 	push	si
 ;	nLen = -12
 ;	nCnt = -4
@@ -479,8 +475,7 @@ SPINLETTERS	PROC FAR
 	add	ax,WORD PTR [bp+14]	;Pos
 	mov	WORD PTR [bp-6],ax	;nBaseStart
 ; Line 228
-	jmp	SHORT $L20004
-	nop	
+	jmp	SHORT $L20003
 $FC1420:
 ; Line 229
 ;	npLtr = -16
@@ -535,7 +530,7 @@ $I1423:
 	mov	ax,WORD PTR [bp-10]	;nSpace
 	sub	WORD PTR [bp-6],ax	;nBaseStart
 ; Line 242
-$L20004:
+$L20003:
 	mov	ax,WORD PTR [bp-4]	;nCnt
 	dec	WORD PTR [bp-4]	;nCnt
 	or	ax,ax
@@ -562,8 +557,7 @@ CREATEHYPEROIDPALETTE	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	mov	ax,126
-	call	FAR PTR __aFchkstk
+	sub	sp,126
 ;	hPalette = -8
 ;	hIC = -6
 ;	t = -4
@@ -617,9 +611,10 @@ $I1433:
 ; Line 266
 	mov	WORD PTR [bp-4],0	;t
 	jmp	$F1434
+	nop	
 $FC1446:
 	inc	WORD PTR [bp-120]	;npBuff
-$L20005:
+$L20004:
 	mov	bx,WORD PTR [bp-120]	;npBuff
 	cmp	BYTE PTR [bx],32
 	je	$FC1446
@@ -629,32 +624,32 @@ $L20005:
 	add	sp,2
 	mov	WORD PTR [bp-124],ax	;r
 ; Line 280
-	jmp	SHORT $L20006
+	jmp	SHORT $L20005
 	nop	
 $FC1449:
 	cmp	BYTE PTR [bx],44
 	je	$FB1450
 	inc	WORD PTR [bp-120]	;npBuff
-$L20006:
+$L20005:
 	mov	bx,WORD PTR [bp-120]	;npBuff
 	cmp	BYTE PTR [bx],0
 	jne	$FC1449
 $FB1450:
 ; Line 281
 	cmp	BYTE PTR [bx],44
-	jne	$L20007
+	jne	$L20006
 	inc	WORD PTR [bp-120]	;npBuff
 	push	WORD PTR [bp-120]	;npBuff
 	call	FAR PTR _atoi
 	add	sp,2
 	mov	WORD PTR [bp-126],ax	;g
 ; Line 282
-	jmp	SHORT $L20007
+	jmp	SHORT $L20006
 $FC1453:
 	cmp	BYTE PTR [bx],44
 	je	$FB1454
 	inc	WORD PTR [bp-120]	;npBuff
-$L20007:
+$L20006:
 	mov	bx,WORD PTR [bp-120]	;npBuff
 	cmp	BYTE PTR [bx],0
 	jne	$FC1453
@@ -682,15 +677,15 @@ $I1440:
 	je	$I1456
 	mov	ax,WORD PTR [bp-116]
 	or	ax,WORD PTR [bp-118]	;dwColor
-	jne	$L20001
+	jne	$L20000
 	sub	ax,ax
 	cwd	
-	jmp	SHORT $L20002
+	jmp	SHORT $L20001
 	nop	
-$L20001:
+$L20000:
 	mov	ax,-1
 	mov	dx,255
-$L20002:
+$L20001:
 	mov	WORD PTR [bp-118],ax	;dwColor
 	mov	WORD PTR [bp-116],dx
 ; Line 287
@@ -741,9 +736,9 @@ $F1434:
 	call	FAR PTR GETPRIVATEPROFILESTRING
 ; Line 273
 	cmp	BYTE PTR [bp-114],0	;szBuff
-	jne	$JCC728
+	jne	$JCC712
 	jmp	$I1440
-$JCC728:
+$JCC712:
 ; Line 274
 ;	r = -124
 ;	g = -126
@@ -758,7 +753,7 @@ $JCC728:
 	mov	WORD PTR [bp-126],ax	;g
 	mov	WORD PTR [bp-124],ax	;r
 ; Line 278
-	jmp	$L20005
+	jmp	$L20004
 $FB1436:
 ; Line 294
 	push	ds
@@ -786,8 +781,7 @@ CREATEHYPEROIDCLASS	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	mov	ax,28
-	call	FAR PTR __aFchkstk
+	sub	sp,28
 ;	Class = -28
 ; Line 306
 	push	WORD PTR _hAppInst
@@ -838,6 +832,7 @@ CREATEHYPEROIDCLASS	PROC FAR
 	pop	bp
 	dec	bp
 	ret	
+	nop	
 
 CREATEHYPEROIDCLASS	ENDP
 ; Line 327
@@ -845,8 +840,7 @@ CREATEHYPEROIDCLASS	ENDP
 SETHYPEROIDMENU	PROC NEAR
 	push	bp
 	mov	bp,sp
-	mov	ax,42
-	call	FAR PTR __aFchkstk
+	sub	sp,42
 ;	szMenuName = -40
 ;	hMenu = -42
 ;	hWnd = 8
@@ -868,7 +862,8 @@ $I1465:
 	or	ax,ax
 	je	$EX1462
 ; Line 335
-	jmp	SHORT $L20008
+	jmp	SHORT $L20007
+	nop	
 $FC1468:
 ; Line 336
 ; Line 337
@@ -891,7 +886,7 @@ $FC1468:
 ; Line 339
 	inc	WORD PTR [bp+6]	;nFirstID
 ; Line 340
-$L20008:
+$L20007:
 	mov	ax,WORD PTR [bp+6]	;nFirstID
 	cmp	WORD PTR [bp+4],ax	;nLastID
 	jge	$FC1468
@@ -914,8 +909,7 @@ CREATEHYPEROIDWINDOW	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	mov	ax,44
-	call	FAR PTR __aFchkstk
+	sub	sp,44
 ;	hWnd = -36
 ;	x = -42
 ;	y = -44
@@ -1079,7 +1073,6 @@ $EX1472:
 	pop	bp
 	dec	bp
 	ret	6
-	nop	
 
 CREATEHYPEROIDWINDOW	ENDP
 ; Line 389
@@ -1093,8 +1086,7 @@ SAVEHYPEROIDWINDOWPOS	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	mov	ax,42
-	call	FAR PTR __aFchkstk
+	sub	sp,42
 ;	rect = -42
 ;	szBuff = -34
 ;	hWnd = 6
@@ -1130,9 +1122,9 @@ $I1490:
 	push	WORD PTR [bp+6]	;hWnd
 	call	FAR PTR ISICONIC
 	or	ax,ax
-	je	$JCC1432
+	je	$JCC1397
 	jmp	$EX1487
-$JCC1432:
+$JCC1397:
 ; Line 401
 	push	WORD PTR [bp+6]	;hWnd
 	call	FAR PTR ISZOOMED
@@ -1146,7 +1138,8 @@ $JCC1432:
 	push	OFFSET DGROUP:$S1358_szMax
 	push	ds
 	push	OFFSET DGROUP:$SG1494
-	jmp	$L20009
+	jmp	$L20008
+	nop	
 $I1493:
 	push	ds
 	push	OFFSET _szAppName
@@ -1244,7 +1237,7 @@ $I1493:
 	lea	ax,WORD PTR [bp-34]	;szBuff
 	push	ss
 	push	ax
-$L20009:
+$L20008:
 	push	ds
 	push	OFFSET DGROUP:$S1355_szIni
 	call	FAR PTR WRITEPRIVATEPROFILESTRING
@@ -1270,8 +1263,6 @@ GETHYPEROIDINI	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	xor	ax,ax
-	call	FAR PTR __aFchkstk
 ; Line 425
 	push	ds
 	push	OFFSET _szAppName
@@ -1360,7 +1351,6 @@ GETHYPEROIDINI	PROC FAR
 	pop	bp
 	dec	bp
 	ret	
-	nop	
 
 GETHYPEROIDINI	ENDP
 ; Line 440
@@ -1374,8 +1364,6 @@ HYPEROIDHELP	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	xor	ax,ax
-	call	FAR PTR __aFchkstk
 ;	hWnd = 6
 ; Line 441
 	push	WORD PTR [bp+6]	;hWnd
@@ -1401,7 +1389,6 @@ HYPEROIDHELP	PROC FAR
 	pop	bp
 	dec	bp
 	ret	2
-	nop	
 
 HYPEROIDHELP	ENDP
 ; Line 451
@@ -1415,8 +1402,7 @@ HYPEROIDABOUTDLG	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	mov	ax,42
-	call	FAR PTR __aFchkstk
+	sub	sp,42
 ;	hDlg = 14
 ;	mess = 12
 ;	wParam = 10
@@ -1431,6 +1417,7 @@ HYPEROIDABOUTDLG	PROC FAR
 	je	$SC1520
 	jmp	SHORT $SD1527
 ; Line 453
+	nop	
 ; Line 454
 $SC1516:
 ; Line 455
@@ -1511,8 +1498,7 @@ ABOUTHYPEROID	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	mov	ax,6
-	call	FAR PTR __aFchkstk
+	sub	sp,6
 ;	lpprocAbout = -6
 ;	hWnd = 6
 ; Line 494
@@ -1542,7 +1528,6 @@ ABOUTHYPEROID	PROC FAR
 	pop	bp
 	dec	bp
 	ret	2
-	nop	
 
 ABOUTHYPEROID	ENDP
 ROIDSUPP_TEXT	ENDS
