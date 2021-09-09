@@ -29,14 +29,14 @@ Initial SS:SP:            seg   4 offset 0000
 Extra stack allocation:   1000 bytes
 DGROUP:                   seg   4
 Linker version:           5.10
-32-bit Checksum:          48c0bfc9
+32-bit Checksum:          4a06be4b
 Segment Table:            00000440 length 0020 (32)
 Resource Table:           00000460 length 0170 (368)
-Resident Names Table:     000005d0 length 001e (30)
-Module Reference Table:   000005ee length 0008 (8)
-Imported Names Table:     000005f6 length 0019 (25)
-Entry Table:              0000060f length 0142 (322)
-Non-resident Names Table: 00000751 length 0059 (89)
+Resident Names Table:     000005d0 length 000c (12)
+Module Reference Table:   000005dc length 0008 (8)
+Imported Names Table:     000005e4 length 0019 (25)
+Entry Table:              000005fd length 0142 (322)
+Non-resident Names Table: 0000073f length 006b (107)
 Movable entry points:     53
 Segment sector size:      16
 Heap allocation:          8000 bytes
@@ -55,8 +55,8 @@ no. type address  file  mem   flags
 
 Exports:
 ord seg offset name
-  3   3  0506  ___EXPORTEDSTUB exported
   2   2  079a  HYPEROIDABOUTDLG exported
+  3   3  0506  ___EXPORTEDSTUB exported
   1   1  2b18  HYPEROIDWNDPROC exported
 
   1 type   offset target
