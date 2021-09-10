@@ -2,7 +2,7 @@
 Microsoft (R) EXE File Header Utility  Version 2.01    
 Copyright (C) Microsoft Corp 1985-1990.  All rights reserved.
 
-.EXE size (bytes)         c990
+.EXE size (bytes)         c920
 Magic number:             5a4d
 Bytes on last page:       003a
 Pages in file:            0004
@@ -29,7 +29,7 @@ Initial SS:SP:            seg   4 offset 0000
 Extra stack allocation:   1000 bytes
 DGROUP:                   seg   4
 Linker version:           5.10
-32-bit Checksum:          83b0b738
+32-bit Checksum:          5540b42b
 Segment Table:            00000440 length 0020 (32)
 Resource Table:           00000460 length 0170 (368)
 Resident Names Table:     000005d0 length 001e (30)
@@ -43,9 +43,9 @@ Heap allocation:          8000 bytes
 Application type:         WINDOWAPI
 Other module flags:       
 no. type address  file  mem   flags
-  1 CODE 00007200 02f0b 02f0c EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
+  1 CODE 00007200 02ea2 02ea2 EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
                               relocs, (movable), (discardable), (nonshared)
-  2 CODE 0000a380 00837 00838 EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
+  2 CODE 0000a2e0 0086d 0086e EXECUTEREAD, LOADONCALL, NONCONFORMING, NOIOPL,
                               relocs, (movable), (discardable), (nonshared)
   3 CODE 000007e0 02792 02792 EXECUTEREAD, PRELOAD, NONCONFORMING, NOIOPL,
                               relocs, (movable), (discardable), (nonshared)
@@ -56,129 +56,119 @@ no. type address  file  mem   flags
 Exports:
 ord seg offset name
   3   3  0506  ___EXPORTEDSTUB exported
-  2   2  076c  HYPEROIDABOUTDLG exported
-  1   1  2af8  HYPEROIDWNDPROC exported
+  2   2  07a4  HYPEROIDABOUTDLG exported
+  1   1  2abe  HYPEROIDWNDPROC exported
 
   1 type   offset target
-    PTR     07c7  seg   3 offset 0678
-    PTR     2bc0  seg   2 offset 07ee
-    PTR     2c64  seg   2 offset 0526
-    PTR     2ec6  seg   2 offset 03cc
-    PTR     2e9c  seg   2 offset 02f6
-    PTR     2db8  seg   2 offset 0672
-    PTR     2d73  seg   3 offset 2254
-    PTR     2d93  seg   3 offset 1ffe
-    PTR     2d61  seg   3 offset 2004
-    PTR     2cbe  seg   2 offset 014c
-    PTR     2bad  imp USER.107
-    PTR     2ef4  imp USER.108
-    PTR     2eda  imp USER.113
-    PTR     2ee4  imp USER.114
-    PTR     080e  imp GDI.128
-    PTR     1efb  imp USER.249
-    PTR     2060  imp GDI.3
-    PTR     2641  imp USER.125
-    OFFSET  2d9f  os #5, additive
-    OFFSET  2d9c  os #5, additive
-    OFFSET  2d8b  os #5, additive
-    OFFSET  2d80  os #5, additive
-    OFFSET  2d6d  os #5, additive
-    OFFSET  2d6a  os #5, additive
-    OFFSET  2d5b  os #5, additive
-    OFFSET  2d50  os #5, additive
-    OFFSET  2d4b  os #5, additive
+    PTR     2c0a  seg   2 offset 0824
+    PTR     2b70  seg   2 offset 055e
+    PTR     2e4a  seg   2 offset 0404
+    PTR     2e20  seg   2 offset 0328
+    PTR     2d67  seg   2 offset 06aa
+    PTR     2d33  seg   3 offset 2254
+    PTR     2d43  seg   3 offset 200e
+    PTR     2d29  seg   3 offset 2014
+    PTR     2c87  seg   2 offset 016a
+    PTR     2b9b  imp USER.107
+    PTR     2e61  imp USER.108
+    PTR     2e6f  imp USER.113
+    PTR     2e79  imp USER.114
+    PTR     0832  imp GDI.128
+    PTR     1ef3  imp USER.249
+    PTR     2053  imp GDI.3
+    PTR     2611  imp USER.125
     OFFSET  2d47  os #5, additive
-    PTR     206e  imp GDI.12
-    PTR     209c  imp GDI.13
-    PTR     2092  imp GDI.14
-    PTR     2c6b  imp USER.6
-    PTR     2b4f  imp USER.10
-    PTR     2779  imp GDI.19
-    PTR     2769  imp GDI.20
-    PTR     26fa  imp GDI.148
-    PTR     2c52  imp USER.12
-    PTR     22b9  imp GDI.22
-    PTR     2d37  imp USER.15
-    PTR     29d0  imp USER.272
-    PTR     28a1  imp GDI.29
+    OFFSET  2d3e  os #5, additive
+    OFFSET  2d2d  os #5, additive
+    OFFSET  2d24  os #5, additive
+    OFFSET  2d1f  os #5, additive
+    OFFSET  2d1b  os #5, additive
+    PTR     205f  imp GDI.12
+    PTR     208c  imp GDI.13
+    PTR     2082  imp GDI.14
+    PTR     2b77  imp USER.6
+    PTR     2b47  imp USER.10
+    PTR     2749  imp GDI.19
+    PTR     2739  imp GDI.20
+    PTR     26ca  imp GDI.148
+    PTR     2b5e  imp USER.12
+    PTR     22b6  imp GDI.22
+    PTR     2d08  imp USER.15
+    PTR     299b  imp USER.272
+    PTR     28a5  imp GDI.29
     PTR     02bb  imp GDI.31
-    PTR     2c33  imp USER.282
-    PTR     29c2  imp GDI.34
-    PTR     2c3b  imp USER.283
-    PTR     0245  imp GDI.37
-    PTR     27cc  imp USER.31
-    PTR     27eb  imp USER.32
-    OFFSET  2d8e  os #6, additive
-    OFFSET  2d5e  os #6, additive
-    OFFSET  2d54  os #6, additive
-    PTR     26e7  imp USER.33
-    PTR     2203  imp USER.420
-    PTR     299f  imp GDI.45
-    PTR     2627  imp USER.37
-    PTR     2eb1  imp KERNEL.54
-    PTR     269f  imp USER.39
-    PTR     26cd  imp USER.40
-    PTR     2632  imp USER.42
-    PTR     2969  imp GDI.52
-    PTR     26ba  imp USER.174
-    PTR     2d20  imp USER.175
-    PTR     2806  imp USER.179
-    PTR     2701  imp USER.180
-    PTR     2cec  imp GDI.61
-    PTR     2726  imp GDI.66
-    PTR     2ac5  imp GDI.68
-    PTR     2e34  imp GDI.69
-    PTR     2c24  imp USER.66
-    PTR     27db  imp USER.67
-    PTR     2ad0  imp USER.68
-    PTR     2988  imp GDI.82
-    PTR     2739  imp USER.81
-    PTR     26c0  imp USER.84
-    PTR     24cf  seg   2 offset 0000
-    PTR     0341  seg   2 offset 0096
-    PTR     1dbc  seg   3 offset 083e
-    PTR     1db5  seg   3 offset 08d8
-  78 relocations
+    PTR     2c57  imp USER.282
+    PTR     298d  imp GDI.34
+    PTR     2c5f  imp USER.283
+    PTR     022f  imp GDI.37
+    PTR     279c  imp USER.31
+    PTR     27bb  imp USER.32
+    PTR     26b7  imp USER.33
+    PTR     21d8  imp USER.420
+    PTR     296a  imp GDI.45
+    PTR     25f7  imp USER.37
+    PTR     2e35  imp KERNEL.54
+    PTR     266f  imp USER.39
+    PTR     269d  imp USER.40
+    PTR     2602  imp USER.42
+    PTR     2937  imp GDI.52
+    PTR     268a  imp USER.174
+    PTR     2ce5  imp USER.175
+    PTR     27d6  imp USER.179
+    PTR     26d1  imp USER.180
+    PTR     2caf  imp GDI.61
+    PTR     26f6  imp GDI.66
+    PTR     2a8c  imp GDI.68
+    PTR     2dc0  imp GDI.69
+    PTR     2c48  imp USER.66
+    PTR     27ab  imp USER.67
+    PTR     2c6a  imp USER.68
+    PTR     2955  imp GDI.82
+    PTR     2709  imp USER.81
+    PTR     2690  imp USER.84
+    PTR     24c7  seg   2 offset 0000
+    PTR     034f  seg   2 offset 009c
+    PTR     1dd6  seg   3 offset 083e
+    PTR     1dcf  seg   3 offset 08d8
+  70 relocations
 
   2 type   offset target
-    PTR     02e7  imp GDI.360
-    PTR     0012  seg   3 offset 0678
-    BASE    07fc  seg   2 offset 0000
-    PTR     04ee  imp USER.104
-    PTR     01d9  seg   3 offset 0694
-    PTR     0053  seg   1 offset 072e
-    PTR     03fa  seg   3 offset 0698
-    BASE    0321  seg   1 offset 0000
-    PTR     0418  imp KERNEL.127
-    PTR     03f1  imp KERNEL.128
-    PTR     0515  imp KERNEL.129
-    PTR     04c4  imp USER.124
-    PTR     0500  imp USER.1
-    PTR     057e  imp USER.272
-    PTR     016a  imp GDI.153
-    PTR     03b6  imp USER.153
-    PTR     0376  imp USER.156
-    PTR     056f  imp USER.31
-    PTR     05b4  imp USER.32
-    PTR     0806  imp KERNEL.51
-    PTR     07a7  imp USER.420
-    PTR     082a  imp KERNEL.52
-    PTR     04ac  imp USER.41
-    PTR     04bc  imp USER.42
-    PTR     033c  imp USER.173
-    PTR     0310  imp USER.176
-    PTR     035d  imp USER.57
-    PTR     0196  imp GDI.68
-    OFFSET  031c  seg   1 offset 2af8
-    OFFSET  07ff  seg   2 offset 076c
-    PTR     0183  imp GDI.80
-    PTR     081f  imp USER.87
-    PTR     07dd  imp USER.88
-    PTR     07ba  imp USER.92
-  34 relocations
+    PTR     031a  imp GDI.360
+    BASE    0832  seg   2 offset 0000
+    PTR     0526  imp USER.104
+    PTR     0248  seg   3 offset 0694
+    PTR     0053  seg   1 offset 074e
+    PTR     0432  seg   3 offset 0698
+    BASE    0353  seg   1 offset 0000
+    PTR     0450  imp KERNEL.127
+    PTR     0429  imp KERNEL.128
+    PTR     054d  imp KERNEL.129
+    PTR     04fc  imp USER.124
+    PTR     0784  imp USER.1
+    PTR     05b6  imp USER.272
+    PTR     018a  imp GDI.153
+    PTR     03ef  imp USER.153
+    PTR     03b8  imp USER.156
+    PTR     05a7  imp USER.31
+    PTR     05ec  imp USER.32
+    PTR     083c  imp KERNEL.51
+    PTR     07e1  imp USER.420
+    PTR     0860  imp KERNEL.52
+    PTR     04e4  imp USER.41
+    PTR     04f4  imp USER.42
+    PTR     036e  imp USER.173
+    PTR     03da  imp USER.176
+    PTR     038f  imp USER.57
+    PTR     01b6  imp GDI.68
+    OFFSET  034e  seg   1 offset 2abe
+    OFFSET  0835  seg   2 offset 07a4
+    PTR     01a3  imp GDI.80
+    PTR     0855  imp USER.87
+    PTR     0812  imp USER.88
+    PTR     07f4  imp USER.92
+  33 relocations
 
   3 type   offset target
-    PTR     1fe1  seg   3 offset 0678
     OFFSET  1501  os #4, additive
     OFFSET  1542  os #4, additive
     OFFSET  180e  os #4, additive
@@ -188,17 +178,18 @@ ord seg offset name
     PTR     0040  seg   3 offset 008a
     PTR     0045  seg   3 offset 021c
     PTR     004a  seg   3 offset 03ae
-    PTR     0078  seg   1 offset 2e82
-    PTR     0458  imp KERNEL.1
+    PTR     0078  seg   1 offset 2e06
     PTR     007e  seg   3 offset 0149
+    PTR     0458  imp KERNEL.1
     PTR     0086  seg   3 offset 0157
     PTR     04d8  seg   3 offset 051a
     PTR     05bf  seg   3 offset 0520
-    PTR     0545  imp KERNEL.5
     PTR     0615  seg   3 offset 0570
+    PTR     0545  imp KERNEL.5
     PTR     05e9  imp KERNEL.6
-    PTR     0566  imp KERNEL.7
     PTR     06c5  seg   3 offset 2292
+    PTR     0566  imp KERNEL.7
+    PTR     1fe1  seg   3 offset 0678
     PTR     1cf1  seg   3 offset 0646
     PTR     044f  imp KERNEL.137
     PTR     1cb4  seg   3 offset 073a

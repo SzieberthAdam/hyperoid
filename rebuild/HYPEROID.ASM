@@ -1,24 +1,24 @@
 ;	Static Name Aliases
 ;
-;	$S1346_dwSeed	EQU	dwSeed
-;	$S1347_nScoreLen	EQU	nScoreLen
-;	$S1348_szScore	EQU	szScore
-;	$S1349_rectScoreClip	EQU	rectScoreClip
-;	$S1350_rectShotClip	EQU	rectShotClip
-;	$S1351_Player	EQU	Player
-;	$S1352_Spinner	EQU	Spinner
-;	$S1353_Swarmer	EQU	Swarmer
-;	$S1354_Hunter	EQU	Hunter
-;	$S1355_Bonus	EQU	Bonus
-;	$S1503_nNextBonus	EQU	nNextBonus
-;	$S1574_nNextHunter	EQU	nNextHunter
-;	$S1612_nNextSwarmer	EQU	nNextSwarmer
-;	$S1644_nNextSpinner	EQU	nNextSpinner
-;	$S1779_nBombing	EQU	nBombing
-;	$S1780_nShotDelay	EQU	nShotDelay
+;	$S1352_dwSeed	EQU	dwSeed
+;	$S1353_nScoreLen	EQU	nScoreLen
+;	$S1354_szScore	EQU	szScore
+;	$S1355_rectScoreClip	EQU	rectScoreClip
+;	$S1356_rectShotClip	EQU	rectShotClip
+;	$S1357_Player	EQU	Player
+;	$S1358_Spinner	EQU	Spinner
+;	$S1359_Swarmer	EQU	Swarmer
+;	$S1360_Hunter	EQU	Hunter
+;	$S1361_Bonus	EQU	Bonus
+;	$S1509_nNextBonus	EQU	nNextBonus
+;	$S1580_nNextHunter	EQU	nNextHunter
+;	$S1618_nNextSwarmer	EQU	nNextSwarmer
+;	$S1650_nNextSpinner	EQU	nNextSpinner
+;	$S1785_nBombing	EQU	nBombing
+;	$S1786_nShotDelay	EQU	nShotDelay
 	TITLE   HYPEROID.C
-	.286p
-	.287
+	.186
+	.8087
 INCLUDELIB	MLIBCE
 HYPEROID_TEXT	SEGMENT  WORD PUBLIC 'CODE'
 HYPEROID_TEXT	ENDS
@@ -31,11 +31,18 @@ _BSS	ENDS
 DGROUP	GROUP	CONST, _BSS, _DATA
 	ASSUME DS: DGROUP, SS: DGROUP
 EXTRN	__acrtused:ABS
+EXTRN	SETWINDOWTEXT:FAR
+EXTRN	GETASYNCKEYSTATE:FAR
+EXTRN	PRINTLETTERS:FAR
+EXTRN	GETCLIENTRECT:FAR
+EXTRN	GETWINDOWRECT:FAR
 EXTRN	SPINLETTERS:FAR
 EXTRN	SETTIMER:FAR
 EXTRN	CREATEHYPEROIDPALETTE:FAR
 EXTRN	KILLTIMER:FAR
 EXTRN	CREATEHYPEROIDCLASS:FAR
+EXTRN	__aFCIcos:FAR
+EXTRN	__aFCIsin:FAR
 EXTRN	GETSYSTEMMETRICS:FAR
 EXTRN	GETOBJECT:FAR
 EXTRN	LOADBITMAP:FAR
@@ -56,21 +63,21 @@ EXTRN	ISZOOMED:FAR
 EXTRN	LOADICON:FAR
 EXTRN	CREATECOMPATIBLEDC:FAR
 EXTRN	DELETEDC:FAR
-EXTRN	_sin:FAR
 EXTRN	MOVETO:FAR
 EXTRN	GETSYSCOLOR:FAR
+EXTRN	__aFftol:FAR
 EXTRN	LINETO:FAR
 EXTRN	SELECTPALETTE:FAR
 EXTRN	ABOUTHYPEROID:FAR
 EXTRN	REALIZEPALETTE:FAR
 EXTRN	MULDIV:FAR
 EXTRN	POLYLINE:FAR
+EXTRN	__aFulmul:FAR
 EXTRN	FILLRECT:FAR
 EXTRN	SETMAPMODE:FAR
-EXTRN	__aFulmul:FAR
+EXTRN	__aFldiv:FAR
 EXTRN	__aFlmul:FAR
 EXTRN	_wsprintf:FAR
-EXTRN	__aFldiv:FAR
 EXTRN	PATBLT:FAR
 EXTRN	SETWINDOWEXT:FAR
 EXTRN	BITBLT:FAR
@@ -88,19 +95,18 @@ EXTRN	CREATEPEN:FAR
 EXTRN	CREATESOLIDBRUSH:FAR
 EXTRN	SETBRUSHORG:FAR
 EXTRN	SHOWWINDOW:FAR
-EXTRN	_strlen:FAR
 EXTRN	GETINSTANCEDATA:FAR
-EXTRN	SETWINDOWTEXT:FAR
-EXTRN	GETASYNCKEYSTATE:FAR
-EXTRN	PRINTLETTERS:FAR
-EXTRN	__aFftol:FAR
-EXTRN	GETCLIENTRECT:FAR
-EXTRN	GETWINDOWRECT:FAR
-EXTRN	_cos:FAR
 _BSS      SEGMENT
+COMM NEAR	_SwarmerList:	BYTE:	 4
+COMM NEAR	_LetterList:	BYTE:	 4
+COMM NEAR	_BonusList:	BYTE:	 4
+COMM NEAR	_nCos:	 2:	 256
+COMM NEAR	_nSin:	 2:	 256
+COMM NEAR	_hPen:	 2:	 16
 COMM NEAR	_Obj:	 88:	 100
 COMM NEAR	_hBitmap:	 2:	 17
 _BSS      ENDS
+EXTRN	__ctype:BYTE
 EXTRN	_LetterPart:BYTE
 EXTRN	_szNumberDesc:BYTE
 EXTRN	_szLetterDesc:BYTE
@@ -114,9 +120,6 @@ COMM NEAR	_nLevel:	BYTE:	 2
 COMM NEAR	_nSafe:	BYTE:	 2
 COMM NEAR	_nShield:	BYTE:	 2
 COMM NEAR	_nBomb:	BYTE:	 2
-_BSS      ENDS
-EXTRN	__ctype:BYTE
-_BSS      SEGMENT
 COMM NEAR	_nBadGuys:	BYTE:	 2
 COMM NEAR	_lScore:	BYTE:	 4
 COMM NEAR	PLOCALHEAP:	BYTE:	 2
@@ -140,30 +143,24 @@ COMM NEAR	_FlameList:	BYTE:	 4
 COMM NEAR	_SpinnerList:	BYTE:	 4
 COMM NEAR	_HunterList:	BYTE:	 4
 COMM NEAR	_HunterShotList:	BYTE:	 4
-COMM NEAR	_SwarmerList:	BYTE:	 4
-COMM NEAR	_LetterList:	BYTE:	 4
-COMM NEAR	_BonusList:	BYTE:	 4
-COMM NEAR	_nCos:	 2:	 256
-COMM NEAR	_nSin:	 2:	 256
-COMM NEAR	_hPen:	 2:	 16
 EXTRN	__fltused:NEAR
 _BSS      ENDS
 _DATA      SEGMENT
 	ORG	$+116
-$SG1413	DB	'GAME OVER',  00H
-$SG1415	DB	'GET READY',  00H
-$SG1417	DB	'LEVEL %u',  00H
-$SG1424	DB	'EXTRA LIFE',  00H
-$SG1471	DB	'l',  00H
-$SG1521	DB	'%ld',  00H
-$SG1523	DB	'EXTRA SHIELD',  00H
-$SG1525	DB	'EXTRA BOMB',  00H
+$SG1419	DB	'GAME OVER',  00H
+$SG1421	DB	'GET READY',  00H
+$SG1423	DB	'LEVEL %u',  00H
+$SG1430	DB	'EXTRA LIFE',  00H
+$SG1477	DB	'l',  00H
+$SG1527	DB	'%ld',  00H
+$SG1529	DB	'EXTRA SHIELD',  00H
+$SG1531	DB	'EXTRA BOMB',  00H
 	ORG	$+12
-$SG1839	DB	'%2.2u',  00H
-$SG1843	DB	'%7.7lu',  00H
-$SG1896	DB	'Program Manager Help - PROGMAN.HLP',  00H
+$SG1845	DB	'%2.2u',  00H
+$SG1849	DB	'%7.7lu',  00H
+$SG1902	DB	'Program Manager Help - PROGMAN.HLP',  00H
 	ORG	$-246
-$S1351_Player	DW	00H
+$S1357_Player	DW	00H
 	DW	00H
 	DW	0a0H
 	DW	096H
@@ -173,7 +170,7 @@ $S1351_Player	DW	00H
 	DW	096H
 	DW	00H
 	DW	00H
-$S1352_Spinner	DW	0a0H
+$S1358_Spinner	DW	0a0H
 	DW	096H
 	DW	0e0H
 	DW	064H
@@ -183,7 +180,7 @@ $S1352_Spinner	DW	0a0H
 	DW	096H
 	DW	0a0H
 	DW	096H
-$S1353_Swarmer	DW	00H
+$S1359_Swarmer	DW	00H
 	DW	064H
 	DW	040H
 	DW	064H
@@ -193,7 +190,7 @@ $S1353_Swarmer	DW	00H
 	DW	064H
 	DW	00H
 	DW	064H
-$S1354_Hunter	DW	0a0H
+$S1360_Hunter	DW	0a0H
 	DW	096H
 	DW	00H
 	DW	0faH
@@ -209,7 +206,7 @@ $S1354_Hunter	DW	0a0H
 	DW	096H
 	DW	0a0H
 	DW	096H
-$S1355_Bonus	DW	00H
+$S1361_Bonus	DW	00H
 	DW	096H
 	DW	066H
 	DW	096H
@@ -222,24 +219,24 @@ $S1355_Bonus	DW	00H
 	DW	00H
 	DW	096H
 	ORG	$+70
-$S1503_nNextBonus	DW	03e8H
-$S1574_nNextHunter	DW	0c8H
-$S1612_nNextSwarmer	DW	03e8H
-$S1644_nNextSpinner	DW	03e8H
-$S1779_nBombing	DW	00H
-$S1780_nShotDelay	DW	00H
+$S1509_nNextBonus	DW	03e8H
+$S1580_nNextHunter	DW	0c8H
+$S1618_nNextSwarmer	DW	03e8H
+$S1650_nNextSpinner	DW	03e8H
+$S1785_nBombing	DW	00H
+$S1786_nShotDelay	DW	00H
 _DATA      ENDS
 _BSS      SEGMENT
 	ORG	$+50
-$S1346_dwSeed	DW 02H DUP (?)
+$S1352_dwSeed	DW 02H DUP (?)
 	ORG	$-6
-$S1347_nScoreLen	DW 01H DUP (?)
+$S1353_nScoreLen	DW 01H DUP (?)
 	ORG	$-50
-$S1348_szScore	DW 014H DUP (?)
+$S1354_szScore	DW 014H DUP (?)
 	ORG	$+14
-$S1349_rectScoreClip	DW 04H DUP (?)
+$S1355_rectScoreClip	DW 04H DUP (?)
 	ORG	$-22
-$S1350_rectShotClip	DW 04H DUP (?)
+$S1356_rectShotClip	DW 04H DUP (?)
 _BSS      ENDS
 HYPEROID_TEXT      SEGMENT
 	ASSUME	CS: HYPEROID_TEXT
@@ -265,13 +262,13 @@ ARAND	PROC NEAR
 	push	ax
 	push	3
 	push	17405
-	push	WORD PTR $S1346_dwSeed+2
-	push	WORD PTR $S1346_dwSeed
+	push	WORD PTR $S1352_dwSeed+2
+	push	WORD PTR $S1352_dwSeed
 	call	FAR PTR __aFulmul
 	add	ax,-24893
 	adc	dx,38
-	mov	WORD PTR $S1346_dwSeed,ax
-	mov	WORD PTR $S1346_dwSeed+2,dx
+	mov	WORD PTR $S1352_dwSeed,ax
+	mov	WORD PTR $S1352_dwSeed+2,dx
 	and	dh,127
 	push	0
 	push	dx
@@ -313,26 +310,20 @@ ADDHEAD	PROC NEAR
 ; Line 117
 	mov	bx,WORD PTR [bp+6]	;npList
 	cmp	WORD PTR [bx],0
-	je	$I1361
-; Line 118
-; Line 119
-	mov	ax,WORD PTR [bx]
-	mov	si,WORD PTR [bp+4]	;npNode
-	mov	WORD PTR [si],ax
+	je	$I1367
 ; Line 120
-	mov	WORD PTR [si+2],0
+	mov	bx,WORD PTR [bp+4]	;npNode
+	mov	WORD PTR [bx+2],0
 ; Line 121
-	mov	di,WORD PTR [bx]
-	mov	WORD PTR [di+2],si
-	mov	si,WORD PTR [bx]
-	mov	ax,WORD PTR [si+2]
-	mov	WORD PTR [bx],ax
-; Line 122
+	mov	si,WORD PTR [bp+6]	;npList
+	mov	di,WORD PTR [si]
+	mov	WORD PTR [bx],di
+	mov	WORD PTR [di+2],bx
+	mov	WORD PTR [si],bx
 ; Line 123
-	jmp	SHORT $I1362
+	jmp	SHORT $EX1366
 	nop	
-$I1361:
-; Line 124
+$I1367:
 ; Line 125
 	mov	ax,WORD PTR [bp+4]	;npNode
 	mov	WORD PTR [bx+2],ax
@@ -342,9 +333,8 @@ $I1361:
 	sub	cx,cx
 	mov	WORD PTR [bx+2],cx
 	mov	WORD PTR [bx],cx
-; Line 127
-$I1362:
 ; Line 128
+$EX1366:
 	pop	si
 	pop	di
 	mov	sp,bp
@@ -361,43 +351,38 @@ REMHEAD	PROC NEAR
 	sub	sp,2
 	push	si
 ;	npList = 4
+;	npNode = -2
 ; Line 136
 	mov	bx,WORD PTR [bp+4]	;npList
 	cmp	WORD PTR [bx],0
-	je	$I1365
-; Line 137
-;	npNode = -2
-; Line 138
+	je	$I1371
+; Line 139
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-2],ax	;npNode
-; Line 139
-	cmp	WORD PTR [bx+2],ax
-	je	$I1367
-; Line 140
-; Line 141
-	mov	si,ax
-	mov	ax,WORD PTR [si]
-	mov	WORD PTR [bx],ax
+	cmp	ax,WORD PTR [bx+2]
+	je	$I1373
 ; Line 142
-	mov	bx,WORD PTR [bp-2]	;npNode
+	mov	bx,ax
 	mov	bx,WORD PTR [bx]
+	mov	si,WORD PTR [bp+4]	;npList
+	mov	WORD PTR [si],bx
 	mov	WORD PTR [bx+2],0
-; Line 143
 ; Line 144
-	jmp	SHORT $I1368
+	jmp	SHORT $I1374
 	nop	
-$I1367:
+$I1373:
 	sub	ax,ax
 	mov	WORD PTR [bx+2],ax
 	mov	WORD PTR [bx],ax
-$I1368:
+$I1374:
 ; Line 145
 	mov	ax,WORD PTR [bp-2]	;npNode
-	jmp	SHORT $EX1364
-$I1365:
+	jmp	SHORT $EX1370
+; Line 147
+$I1371:
 	sub	ax,ax
 ; Line 148
-$EX1364:
+$EX1370:
 	pop	si
 	mov	sp,bp
 	pop	bp
@@ -415,27 +400,27 @@ REMOVE	PROC NEAR
 ; Line 156
 	mov	bx,WORD PTR [bp+4]	;npNode
 	cmp	WORD PTR [bx+2],0
-	je	$I1373
+	je	$I1379
 	mov	ax,WORD PTR [bx]
 	mov	bx,WORD PTR [bx+2]
-	jmp	SHORT $L20030
+	jmp	SHORT $L20131
 	nop	
-$I1373:
+$I1379:
 	mov	ax,WORD PTR [bx]
 	mov	bx,WORD PTR [bp+6]	;npList
-$L20030:
+$L20131:
 	mov	WORD PTR [bx],ax
 ; Line 158
 	mov	bx,WORD PTR [bp+4]	;npNode
 	cmp	WORD PTR [bx],0
-	je	$I1375
+	je	$I1381
 	mov	ax,WORD PTR [bx+2]
 	mov	bx,WORD PTR [bx]
-	jmp	SHORT $L20031
-$I1375:
+	jmp	SHORT $L20132
+$I1381:
 	mov	ax,WORD PTR [bx+2]
 	mov	bx,WORD PTR [bp+6]	;npList
-$L20031:
+$L20132:
 	mov	WORD PTR [bx+2],ax
 ; Line 160
 	pop	bp
@@ -448,16 +433,17 @@ REMOVE	ENDP
 DRAWOBJECT	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,48
-	push	di
+	sub	sp,52
 	push	si
+;	hDC = 6
+;	npObj = 4
 ;	nCnt = -2
 ;	nDir = -40
 ;	x = -36
 ;	y = -38
 ;	Pts = -34
-;	hDC = 6
-;	npObj = 4
+;	wDeg = -42
+;	nLen = -44
 ; Line 169
 	mov	bx,WORD PTR [bp+4]	;npObj
 	mov	ax,WORD PTR [bx+16]
@@ -470,116 +456,102 @@ DRAWOBJECT	PROC NEAR
 	mov	ax,WORD PTR [bx+4]
 	mov	WORD PTR [bp-36],ax	;x
 ; Line 171
-	mov	ax,WORD PTR [bx+10]
-	add	WORD PTR [bx+6],ax
-	mov	ax,WORD PTR [bx+6]
-	mov	WORD PTR [bp-38],ax	;y
+	mov	cx,WORD PTR [bx+10]
+	add	WORD PTR [bx+6],cx
+	mov	cx,WORD PTR [bx+6]
+	mov	WORD PTR [bp-38],cx	;y
 ; Line 174
-	cmp	WORD PTR [bp-36],-8492	;x
-	jge	$I1385
+	cmp	ax,-8492
+	jge	$I1391
 	mov	ax,8492
-	mov	WORD PTR [bp-36],ax	;x
-	jmp	SHORT $L20034
-$I1385:
+	jmp	SHORT $L20133
+$I1391:
 	cmp	WORD PTR [bp-36],8492	;x
-	jle	$I1387
+	jle	$I1392
 	mov	ax,-8492
+$L20133:
 	mov	WORD PTR [bp-36],ax	;x
 	mov	bx,WORD PTR [bp+4]	;npObj
-$L20034:
 	mov	WORD PTR [bx+4],ax
 ; Line 176
-$I1387:
+$I1392:
 	cmp	WORD PTR [bp-38],-8492	;y
-	jge	$I1388
+	jge	$I1394
 	mov	ax,8492
-	jmp	SHORT $L20035
+	jmp	SHORT $L20134
 	nop	
-$I1388:
+$I1394:
 	cmp	WORD PTR [bp-38],8492	;y
-	jle	$I1390
+	jle	$I1395
 	mov	ax,-8492
-$L20035:
+$L20134:
 	mov	WORD PTR [bp-38],ax	;y
 	mov	bx,WORD PTR [bp+4]	;npObj
 	mov	WORD PTR [bx+6],ax
 ; Line 179
-$I1390:
+$I1395:
 	mov	bx,WORD PTR [bp+4]	;npObj
 	mov	al,BYTE PTR [bx+23]
 	sub	ah,ah
 	dec	ax
 	mov	WORD PTR [bp-2],ax	;nCnt
-	jmp	SHORT $F1391
-	nop	
-$FC1392:
-; Line 180
-;	wDeg = -42
-;	nLen = -44
+	or	ax,ax
+	jl	$FB1399
+	mov	si,ax
+	shl	si,2
+	lea	ax,WORD PTR [bp-34][si]
+	mov	WORD PTR [bp-46],ax
+	add	si,WORD PTR [bp+4]	;npObj
+	add	si,24
+	mov	WORD PTR [bp-48],si
+$F1397:
 ; Line 181
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,2
-	mov	ax,bx
-	add	bx,WORD PTR [bp+4]	;npObj
-	mov	cl,BYTE PTR [bx+24]
-	add	cl,BYTE PTR [bp-40]	;nDir
-	sub	ch,ch
-	mov	WORD PTR [bp-42],cx	;wDeg
+	mov	bx,WORD PTR [bp-48]
+	mov	al,BYTE PTR [bx]
+	add	al,BYTE PTR [bp-40]	;nDir
+	sub	ah,ah
+	mov	WORD PTR [bp-42],ax	;wDeg
 ; Line 182
-	mov	dx,WORD PTR [bx+26]
-	mov	WORD PTR [bp-44],dx	;nLen
+	mov	cx,WORD PTR [bx+2]
+	mov	WORD PTR [bp-44],cx	;nLen
 ; Line 183
 	push	0
 	push	16384
 	mov	bx,ax
-	mov	ax,dx
-	cwd	
-	push	dx
-	push	ax
-	mov	si,cx
-	shl	si,1
-	mov	cx,ax
-	mov	ax,WORD PTR _nCos[si]
-	mov	di,dx
-	cwd	
-	push	dx
-	push	ax
-	mov	WORD PTR [bp-48],cx
-	mov	WORD PTR [bp-46],di
-	mov	di,bx
-	call	FAR PTR __aFlmul
+	shl	bx,1
+	mov	ax,WORD PTR _nCos[bx]
+	imul	cx
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
 	add	ax,WORD PTR [bp-36]	;x
-	mov	WORD PTR [bp-34][di],ax
+	mov	bx,WORD PTR [bp-46]
+	mov	WORD PTR [bx],ax
 ; Line 184
 	push	0
 	push	16384
-	push	WORD PTR [bp-46]
-	push	WORD PTR [bp-48]
-	mov	ax,WORD PTR _nSin[si]
-	cwd	
-	push	dx
-	push	ax
-	call	FAR PTR __aFlmul
+	mov	bx,WORD PTR [bp-42]	;wDeg
+	shl	bx,1
+	mov	ax,WORD PTR _nSin[bx]
+	imul	WORD PTR [bp-44]	;nLen
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
 	add	ax,WORD PTR [bp-38]	;y
-	mov	WORD PTR [bp-32][di],ax
-; Line 185
+	mov	bx,WORD PTR [bp-46]
+	mov	WORD PTR [bx+2],ax
+	sub	WORD PTR [bp-46],4
+	sub	WORD PTR [bp-48],4
 	dec	WORD PTR [bp-2]	;nCnt
-$F1391:
-	cmp	WORD PTR [bp-2],0	;nCnt
-	jge	$FC1392
+	jns	$F1397
+; Line 185
+$FB1399:
 ; Line 187
 	mov	bx,WORD PTR [bp+4]	;npObj
 	cmp	BYTE PTR [bx+23],1
-	ja	$JCC543
-	jmp	$I1396
-$JCC543:
-; Line 188
+	ja	$JCC521
+	jmp	$I1402
+$JCC521:
 ; Line 189
 	push	WORD PTR [bp+6]	;hDC
 	push	WORD PTR _hPen
@@ -598,10 +570,9 @@ $JCC543:
 ; Line 191
 	mov	bx,WORD PTR [bp+4]	;npObj
 	cmp	WORD PTR [bx+18],0
-	jg	$JCC592
-	jmp	$I1402
-$JCC592:
-; Line 192
+	jg	$JCC570
+	jmp	$EX1385
+$JCC570:
 ; Line 193
 	push	WORD PTR [bp+6]	;hDC
 	mov	bl,BYTE PTR [bx+22]
@@ -625,26 +596,31 @@ $JCC592:
 	sub	ah,ah
 	dec	ax
 	mov	WORD PTR [bp-2],ax	;nCnt
-	jmp	SHORT $F1398
-$FC1399:
-; Line 196
-	mov	si,WORD PTR [bp-2]	;nCnt
+	or	ax,ax
+	jl	$EX1385
+	mov	si,ax
 	shl	si,2
-	mov	ax,WORD PTR [bp-34][si]
-	mov	dx,WORD PTR [bp-32][si]
-	mov	bx,WORD PTR [bp+4]	;npObj
-	mov	WORD PTR [bx+56][si],ax
-	mov	WORD PTR [bx+58][si],dx
+	lea	ax,WORD PTR [bp-34][si]
+	mov	WORD PTR [bp-50],ax
+	add	si,WORD PTR [bp+4]	;npObj
+	add	si,56
+	mov	WORD PTR [bp-52],si
+$F1404:
+; Line 196
+	mov	bx,WORD PTR [bp-50]
+	sub	WORD PTR [bp-50],4
+	mov	ax,WORD PTR [bx]
+	mov	dx,WORD PTR [bx+2]
+	mov	bx,WORD PTR [bp-52]
+	sub	WORD PTR [bp-52],4
+	mov	WORD PTR [bx],ax
+	mov	WORD PTR [bx+2],dx
 	dec	WORD PTR [bp-2]	;nCnt
-$F1398:
-	cmp	WORD PTR [bp-2],0	;nCnt
-	jge	$FC1399
-; Line 197
-; Line 198
+	jns	$F1404
+	jmp	SHORT $EX1385
+	nop	
 ; Line 199
-	jmp	SHORT $I1402
-$I1396:
-; Line 200
+$I1402:
 ; Line 201
 	push	WORD PTR [bp+6]	;hDC
 	push	WORD PTR [bx+56]
@@ -655,8 +631,7 @@ $I1396:
 ; Line 202
 	mov	bx,WORD PTR [bp+4]	;npObj
 	cmp	WORD PTR [bx+18],0
-	jle	$I1402
-; Line 203
+	jle	$EX1385
 ; Line 204
 	push	WORD PTR [bp+6]	;hDC
 	push	WORD PTR [bp-34]	;Pts
@@ -672,15 +647,13 @@ $I1396:
 	mov	bx,WORD PTR [bp+4]	;npObj
 	mov	WORD PTR [bx+56],ax
 	mov	WORD PTR [bx+58],dx
-; Line 206
-; Line 207
-$I1402:
 ; Line 208
+$EX1385:
 	pop	si
-	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	4
+	nop	
 
 DRAWOBJECT	ENDP
 ; Line 215
@@ -689,13 +662,13 @@ SETRESTART	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,36
+;	Restart = 4
 ;	Pt = -36
 ;	szBuff = -32
-;	Restart = 4
 ; Line 219
 	cmp	WORD PTR _bRestart,0
 	je	$JCC769
-	jmp	$SB1409
+	jmp	$EX1410
 $JCC769:
 ; Line 220
 	push	WORD PTR _hAppWnd
@@ -712,13 +685,21 @@ $JCC769:
 	mov	WORD PTR [bp-36],ax	;Pt
 ; Line 224
 	mov	ax,WORD PTR [bp+4]	;Restart
-	jmp	SHORT $S1408
-; Line 225
+; Line 236
+	or	ax,ax
+	je	$SC1418
+	dec	ax
+	je	$SC1420
+	dec	ax
+	je	$SC1422
+	mov	sp,bp
+	pop	bp
+	ret	2
 	nop	
 ; Line 226
-$SC1412:
+$SC1418:
 ; Line 227
-	push	OFFSET DGROUP:$SG1413
+	push	OFFSET DGROUP:$SG1419
 	push	WORD PTR [bp-34]
 	push	WORD PTR [bp-36]	;Pt
 	push	WORD PTR [bp-34]
@@ -732,30 +713,19 @@ $SC1412:
 	ret	2
 	nop	
 ; Line 229
-$SC1414:
+$SC1420:
 ; Line 230
-	push	OFFSET DGROUP:$SG1415
-$L20036:
-	push	WORD PTR [bp-34]
-	push	WORD PTR [bp-36]	;Pt
-	push	WORD PTR [bp-34]
-	push	WORD PTR [bp-36]	;Pt
-	push	9
-	push	300
-	call	FAR PTR PRINTLETTERS
-; Line 231
-	mov	sp,bp
-	pop	bp
-	ret	2
+	push	OFFSET DGROUP:$SG1421
+	jmp	SHORT $L20135
 	nop	
 ; Line 232
-$SC1416:
+$SC1422:
 ; Line 233
 	mov	ax,WORD PTR _nLevel
 	inc	ax
 	push	ax
 	push	ds
-	push	OFFSET DGROUP:$SG1417
+	push	OFFSET DGROUP:$SG1423
 	lea	ax,WORD PTR [bp-32]	;szBuff
 	push	ss
 	push	ax
@@ -764,16 +734,16 @@ $SC1416:
 ; Line 234
 	lea	ax,WORD PTR [bp-32]	;szBuff
 	push	ax
-	jmp	SHORT $L20036
-$S1408:
-	or	ax,ax
-	je	$SC1412
-	dec	ax
-	je	$SC1414
-	dec	ax
-	je	$SC1416
-$SB1409:
+$L20135:
+	push	WORD PTR [bp-34]
+	push	WORD PTR [bp-36]	;Pt
+	push	WORD PTR [bp-34]
+	push	WORD PTR [bp-36]	;Pt
+	push	9
+	push	300
+	call	FAR PTR PRINTLETTERS
 ; Line 237
+$EX1410:
 	mov	sp,bp
 	pop	bp
 	ret	2
@@ -785,9 +755,9 @@ PRINTPLAYERMESSAGE	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,8
+;	npszText = 4
 ;	Pos = -4
 ;	Vel = -8
-;	npszText = 4
 ; Line 247
 	mov	bx,WORD PTR _npPlayer
 	mov	ax,WORD PTR [bx+4]
@@ -821,22 +791,20 @@ ADDEXTRALIFE	PROC NEAR
 	push	bp
 	mov	bp,sp
 ; Line 260
-	push	OFFSET DGROUP:$SG1424
+	push	OFFSET DGROUP:$SG1430
 	call	PRINTPLAYERMESSAGE
-; Line 261
-	mov	bx,WORD PTR _npPlayer
-	inc	WORD PTR [bx+18]
 ; Line 262
 	mov	bx,WORD PTR _npPlayer
+	inc	WORD PTR [bx+18]
 	mov	al,BYTE PTR [bx+18]
 	mov	BYTE PTR [bx+22],al
 ; Line 263
+	cmp	al,3
+	jbe	$EX1429
 	mov	bx,WORD PTR _npPlayer
-	cmp	BYTE PTR [bx+22],3
-	jbe	$I1425
 	mov	BYTE PTR [bx+22],3
 ; Line 264
-$I1425:
+$EX1429:
 	mov	sp,bp
 	pop	bp
 	ret	
@@ -847,24 +815,24 @@ ADDEXTRALIFE	ENDP
 HIT	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,4
+	sub	sp,8
+	push	di
 	push	si
-;	nCnt = -2
 ;	hDC = 6
 ;	npObj = 4
-; Line 274
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC1431:
-; Line 275
+;	nCnt = -2
 ;	npFlame = -4
+	mov	WORD PTR [bp-6],0
+; Line 274
+$F1436:
 ; Line 277
 	push	OFFSET DGROUP:_FreeList
 	call	REMHEAD
 	mov	WORD PTR [bp-4],ax	;npFlame
 	or	ax,ax
-	jne	$JCC1051
-	jmp	$EX1428
-$JCC1051:
+	jne	$JCC1044
+	jmp	$EX1434
+$JCC1044:
 ; Line 278
 	mov	bx,WORD PTR [bp+4]	;npObj
 	mov	ax,WORD PTR [bx+4]
@@ -880,8 +848,7 @@ $JCC1051:
 	mov	ax,WORD PTR [bx+10]
 	mov	WORD PTR [si+10],ax
 ; Line 282
-	mov	ah,BYTE PTR [bp-2]	;nCnt
-	sub	al,al
+	mov	ax,WORD PTR [bp-6]
 	mov	cx,6
 	cwd	
 	idiv	cx
@@ -905,43 +872,56 @@ $JCC1051:
 ; Line 288
 	push	ax
 	push	16384
+	mov	ax,50
+	sub	ax,WORD PTR [si+18]
+	cwd	
+	push	dx
+	push	ax
 	mov	bl,BYTE PTR [si+14]
 	sub	bh,bh
 	shl	bx,1
+	mov	cx,ax
 	mov	ax,WORD PTR _nCos[bx]
-	mov	cx,50
-	sub	cx,WORD PTR [si+18]
-	imul	cx
+	mov	di,dx
+	cwd	
+	push	dx
+	push	ax
+	mov	si,cx
+	mov	WORD PTR [bp-8],bx
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
-	add	WORD PTR [si+8],ax
+	mov	bx,WORD PTR [bp-4]	;npFlame
+	add	WORD PTR [bx+8],ax
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [si+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	mov	cx,50
-	sub	cx,WORD PTR [si+18]
-	imul	cx
+	push	di
+	push	si
+	mov	si,WORD PTR [bp-8]
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	push	dx
+	push	ax
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
-	add	WORD PTR [si+10],ax
+	mov	bx,WORD PTR [bp-4]	;npFlame
+	add	WORD PTR [bx+10],ax
 ; Line 289
 	push	OFFSET DGROUP:_FlameList
-	push	si
+	push	bx
 	call	ADDHEAD
-; Line 290
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],6	;nCnt
-	jge	$JCC1216
-	jmp	$FC1431
-$JCC1216:
+	add	BYTE PTR [bp-5],1
+	cmp	WORD PTR [bp-6],1536
+	jge	$JCC1231
+	jmp	$F1436
+$JCC1231:
 ; Line 291
-$EX1428:
+$EX1434:
 	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	4
@@ -952,13 +932,14 @@ HIT	ENDP
 EXPLODE	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,6
+	sub	sp,12
 	push	di
 	push	si
-;	nCnt = -2
-;	nSize = -4
 ;	hDC = 6
 ;	npObj = 4
+;	nCnt = -2
+;	nSize = -4
+;	npFlame = -6
 ; Line 299
 	mov	bx,WORD PTR [bp+4]	;npObj
 	mov	al,BYTE PTR [bx+23]
@@ -970,78 +951,30 @@ EXPLODE	PROC NEAR
 	call	DRAWOBJECT
 ; Line 302
 	mov	WORD PTR [bp-2],0	;nCnt
-	jmp	SHORT $F1440
-	nop	
-$I1446:
-	mov	si,WORD PTR [bp-2]	;nCnt
-	shl	si,2
-	mov	bx,WORD PTR [bp+4]	;npObj
-	mov	ax,WORD PTR [bx+28][si]
-	mov	dx,WORD PTR [bx+30][si]
-	mov	bx,WORD PTR [bp-6]	;npFlame
-	mov	WORD PTR [bx+28],ax
-	mov	WORD PTR [bx+30],dx
-$I1447:
-; Line 319
-	push	0
-	push	16384
-	mov	bx,WORD PTR [bp-6]	;npFlame
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nCos[bx]
-	mov	cx,60
-	mov	bx,WORD PTR [bp-6]	;npFlame
-	sub	cx,WORD PTR [bx+18]
-	imul	cx
-	push	dx
-	push	ax
-	call	FAR PTR __aFldiv
-	mov	bx,WORD PTR [bp-6]	;npFlame
-	add	WORD PTR [bx+8],ax
-	push	0
-	push	16384
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	mov	cx,60
-	mov	bx,WORD PTR [bp-6]	;npFlame
-	sub	cx,WORD PTR [bx+18]
-	imul	cx
-	push	dx
-	push	ax
-	call	FAR PTR __aFldiv
-	mov	bx,WORD PTR [bp-6]	;npFlame
-	add	WORD PTR [bx+10],ax
-; Line 320
-	push	OFFSET DGROUP:_FlameList
-	push	bx
-	call	ADDHEAD
-; Line 321
-$FC1441:
-	inc	WORD PTR [bp-2]	;nCnt
-$F1440:
-	mov	ax,WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-4],ax	;nSize
-	jg	$JCC1385
-	jmp	$FB1442
-$JCC1385:
-; Line 303
-;	npFlame = -6
+	cmp	WORD PTR [bp-4],0	;nSize
+	jg	$JCC1279
+	jmp	$FB1448
+$JCC1279:
+	mov	ax,WORD PTR [bp+4]	;npObj
+	add	ax,24
+	mov	WORD PTR [bp-8],ax
+	mov	WORD PTR [bp-10],0
+$F1446:
 ; Line 305
 	push	2
 	call	ARAND
 	or	ax,ax
-	jne	$FC1441
+	je	$JCC1305
+	jmp	$FC1447
+$JCC1305:
 ; Line 306
 	push	OFFSET DGROUP:_FreeList
 	call	REMHEAD
 	mov	WORD PTR [bp-6],ax	;npFlame
 	or	ax,ax
-	jne	$JCC1410
-	jmp	$EX1437
-$JCC1410:
+	jne	$JCC1321
+	jmp	$EX1443
+$JCC1321:
 ; Line 307
 	mov	bx,WORD PTR [bp+4]	;npObj
 	mov	ax,WORD PTR [bx+4]
@@ -1060,8 +993,7 @@ $JCC1410:
 	push	32
 	call	ARAND
 	mov	cx,ax
-	mov	ah,BYTE PTR [bp-2]	;nCnt
-	sub	al,al
+	mov	ax,WORD PTR [bp-10]
 	cwd	
 	idiv	WORD PTR [bp-4]	;nSize
 	add	cx,ax
@@ -1085,32 +1017,91 @@ $JCC1410:
 ; Line 315
 	mov	BYTE PTR [si+23],2
 ; Line 316
-	mov	di,WORD PTR [bp-2]	;nCnt
-	shl	di,2
-	mov	ax,WORD PTR [bx+24][di]
-	mov	dx,WORD PTR [bx+26][di]
+	mov	bx,WORD PTR [bp-8]
+	mov	ax,WORD PTR [bx]
+	mov	dx,WORD PTR [bx+2]
 	mov	WORD PTR [si+24],ax
 	mov	WORD PTR [si+26],dx
 ; Line 317
 	mov	ax,WORD PTR [bp-4]	;nSize
 	sub	ax,WORD PTR [bp-2]	;nCnt
 	dec	ax
-	je	$JCC1532
-	jmp	$I1446
-$JCC1532:
+	jne	$I1452
+	mov	bx,WORD PTR [bp+4]	;npObj
 	mov	ax,WORD PTR [bx+24]
 	mov	dx,WORD PTR [bx+26]
-	mov	WORD PTR [si+28],ax
-	mov	WORD PTR [si+30],dx
-; Line 318
-	jmp	$I1447
-$FB1442:
+	jmp	SHORT $I1453
+$I1452:
+	mov	bx,WORD PTR [bp-8]
+	mov	ax,WORD PTR [bx+4]
+	mov	dx,WORD PTR [bx+6]
+$I1453:
+	mov	bx,WORD PTR [bp-6]	;npFlame
+	mov	WORD PTR [bx+28],ax
+	mov	WORD PTR [bx+30],dx
+; Line 319
+	push	0
+	push	16384
+	mov	ax,60
+	mov	bx,WORD PTR [bp-6]	;npFlame
+	sub	ax,WORD PTR [bx+18]
+	cwd	
+	push	dx
+	push	ax
+	mov	bl,BYTE PTR [bx+14]
+	sub	bh,bh
+	shl	bx,1
+	mov	cx,ax
+	mov	ax,WORD PTR _nCos[bx]
+	mov	si,dx
+	cwd	
+	push	dx
+	push	ax
+	mov	di,cx
+	mov	WORD PTR [bp-12],bx
+	call	FAR PTR __aFlmul
+	push	dx
+	push	ax
+	call	FAR PTR __aFldiv
+	mov	bx,WORD PTR [bp-6]	;npFlame
+	add	WORD PTR [bx+8],ax
+	push	0
+	push	16384
+	push	si
+	push	di
+	mov	si,WORD PTR [bp-12]
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	push	dx
+	push	ax
+	call	FAR PTR __aFlmul
+	push	dx
+	push	ax
+	call	FAR PTR __aFldiv
+	mov	bx,WORD PTR [bp-6]	;npFlame
+	add	WORD PTR [bx+10],ax
+; Line 320
+	push	OFFSET DGROUP:_FlameList
+	push	bx
+	call	ADDHEAD
+; Line 302
+$FC1447:
+	add	WORD PTR [bp-8],4
+	add	BYTE PTR [bp-9],1
+	mov	ax,WORD PTR [bp-4]	;nSize
+	inc	WORD PTR [bp-2]	;nCnt
+	cmp	WORD PTR [bp-2],ax	;nCnt
+	jge	$JCC1585
+	jmp	$F1446
+$JCC1585:
+; Line 321
+$FB1448:
 ; Line 322
 	push	WORD PTR [bp+6]	;hDC
 	push	WORD PTR [bp+4]	;npObj
 	call	HIT
 ; Line 323
-$EX1437:
+$EX1443:
 	pop	si
 	pop	di
 	mov	sp,bp
@@ -1126,35 +1117,32 @@ HITPLAYER	PROC NEAR
 	mov	bp,sp
 	sub	sp,8
 	push	si
+;	hDC = 6
+;	npObj = 4
 ;	Vel = -6
 ;	nMass = -2
 ;	nSpin = -8
-;	hDC = 6
-;	npObj = 4
 ; Line 334
 	cmp	WORD PTR _nSafe,0
-	jne	$I1455
+	je	$JCC1620
+	jmp	$I1461
+$JCC1620:
 	mov	bx,WORD PTR _npPlayer
 	cmp	WORD PTR [bx+18],0
-	jg	$I1454
-$I1455:
-	sub	ax,ax
-	jmp	$EX1450
-	nop	
-; Line 337
-$I1454:
-	mov	ax,WORD PTR [bx+12]
+	jg	$JCC1633
+	jmp	$I1461
+$JCC1633:
+; Line 339
+	mov	ax,WORD PTR [bx+16]
 	mov	si,WORD PTR [bp+4]	;npObj
-	mov	cx,ax
+	add	ax,WORD PTR [si+16]
+	mov	WORD PTR [bp-8],ax	;nSpin
+; Line 340
+	push	ax
+	push	WORD PTR [bx+12]
+	mov	ax,WORD PTR [bx+12]
 	add	ax,WORD PTR [si+12]
 	mov	WORD PTR [bp-2],ax	;nMass
-; Line 339
-	mov	dx,WORD PTR [bx+16]
-	add	dx,WORD PTR [si+16]
-	mov	WORD PTR [bp-8],dx	;nSpin
-; Line 340
-	push	dx
-	push	cx
 	push	ax
 	call	FAR PTR MULDIV
 	sub	WORD PTR [si+16],ax
@@ -1165,16 +1153,15 @@ $I1454:
 	call	FAR PTR MULDIV
 	mov	bx,WORD PTR _npPlayer
 	sub	WORD PTR [bx+16],ax
-; Line 343
+; Line 344
 	mov	bx,WORD PTR _npPlayer
+	mov	ax,WORD PTR [bx+10]
+	sub	ax,WORD PTR [si+10]
+	mov	WORD PTR [bp-4],ax
+; Line 345
 	mov	ax,WORD PTR [bx+8]
 	sub	ax,WORD PTR [si+8]
 	mov	WORD PTR [bp-6],ax	;Vel
-; Line 344
-	mov	cx,WORD PTR [bx+10]
-	sub	cx,WORD PTR [si+10]
-	mov	WORD PTR [bp-4],cx
-; Line 345
 	push	ax
 	push	WORD PTR [bx+12]
 	push	WORD PTR [bp-2]	;nMass
@@ -1204,41 +1191,40 @@ $I1454:
 ; Line 350
 	mov	bx,WORD PTR _npPlayer
 	dec	WORD PTR [bx+18]
-	mov	bx,WORD PTR _npPlayer
-	cmp	WORD PTR [bx+18],0
-	je	$I1456
-; Line 351
-; Line 352
-	mov	al,BYTE PTR [bx+18]
-	mov	BYTE PTR [bx+22],al
+	je	$I1462
 ; Line 353
 	mov	bx,WORD PTR _npPlayer
-	cmp	BYTE PTR [bx+22],3
-	jbe	$I1457
+	mov	al,BYTE PTR [bx+18]
+	mov	BYTE PTR [bx+22],al
+	cmp	al,3
+	jbe	$I1463
+	mov	bx,WORD PTR _npPlayer
 	mov	BYTE PTR [bx+22],3
 ; Line 354
-$I1457:
+$I1463:
 	push	WORD PTR [bp+6]	;hDC
 	push	WORD PTR _npPlayer
 	call	HIT
 ; Line 355
 	mov	ax,1
-	jmp	SHORT $EX1450
-; Line 356
+	jmp	SHORT $EX1456
 	nop	
 ; Line 359
-$I1456:
+$I1462:
+	mov	bx,WORD PTR _npPlayer
 	mov	BYTE PTR [bx+22],3
 ; Line 360
 	push	WORD PTR [bp+6]	;hDC
-	push	WORD PTR _npPlayer
+	push	bx
 	call	EXPLODE
 ; Line 361
 	push	0
 	call	SETRESTART
-	jmp	$I1455
+; Line 334
+$I1461:
+	sub	ax,ax
 ; Line 363
-$EX1450:
+$EX1456:
 	pop	si
 	mov	sp,bp
 	pop	bp
@@ -1257,91 +1243,96 @@ CREATELETTER	PROC FAR
 	mov	bp,sp
 	push	ds
 	mov	ds,ax
-	sub	sp,10
+	sub	sp,12
+	push	di
 	push	si
+;	cLetter = 8
+;	nSize = 6
 ;	npLtr = -4
 ;	nCnt = -6
 ;	npDesc = -8
-;	cLetter = 8
-;	nSize = 6
 ; Line 375
 	cmp	BYTE PTR [bp+8],48	;cLetter
-	jl	$I1464
+	jl	$I1470
 	cmp	BYTE PTR [bp+8],57	;cLetter
-	jg	$I1464
+	jg	$I1470
 	mov	al,BYTE PTR [bp+8]	;cLetter
 	cbw	
 	mov	bx,ax
 	shl	bx,1
 	mov	ax,WORD PTR _szNumberDesc[bx-96]
-$L20038:
+$L20136:
 	mov	WORD PTR [bp-8],ax	;npDesc
 ; Line 376
-	jmp	SHORT $I1469
-	nop	
-$I1464:
+	jmp	SHORT $I1471
+$I1470:
 	cmp	BYTE PTR [bp+8],65	;cLetter
-	jl	$I1466
+	jl	$I1472
 	cmp	BYTE PTR [bp+8],90	;cLetter
-	jg	$I1466
+	jg	$I1472
 	mov	al,BYTE PTR [bp+8]	;cLetter
 	cbw	
 	mov	bx,ax
 	shl	bx,1
 	mov	ax,WORD PTR _szLetterDesc[bx-130]
-	jmp	SHORT $L20038
-$I1466:
+	jmp	SHORT $L20136
+$I1472:
 	cmp	BYTE PTR [bp+8],97	;cLetter
-	jl	$I1468
+	jl	$I1474
 	cmp	BYTE PTR [bp+8],122	;cLetter
-	jg	$I1468
+	jg	$I1474
 	mov	al,BYTE PTR [bp+8]	;cLetter
 	cbw	
 	mov	bx,ax
 	shl	bx,1
 	mov	ax,WORD PTR _szLetterDesc[bx-194]
-	jmp	SHORT $L20038
-$I1468:
+	jmp	SHORT $L20136
+$I1474:
 	cmp	BYTE PTR [bp+8],46	;cLetter
-	je	$JCC1938
-	jmp	$I1470
-$JCC1938:
-	mov	WORD PTR [bp-8],OFFSET DGROUP:$SG1471	;npDesc
+	je	$JCC1970
+	jmp	$I1476
+$JCC1970:
+	mov	WORD PTR [bp-8],OFFSET DGROUP:$SG1477	;npDesc
 ; Line 379
-$I1469:
+$I1471:
 ; Line 381
 	push	OFFSET DGROUP:_FreeList
 	call	REMHEAD
 	mov	WORD PTR [bp-4],ax	;npLtr
 	or	ax,ax
-	je	$I1473
-; Line 382
+	jne	$JCC1991
+	jmp	$I1479
+$JCC1991:
 ; Line 383
 	mov	bx,ax
 	mov	WORD PTR [bx+12],1
-; Line 384
-	mov	WORD PTR [bx+14],0
 ; Line 385
-	mov	WORD PTR [bx+16],0
+	sub	ax,ax
+	mov	WORD PTR [bx+14],ax
+	mov	WORD PTR [bx+16],ax
 ; Line 386
 	mov	WORD PTR [bx+18],40
 ; Line 387
 	mov	BYTE PTR [bx+22],3
 ; Line 388
-	push	WORD PTR [bp-8]	;npDesc
-	call	FAR PTR _strlen
-	add	sp,2
-	mov	WORD PTR [bp-6],ax	;nCnt
-	mov	al,BYTE PTR [bp-6]	;nCnt
-	mov	bx,WORD PTR [bp-4]	;npLtr
-	mov	BYTE PTR [bx+23],al
-; Line 389
-$FC1475:
+	push	ds
+	pop	es
+	mov	di,WORD PTR [bp-8]	;npDesc
+	mov	cx,-1
+	repnz	scasb
+	not	cx
+	dec	cx
+	mov	WORD PTR [bp-6],cx	;nCnt
+	mov	BYTE PTR [bx+23],cl
 	mov	ax,WORD PTR [bp-6]	;nCnt
-	dec	WORD PTR [bp-6]	;nCnt
-	or	ax,ax
-	je	$FB1476
-; Line 390
+	shl	ax,2
+	add	bx,ax
+	add	bx,26
+	mov	WORD PTR [bp-12],bx
+; Line 389
+	jmp	SHORT $L20137
+	nop	
+$FC1481:
 ; Line 391
 	mov	bx,WORD PTR [bp-8]	;npDesc
 	mov	si,WORD PTR [bp-6]	;nCnt
@@ -1351,34 +1342,40 @@ $FC1475:
 	shl	bx,2
 	mov	ax,WORD PTR _LetterPart[bx-388]
 	mov	dx,WORD PTR _LetterPart[bx-386]
-	shl	si,2
-	add	si,WORD PTR [bp-4]	;npLtr
-	mov	WORD PTR [si+24],ax
-	mov	WORD PTR [si+26],dx
+	mov	bx,WORD PTR [bp-12]
+	mov	WORD PTR [bx-2],ax
+	mov	WORD PTR [bx],dx
 ; Line 392
-	push	dx
+	mov	bx,WORD PTR [bp-12]
+	push	WORD PTR [bx]
 	push	WORD PTR [bp+6]	;nSize
 	push	256
 	call	FAR PTR MULDIV
-	mov	WORD PTR [si+26],ax
+	mov	bx,WORD PTR [bp-12]
+	mov	WORD PTR [bx],ax
 ; Line 393
-	jmp	SHORT $FC1475
-	nop	
-$I1470:
-	sub	ax,ax
-	jmp	SHORT $EX1460
-$FB1476:
+$L20137:
+	sub	WORD PTR [bp-12],4
+	mov	ax,WORD PTR [bp-6]	;nCnt
+	dec	WORD PTR [bp-6]	;nCnt
+	or	ax,ax
+	jne	$FC1481
 ; Line 394
 	push	OFFSET DGROUP:_LetterList
 	push	WORD PTR [bp-4]	;npLtr
 	call	ADDHEAD
-; Line 395
 ; Line 396
-$I1473:
+$I1479:
 	mov	ax,WORD PTR [bp-4]	;npLtr
+	jmp	SHORT $EX1466
+	nop	
+; Line 379
+$I1476:
+	sub	ax,ax
 ; Line 397
-$EX1460:
+$EX1466:
 	pop	si
+	pop	di
 	dec	bp
 	dec	bp
 	mov	sp,bp
@@ -1386,7 +1383,6 @@ $EX1460:
 	pop	bp
 	dec	bp
 	ret	4
-	nop	
 
 CREATELETTER	ENDP
 ; Line 404
@@ -1395,47 +1391,31 @@ DRAWLETTERS	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,4
+;	hDC = 4
 ;	npLtr = -2
 ;	npNext = -4
-;	hDC = 4
 ; Line 407
 	mov	ax,WORD PTR _LetterList
-	jmp	SHORT $L20039
-; Line 411
-	nop	
-; Line 412
-$SC1488:
-; Line 413
-	mov	bx,WORD PTR [bp-2]	;npLtr
-	dec	BYTE PTR [bx+22]
-; Line 414
-$SB1485:
-; Line 420
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-2]	;npLtr
-	call	DRAWOBJECT
-; Line 421
-	mov	ax,WORD PTR [bp-4]	;npNext
-$L20039:
 	mov	WORD PTR [bp-2],ax	;npLtr
 	or	ax,ax
-	je	$FB1483
-; Line 408
+	je	$EX1484
+$F1487:
 ; Line 409
-	mov	bx,ax
+	mov	bx,WORD PTR [bp-2]	;npLtr
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-4],ax	;npNext
 ; Line 410
 	dec	WORD PTR [bx+18]
 	mov	ax,WORD PTR [bx+18]
+; Line 419
 	or	ax,ax
-	je	$SC1489
+	je	$SC1495
 	sub	ax,3
-	je	$SC1488
-	jmp	SHORT $SB1485
+	je	$SC1494
+	jmp	SHORT $SB1491
 	nop	
 ; Line 415
-$SC1489:
+$SC1495:
 ; Line 416
 	push	OFFSET DGROUP:_LetterList
 	push	WORD PTR [bp-2]	;npLtr
@@ -1445,12 +1425,28 @@ $SC1489:
 	push	WORD PTR [bp-2]	;npLtr
 	call	ADDHEAD
 ; Line 418
-	jmp	SHORT $SB1485
-$FB1483:
+	jmp	SHORT $SB1491
+; Line 412
+$SC1494:
+; Line 413
+	mov	bx,WORD PTR [bp-2]	;npLtr
+	dec	BYTE PTR [bx+22]
+; Line 419
+$SB1491:
+; Line 420
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npLtr
+	call	DRAWOBJECT
+	mov	ax,WORD PTR [bp-4]	;npNext
+	mov	WORD PTR [bp-2],ax	;npLtr
+	or	ax,ax
+	jne	$F1487
 ; Line 422
+$EX1484:
 	mov	sp,bp
 	pop	bp
 	ret	2
+	nop	
 
 DRAWLETTERS	ENDP
 ; Line 429
@@ -1458,7 +1454,8 @@ DRAWLETTERS	ENDP
 CREATEBONUS	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,4
+	sub	sp,12
+	push	di
 	push	si
 ;	npBonus = -4
 ;	nCnt = -2
@@ -1467,10 +1464,9 @@ CREATEBONUS	PROC NEAR
 	call	REMHEAD
 	mov	WORD PTR [bp-4],ax	;npBonus
 	or	ax,ax
-	jne	$JCC2206
-	jmp	$I1494
-$JCC2206:
-; Line 434
+	jne	$JCC2263
+	jmp	$EX1497
+$JCC2263:
 ; Line 435
 	push	16984
 	call	ARAND
@@ -1480,8 +1476,9 @@ $JCC2206:
 ; Line 436
 	mov	WORD PTR [bx+6],-8492
 ; Line 437
-	mov	WORD PTR [bx+10],0
-	mov	WORD PTR [bx+8],0
+	sub	ax,ax
+	mov	WORD PTR [bx+10],ax
+	mov	WORD PTR [bx+8],ax
 ; Line 438
 	push	256
 	call	ARAND
@@ -1517,34 +1514,34 @@ $JCC2206:
 	mov	BYTE PTR [bx+22],al
 ; Line 444
 	mov	BYTE PTR [bx+23],6
-; Line 445
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC1496:
-; Line 446
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,2
-	mov	ax,WORD PTR $S1355_Bonus[bx]
-	mov	dx,WORD PTR $S1355_Bonus[bx+2]
-	mov	cx,bx
-	mov	bx,WORD PTR [bp-4]	;npBonus
-	mov	si,cx
-	mov	WORD PTR [bx+24][si],ax
-	mov	WORD PTR [bx+26][si],dx
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],6	;nCnt
-	jl	$FC1496
+	mov	cx,12
+	lea	di,WORD PTR [bx+24]
+	mov	si,OFFSET DGROUP:$S1361_Bonus
+	push	ds
+	pop	es
+	rep	movsw
 ; Line 447
 	push	0
 	push	16384
+	mov	ax,WORD PTR _nLevel
+	add	ax,15
+	shl	ax,1
+	cwd	
+	push	dx
+	push	ax
 	mov	bx,WORD PTR [bp-4]	;npBonus
 	mov	bl,BYTE PTR [bx+14]
 	sub	bh,bh
 	shl	bx,1
+	mov	cx,ax
 	mov	ax,WORD PTR _nCos[bx]
-	mov	cx,WORD PTR _nLevel
-	add	cx,15
-	shl	cx,1
-	imul	cx
+	mov	si,dx
+	cwd	
+	push	dx
+	push	ax
+	mov	di,cx
+	mov	WORD PTR [bp-12],bx
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -1552,14 +1549,14 @@ $FC1496:
 	add	WORD PTR [bx+8],ax
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	mov	cx,WORD PTR _nLevel
-	add	cx,15
-	shl	cx,1
-	imul	cx
+	push	si
+	push	di
+	mov	si,WORD PTR [bp-12]
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	push	dx
+	push	ax
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -1569,10 +1566,10 @@ $FC1496:
 	push	OFFSET DGROUP:_BonusList
 	push	bx
 	call	ADDHEAD
-; Line 449
 ; Line 450
-$I1494:
+$EX1497:
 	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	
@@ -1585,298 +1582,34 @@ DRAWBONUSES	PROC NEAR
 	mov	bp,sp
 	sub	sp,52
 	push	si
+;	hDC = 4
 ;	npBonus = -2
 ;	npNext = -4
-;	hDC = 4
-; Line 461
-	cmp	WORD PTR _nBadGuys,0
-	je	$I1504
-	dec	WORD PTR $S1503_nNextBonus
-	jns	$I1504
-; Line 462
-; Line 463
-	call	CREATEBONUS
-; Line 464
-	mov	WORD PTR $S1503_nNextBonus,1000
-; Line 465
-; Line 467
-$I1504:
-	mov	ax,WORD PTR _BonusList
-	jmp	$L20041
-; Line 480
-	nop	
-; Line 481
-$SC1517:
-; Line 482
-;	szBuff = -48
-;	lBonus = -52
-; Line 485
-	mov	ax,1000
-	imul	WORD PTR _nLevel
-	mov	WORD PTR [bp-52],ax	;lBonus
-	mov	WORD PTR [bp-50],dx
-	or	dx,ax
-	jne	$I1520
-	mov	WORD PTR [bp-52],500	;lBonus
-	mov	WORD PTR [bp-50],0
-; Line 486
-$I1520:
-	mov	ax,WORD PTR [bp-52]	;lBonus
-	mov	dx,WORD PTR [bp-50]
-	add	WORD PTR _lScore,ax
-	adc	WORD PTR _lScore+2,dx
-; Line 487
-	push	dx
-	push	ax
-	push	ds
-	push	OFFSET DGROUP:$SG1521
-	lea	ax,WORD PTR [bp-48]	;szBuff
-	push	ss
-	push	ax
-	call	FAR PTR _wsprintf
-	add	sp,12
-; Line 488
-	lea	ax,WORD PTR [bp-48]	;szBuff
-	push	ax
-$L20042:
-	call	PRINTPLAYERMESSAGE
-; Line 489
-; Line 490
-$SB1514:
-; Line 505
-	mov	bx,WORD PTR [bp-2]	;npBonus
-	mov	WORD PTR [bx+18],0
-; Line 506
-	push	WORD PTR [bp+4]	;hDC
-	push	bx
-	call	EXPLODE
-; Line 507
-	push	OFFSET DGROUP:_BonusList
-	push	WORD PTR [bp-2]	;npBonus
-	call	REMOVE
-; Line 508
-	push	OFFSET DGROUP:_FreeList
-	push	WORD PTR [bp-2]	;npBonus
-	call	ADDHEAD
-; Line 509
-; Line 510
-$FB1531:
-; Line 521
-; Line 522
-	mov	bx,WORD PTR [bp-2]	;npBonus
-	cmp	WORD PTR [bx+18],0
-	je	$I1535
-	dec	WORD PTR [bx+20]
-	cmp	WORD PTR [bx+20],0
-	jg	$I1535
-; Line 523
-; Line 524
-	dec	WORD PTR [bx+18]
-; Line 525
-	push	128
-	call	ARAND
-	add	ax,64
-	mov	bx,WORD PTR [bp-2]	;npBonus
-	mov	WORD PTR [bx+20],ax
-; Line 526
-	mov	al,BYTE PTR [bx+18]
-	shl	al,1
-	add	al,3
-	mov	BYTE PTR [bx+22],al
-; Line 527
-	cmp	WORD PTR [bx+18],0
-	jne	$I1535
-; Line 528
-; Line 529
-	push	WORD PTR [bp+4]	;hDC
-	push	bx
-	call	EXPLODE
-; Line 530
-	push	OFFSET DGROUP:_BonusList
-	push	WORD PTR [bp-2]	;npBonus
-	call	REMOVE
-; Line 531
-	push	OFFSET DGROUP:_FreeList
-	push	WORD PTR [bp-2]	;npBonus
-	call	ADDHEAD
-; Line 532
-; Line 533
-$I1535:
-; Line 534
-	mov	bx,WORD PTR _npPlayer
-	mov	ax,WORD PTR [bx+4]
-	mov	bx,WORD PTR [bp-2]	;npBonus
-	sub	ax,WORD PTR [bx+4]
-$L20044:
-	mov	WORD PTR [bp-6],ax	;nDelta
-; Line 535
-	cmp	ax,-16
-	jl	$FB1539
-	cmp	ax,16
-	jg	$JCC2693
-	jmp	$FB1538
-$JCC2693:
-$FB1539:
-	mov	cx,2
-	cwd	
-	idiv	cx
-	jmp	SHORT $L20044
-; Line 491
-$SC1522:
-; Line 492
-	mov	WORD PTR _nSafe,15
-; Line 493
-	inc	WORD PTR _nShield
-; Line 494
-	mov	bx,WORD PTR _npPlayer
-	mov	BYTE PTR [bx+22],7
-; Line 495
-	push	OFFSET DGROUP:$SG1523
-	jmp	$L20042
-; Line 497
-$SC1524:
-; Line 498
-	inc	WORD PTR _nBomb
-; Line 499
-	push	OFFSET DGROUP:$SG1525
-	jmp	$L20042
-; Line 501
-$SC1526:
-; Line 502
-	call	ADDEXTRALIFE
-; Line 503
-	jmp	$SB1514
-$I1511:
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR $S1350_rectShotClip,ax
-	jle	$JCC2753
-	jmp	$FB1531
-$JCC2753:
-	mov	ax,WORD PTR [bp-16]	;rect
-	cmp	WORD PTR $S1350_rectShotClip+4,ax
-	jg	$JCC2765
-	jmp	$FB1531
-$JCC2765:
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR $S1350_rectShotClip+2,ax
-	jle	$JCC2777
-	jmp	$FB1531
-$JCC2777:
-	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR $S1350_rectShotClip+6,ax
-	jg	$JCC2789
-	jmp	$FB1531
-$JCC2789:
-; Line 511
-; Line 512
-	mov	ax,WORD PTR _ShotList
-	jmp	SHORT $L20043
-	nop	
-; Line 515
-$I1532:
-	mov	WORD PTR [bx+18],1
-; Line 516
-	mov	bx,WORD PTR [bp-2]	;npBonus
-	mov	WORD PTR [bx+18],0
-; Line 517
-	push	WORD PTR [bp+4]	;hDC
-	push	bx
-	call	EXPLODE
-; Line 518
-	push	OFFSET DGROUP:_BonusList
-	push	WORD PTR [bp-2]	;npBonus
-	call	REMOVE
-; Line 519
-	push	OFFSET DGROUP:_FreeList
-	push	WORD PTR [bp-2]	;npBonus
-	call	ADDHEAD
-; Line 520
-$FC1530:
-	mov	bx,WORD PTR [bp-8]	;npShot
-	mov	ax,WORD PTR [bx]
-$L20043:
-	mov	WORD PTR [bp-8],ax	;npShot
-	or	ax,ax
-	jne	$JCC2848
-	jmp	$FB1531
-$JCC2848:
-; Line 513
-; Line 514
-	mov	ax,WORD PTR [bp-16]	;rect
-	mov	bx,WORD PTR [bp-8]	;npShot
-	cmp	WORD PTR [bx+4],ax
-	jl	$FC1530
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [bx+4],ax
-	jge	$FC1530
-	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR [bx+6],ax
-	jl	$FC1530
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [bx+6],ax
-	jl	$I1532
-	jmp	SHORT $FC1530
-$FB1538:
-; Line 536
-	mov	bx,WORD PTR [bp-2]	;npBonus
-	mov	ax,WORD PTR [bx+8]
-	cwd	
-	xor	ax,dx
-	sub	ax,dx
-	sar	ax,4
-	xor	ax,dx
-	sub	ax,dx
-	sub	ax,WORD PTR [bp-6]	;nDelta
-	neg	ax
-	add	WORD PTR [bx+8],ax
-; Line 537
-	mov	si,WORD PTR _npPlayer
-	mov	ax,WORD PTR [si+6]
-	sub	ax,WORD PTR [bx+6]
-$L20045:
-	mov	WORD PTR [bp-6],ax	;nDelta
-; Line 538
-	cmp	ax,-16
-	jl	$FB1543
-	cmp	ax,16
-	jle	$FB1542
-$FB1543:
-	mov	cx,2
-	cwd	
-	idiv	cx
-	jmp	SHORT $L20045
-	nop	
-$FB1542:
-; Line 539
-	mov	bx,WORD PTR [bp-2]	;npBonus
-	mov	ax,WORD PTR [bx+10]
-	cwd	
-	xor	ax,dx
-	sub	ax,dx
-	sar	ax,4
-	xor	ax,dx
-	sub	ax,dx
-	sub	ax,WORD PTR [bp-6]	;nDelta
-	neg	ax
-	add	WORD PTR [bx+10],ax
-; Line 540
-	push	WORD PTR [bp+4]	;hDC
-	push	bx
-	call	DRAWOBJECT
-; Line 541
-	mov	ax,WORD PTR [bp-4]	;npNext
-$L20041:
-	mov	WORD PTR [bp-2],ax	;npBonus
-	or	ax,ax
-	jne	$JCC2989
-	jmp	$FB1507
-$JCC2989:
-; Line 468
 ;	npShot = -8
 ;	nDelta = -6
 ;	rect = -16
+;	szBuff = -48
+;	lBonus = -52
+; Line 461
+	cmp	WORD PTR _nBadGuys,0
+	je	$I1510
+	dec	WORD PTR $S1509_nNextBonus
+	jns	$I1510
+; Line 463
+	call	CREATEBONUS
+; Line 464
+	mov	WORD PTR $S1509_nNextBonus,1000
+; Line 467
+$I1510:
+	mov	ax,WORD PTR _BonusList
+	mov	WORD PTR [bp-2],ax	;npBonus
+	or	ax,ax
+	jne	$JCC2533
+	jmp	$EX1506
+$JCC2533:
+$F1511:
 ; Line 473
-	mov	bx,ax
+	mov	bx,WORD PTR [bp-2]	;npBonus
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-4],ax	;npNext
 ; Line 475
@@ -1894,54 +1627,291 @@ $JCC2989:
 	mov	WORD PTR [bp-10],ax
 ; Line 477
 	mov	ax,WORD PTR [bp-16]	;rect
-	mov	si,WORD PTR _npPlayer
-	cmp	WORD PTR [si+4],ax
-	jge	$JCC3047
-	jmp	$I1511
-$JCC3047:
+	mov	bx,WORD PTR _npPlayer
+	cmp	WORD PTR [bx+4],ax
+	jge	$JCC2592
+	jmp	$I1517
+$JCC2592:
 	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [si+4],ax
-	jl	$JCC3058
-	jmp	$I1511
-$JCC3058:
+	cmp	WORD PTR [bx+4],ax
+	jl	$JCC2603
+	jmp	$I1517
+$JCC2603:
 	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR [si+6],ax
-	jge	$JCC3069
-	jmp	$I1511
-$JCC3069:
+	cmp	WORD PTR [bx+6],ax
+	jge	$JCC2614
+	jmp	$I1517
+$JCC2614:
 	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [si+6],ax
-	jl	$JCC3080
-	jmp	$I1511
-$JCC3080:
-; Line 478
+	cmp	WORD PTR [bx+6],ax
+	jl	$JCC2625
+	jmp	$I1517
+$JCC2625:
 ; Line 479
-	cmp	WORD PTR [si+18],0
-	jg	$JCC3089
-	jmp	$SB1514
-$JCC3089:
+	cmp	WORD PTR [bx+18],0
+	jg	$JCC2634
+	jmp	$I1518
+$JCC2634:
+	mov	bx,WORD PTR [bp-2]	;npBonus
 	mov	ax,WORD PTR [bx+18]
+; Line 504
 	dec	ax
-	jne	$JCC3098
-	jmp	$SC1517
-$JCC3098:
+	je	$SC1523
 	dec	ax
-	jne	$JCC3104
-	jmp	$SC1522
-$JCC3104:
+	je	$SC1528
 	dec	ax
-	jne	$JCC3110
-	jmp	$SC1524
-$JCC3110:
+	je	$SC1530
 	dec	ax
-	jne	$JCC3116
-	jmp	$SC1526
-$JCC3116:
-	jmp	$SB1514
+	je	$SC1532
+	jmp	SHORT $I1518
 	nop	
+; Line 481
+$SC1523:
+; Line 485
+	mov	ax,1000
+	imul	WORD PTR _nLevel
+	mov	WORD PTR [bp-52],ax	;lBonus
+	mov	WORD PTR [bp-50],dx
+	or	dx,ax
+	jne	$I1526
+	mov	WORD PTR [bp-52],500	;lBonus
+	mov	WORD PTR [bp-50],0
+; Line 486
+$I1526:
+	mov	ax,WORD PTR [bp-52]	;lBonus
+	mov	dx,WORD PTR [bp-50]
+	add	WORD PTR _lScore,ax
+	adc	WORD PTR _lScore+2,dx
+; Line 487
+	push	dx
+	push	ax
+	push	ds
+	push	OFFSET DGROUP:$SG1527
+	lea	ax,WORD PTR [bp-48]	;szBuff
+	push	ss
+	push	ax
+	call	FAR PTR _wsprintf
+	add	sp,12
+; Line 488
+	lea	ax,WORD PTR [bp-48]	;szBuff
+	push	ax
+$L20138:
+	call	PRINTPLAYERMESSAGE
+; Line 490
+	jmp	SHORT $I1518
 	nop	
-$FB1507:
+; Line 491
+$SC1528:
+; Line 492
+	mov	WORD PTR _nSafe,15
+; Line 493
+	inc	WORD PTR _nShield
+; Line 494
+	mov	bx,WORD PTR _npPlayer
+	mov	BYTE PTR [bx+22],7
+; Line 495
+	push	OFFSET DGROUP:$SG1529
+	jmp	SHORT $L20138
+	nop	
+; Line 497
+$SC1530:
+; Line 498
+	inc	WORD PTR _nBomb
+; Line 499
+	push	OFFSET DGROUP:$SG1531
+	jmp	SHORT $L20138
+	nop	
+; Line 501
+$SC1532:
+; Line 502
+	call	ADDEXTRALIFE
+; Line 505
+$I1518:
+	mov	bx,WORD PTR [bp-2]	;npBonus
+	mov	WORD PTR [bx+18],0
+; Line 506
+	push	WORD PTR [bp+4]	;hDC
+	push	bx
+	call	EXPLODE
+; Line 507
+	push	OFFSET DGROUP:_BonusList
+	push	WORD PTR [bp-2]	;npBonus
+	call	REMOVE
+; Line 508
+	push	OFFSET DGROUP:_FreeList
+	push	WORD PTR [bp-2]	;npBonus
+	call	ADDHEAD
+; Line 510
+	jmp	$I1533
+	nop	
+$I1517:
+	mov	ax,WORD PTR $S1356_rectShotClip
+	cmp	WORD PTR [bp-12],ax
+	jl	$I1533
+	mov	ax,WORD PTR $S1356_rectShotClip+4
+	cmp	WORD PTR [bp-16],ax	;rect
+	jge	$I1533
+	mov	ax,WORD PTR $S1356_rectShotClip+2
+	cmp	WORD PTR [bp-10],ax
+	jl	$I1533
+	mov	ax,WORD PTR $S1356_rectShotClip+6
+	cmp	WORD PTR [bp-14],ax
+	jge	$I1533
+; Line 512
+	mov	ax,WORD PTR _ShotList
+	mov	WORD PTR [bp-8],ax	;npShot
+	or	ax,ax
+	je	$I1533
+$F1535:
+; Line 514
+	mov	ax,WORD PTR [bp-16]	;rect
+	mov	bx,WORD PTR [bp-8]	;npShot
+	cmp	WORD PTR [bx+4],ax
+	jl	$FC1536
+	mov	ax,WORD PTR [bp-12]
+	cmp	WORD PTR [bx+4],ax
+	jge	$FC1536
+	mov	ax,WORD PTR [bp-14]
+	cmp	WORD PTR [bx+6],ax
+	jl	$FC1536
+	mov	ax,WORD PTR [bp-10]
+	cmp	WORD PTR [bx+6],ax
+	jge	$FC1536
+; Line 515
+	mov	WORD PTR [bx+18],1
+; Line 516
+	mov	bx,WORD PTR [bp-2]	;npBonus
+	mov	WORD PTR [bx+18],0
+; Line 517
+	push	WORD PTR [bp+4]	;hDC
+	push	bx
+	call	EXPLODE
+; Line 518
+	push	OFFSET DGROUP:_BonusList
+	push	WORD PTR [bp-2]	;npBonus
+	call	REMOVE
+; Line 519
+	push	OFFSET DGROUP:_FreeList
+	push	WORD PTR [bp-2]	;npBonus
+	call	ADDHEAD
+; Line 512
+$FC1536:
+	mov	bx,WORD PTR [bp-8]	;npShot
+	mov	ax,WORD PTR [bx]
+	mov	WORD PTR [bp-8],ax	;npShot
+	or	ax,ax
+	jne	$F1535
+; Line 522
+$I1533:
+	mov	bx,WORD PTR [bp-2]	;npBonus
+	cmp	WORD PTR [bx+18],0
+	je	$I1540
+	dec	WORD PTR [bx+20]
+	cmp	WORD PTR [bx+20],0
+	jg	$I1540
+; Line 524
+	mov	bx,WORD PTR [bp-2]	;npBonus
+	dec	WORD PTR [bx+18]
+; Line 525
+	push	128
+	call	ARAND
+	add	ax,64
+	mov	bx,WORD PTR [bp-2]	;npBonus
+	mov	WORD PTR [bx+20],ax
+; Line 526
+	mov	al,BYTE PTR [bx+18]
+	shl	al,1
+	add	al,3
+	mov	BYTE PTR [bx+22],al
+; Line 527
+	cmp	WORD PTR [bx+18],0
+	jne	$I1540
+; Line 529
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npBonus
+	call	EXPLODE
+; Line 530
+	push	OFFSET DGROUP:_BonusList
+	push	WORD PTR [bp-2]	;npBonus
+	call	REMOVE
+; Line 531
+	push	OFFSET DGROUP:_FreeList
+	push	WORD PTR [bp-2]	;npBonus
+	call	ADDHEAD
+; Line 534
+$I1540:
+	mov	bx,WORD PTR _npPlayer
+	mov	ax,WORD PTR [bx+4]
+	mov	bx,WORD PTR [bp-2]	;npBonus
+	sub	ax,WORD PTR [bx+4]
+$L20139:
+	mov	WORD PTR [bp-6],ax	;nDelta
+; Line 535
+	cmp	ax,-16
+	jl	$FB1545
+	cmp	ax,16
+	jle	$L20022
+$FB1545:
+	mov	cx,2
+	cwd	
+	idiv	cx
+	jmp	SHORT $L20139
+	nop	
+$L20022:
+; Line 536
+	mov	bx,WORD PTR [bp-2]	;npBonus
+	mov	ax,WORD PTR [bx+8]
+	cwd	
+	xor	ax,dx
+	sub	ax,dx
+	sar	ax,4
+	xor	ax,dx
+	sub	ax,dx
+	sub	ax,WORD PTR [bp-6]	;nDelta
+	neg	ax
+	add	WORD PTR [bx+8],ax
+; Line 537
+	mov	si,WORD PTR _npPlayer
+	mov	ax,WORD PTR [si+6]
+	sub	ax,WORD PTR [bx+6]
+$L20140:
+	mov	WORD PTR [bp-6],ax	;nDelta
+; Line 538
+	cmp	ax,-16
+	jl	$FB1549
+	cmp	ax,16
+	jle	$L20023
+$FB1549:
+	mov	cx,2
+	cwd	
+	idiv	cx
+	jmp	SHORT $L20140
+	nop	
+$L20023:
+; Line 539
+	mov	bx,WORD PTR [bp-2]	;npBonus
+	mov	ax,WORD PTR [bx+10]
+	cwd	
+	xor	ax,dx
+	sub	ax,dx
+	sar	ax,4
+	xor	ax,dx
+	sub	ax,dx
+	sub	ax,WORD PTR [bp-6]	;nDelta
+	neg	ax
+	add	WORD PTR [bx+10],ax
+; Line 540
+	push	WORD PTR [bp+4]	;hDC
+	push	bx
+	call	DRAWOBJECT
+	mov	ax,WORD PTR [bp-4]	;npNext
+	mov	WORD PTR [bp-2],ax	;npBonus
+	or	ax,ax
+	je	$JCC3147
+	jmp	$F1511
+$JCC3147:
 ; Line 542
+$EX1506:
 	pop	si
 	mov	sp,bp
 	pop	bp
@@ -1955,37 +1925,20 @@ DRAWHUNTERSHOTS	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,12
-	push	si
+;	hDC = 4
 ;	npShot = -2
 ;	npNext = -4
-;	hDC = 4
+;	rect = -12
 ; Line 552
 	mov	ax,WORD PTR _HunterShotList
-	jmp	SHORT $L20046
-; Line 566
-; Line 567
-$SC1557:
-; Line 568
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	BYTE PTR [bx+22],6
-; Line 569
-$SB1554:
-; Line 575
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-2]	;npShot
-	call	DRAWOBJECT
-; Line 576
-	mov	ax,WORD PTR [bp-4]	;npNext
-$L20046:
 	mov	WORD PTR [bp-2],ax	;npShot
 	or	ax,ax
-	jne	$JCC3170
-	jmp	$FB1550
-$JCC3170:
-; Line 553
-;	rect = -12
+	jne	$JCC3174
+	jmp	$EX1551
+$JCC3174:
+$F1554:
 ; Line 556
-	mov	bx,ax
+	mov	bx,WORD PTR [bp-2]	;npShot
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-4],ax	;npNext
 ; Line 558
@@ -2003,42 +1956,38 @@ $JCC3170:
 	mov	WORD PTR [bp-6],ax
 ; Line 560
 	mov	ax,WORD PTR [bp-12]	;rect
-	mov	si,WORD PTR _npPlayer
-	cmp	WORD PTR [si+4],ax
-	jl	$I1552
+	mov	bx,WORD PTR _npPlayer
+	cmp	WORD PTR [bx+4],ax
+	jl	$I1558
 	mov	ax,WORD PTR [bp-8]
-	cmp	WORD PTR [si+4],ax
-	jge	$I1552
+	cmp	WORD PTR [bx+4],ax
+	jge	$I1558
 	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [si+6],ax
-	jl	$I1552
+	cmp	WORD PTR [bx+6],ax
+	jl	$I1558
 	mov	ax,WORD PTR [bp-6]
-	cmp	WORD PTR [si+6],ax
-	jge	$I1552
-; Line 561
+	cmp	WORD PTR [bx+6],ax
+	jge	$I1558
 ; Line 562
 	push	WORD PTR [bp+4]	;hDC
-	push	bx
+	push	WORD PTR [bp-2]	;npShot
 	call	HITPLAYER
 ; Line 563
 	mov	bx,WORD PTR [bp-2]	;npShot
 	mov	WORD PTR [bx+18],1
-; Line 564
 ; Line 565
-$I1552:
+$I1558:
 	mov	bx,WORD PTR [bp-2]	;npShot
 	dec	WORD PTR [bx+18]
 	mov	ax,WORD PTR [bx+18]
+; Line 574
 	or	ax,ax
-	je	$SC1558
+	je	$SC1564
 	sub	ax,7
-	jne	$JCC3285
-	jmp	$SC1557
-$JCC3285:
-	jmp	$SB1554
-	nop	
+	je	$SC1563
+	jmp	SHORT $SB1560
 ; Line 570
-$SC1558:
+$SC1564:
 ; Line 571
 	push	OFFSET DGROUP:_HunterShotList
 	push	WORD PTR [bp-2]	;npShot
@@ -2048,11 +1997,26 @@ $SC1558:
 	push	WORD PTR [bp-2]	;npShot
 	call	ADDHEAD
 ; Line 573
-	jmp	$SB1554
-	nop	
-$FB1550:
+	jmp	SHORT $SB1560
+; Line 567
+$SC1563:
+; Line 568
+	mov	bx,WORD PTR [bp-2]	;npShot
+	mov	BYTE PTR [bx+22],6
+; Line 574
+$SB1560:
+; Line 575
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npShot
+	call	DRAWOBJECT
+	mov	ax,WORD PTR [bp-4]	;npNext
+	mov	WORD PTR [bp-2],ax	;npShot
+	or	ax,ax
+	je	$JCC3340
+	jmp	$F1554
+$JCC3340:
 ; Line 577
-	pop	si
+$EX1551:
 	mov	sp,bp
 	pop	bp
 	ret	2
@@ -2064,43 +2028,43 @@ DRAWHUNTERSHOTS	ENDP
 FIREHUNTERSHOT	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,2
+	sub	sp,4
+	push	di
 	push	si
-;	npShot = -2
 ;	npHunt = 4
+;	npShot = -2
 ; Line 587
 	push	OFFSET DGROUP:_FreeList
 	call	REMHEAD
 	mov	WORD PTR [bp-2],ax	;npShot
 	or	ax,ax
-	jne	$JCC3342
-	jmp	$I1562
-$JCC3342:
-; Line 588
+	jne	$JCC3371
+	jmp	$EX1566
+$JCC3371:
 ; Line 589
-	mov	bx,ax
-	mov	si,WORD PTR [bp+4]	;npHunt
-	mov	cx,WORD PTR [si+4]
-	mov	WORD PTR [bx+4],cx
+	mov	bx,WORD PTR [bp+4]	;npHunt
+	mov	ax,WORD PTR [bx+4]
+	mov	si,WORD PTR [bp-2]	;npShot
+	mov	WORD PTR [si+4],ax
 ; Line 590
-	mov	cx,WORD PTR [si+6]
-	mov	WORD PTR [bx+6],cx
+	mov	ax,WORD PTR [bx+6]
+	mov	WORD PTR [si+6],ax
 ; Line 591
-	mov	cx,WORD PTR [si+8]
-	mov	WORD PTR [bx+8],cx
+	mov	ax,WORD PTR [bx+8]
+	mov	WORD PTR [si+8],ax
 ; Line 592
-	mov	cx,WORD PTR [si+10]
-	mov	WORD PTR [bx+10],cx
+	mov	ax,WORD PTR [bx+10]
+	mov	WORD PTR [si+10],ax
 ; Line 593
-	mov	WORD PTR [bx+12],8
+	mov	WORD PTR [si+12],8
 ; Line 594
 	push	5
 	call	ARAND
-	add	ax,WORD PTR [si+14]
+	mov	bx,WORD PTR [bp+4]	;npHunt
+	add	ax,WORD PTR [bx+14]
 	dec	ax
 	dec	ax
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	WORD PTR [bx+14],ax
+	mov	WORD PTR [si+14],ax
 ; Line 595
 	push	2
 	call	ARAND
@@ -2108,37 +2072,44 @@ $JCC3342:
 	sbb	ax,ax
 	and	al,236
 	add	ax,10
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	WORD PTR [bx+16],ax
+	mov	WORD PTR [si+16],ax
 ; Line 596
 	push	8
 	call	ARAND
 	add	ax,16
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	WORD PTR [bx+18],ax
+	mov	WORD PTR [si+18],ax
 ; Line 597
-	mov	BYTE PTR [bx+22],7
+	mov	BYTE PTR [si+22],7
 ; Line 598
-	mov	BYTE PTR [bx+23],2
+	mov	BYTE PTR [si+23],2
 ; Line 599
-	mov	WORD PTR [bx+24],128
-; Line 600
-	mov	WORD PTR [bx+26],50
+	mov	WORD PTR [si+24],128
 ; Line 601
-	mov	WORD PTR [bx+28],0
+	mov	WORD PTR [si+28],0
 ; Line 602
-	mov	WORD PTR [bx+30],50
+	mov	ax,50
+	mov	WORD PTR [si+26],ax
+	mov	WORD PTR [si+30],ax
 ; Line 603
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [bx+14]
+	mov	ax,WORD PTR [si+18]
+	add	ax,200
+	cwd	
+	push	dx
+	push	ax
+	mov	bl,BYTE PTR [si+14]
 	sub	bh,bh
 	shl	bx,1
+	mov	cx,ax
 	mov	ax,WORD PTR _nCos[bx]
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	cx,WORD PTR [bx+18]
-	add	cx,200
-	imul	cx
+	mov	di,dx
+	cwd	
+	push	dx
+	push	ax
+	mov	si,cx
+	mov	WORD PTR [bp-4],bx
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -2146,14 +2117,14 @@ $JCC3342:
 	add	WORD PTR [bx+8],ax
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	cx,WORD PTR [bx+18]
-	add	cx,200
-	imul	cx
+	push	di
+	push	si
+	mov	si,WORD PTR [bp-4]
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	push	dx
+	push	ax
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -2163,10 +2134,10 @@ $JCC3342:
 	push	OFFSET DGROUP:_HunterShotList
 	push	bx
 	call	ADDHEAD
-; Line 605
 ; Line 606
-$I1562:
+$EX1566:
 	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	2
@@ -2177,7 +2148,8 @@ FIREHUNTERSHOT	ENDP
 CREATEHUNTER	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,4
+	sub	sp,12
+	push	di
 	push	si
 ;	npHunt = -4
 ;	nCnt = -2
@@ -2186,10 +2158,9 @@ CREATEHUNTER	PROC NEAR
 	call	REMHEAD
 	mov	WORD PTR [bp-4],ax	;npHunt
 	or	ax,ax
-	jne	$JCC3574
-	jmp	$I1566
-$JCC3574:
-; Line 618
+	jne	$JCC3607
+	jmp	$EX1569
+$JCC3607:
 ; Line 619
 	push	16984
 	call	ARAND
@@ -2199,12 +2170,13 @@ $JCC3574:
 ; Line 620
 	mov	WORD PTR [bx+6],-8492
 ; Line 621
-	mov	WORD PTR [bx+10],0
-	mov	WORD PTR [bx+8],0
-; Line 622
-	mov	WORD PTR [bx+12],256
+	sub	ax,ax
+	mov	WORD PTR [bx+10],ax
+	mov	WORD PTR [bx+8],ax
 ; Line 623
-	push	256
+	mov	ax,256
+	mov	WORD PTR [bx+12],ax
+	push	ax
 	call	ARAND
 	mov	bx,WORD PTR [bp-4]	;npHunt
 	mov	WORD PTR [bx+14],ax
@@ -2227,34 +2199,34 @@ $JCC3574:
 	mov	BYTE PTR [bx+22],13
 ; Line 628
 	mov	BYTE PTR [bx+23],8
-; Line 629
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC1568:
-; Line 630
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,2
-	mov	ax,WORD PTR $S1354_Hunter[bx]
-	mov	dx,WORD PTR $S1354_Hunter[bx+2]
-	mov	cx,bx
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	mov	si,cx
-	mov	WORD PTR [bx+24][si],ax
-	mov	WORD PTR [bx+26][si],dx
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],8	;nCnt
-	jl	$FC1568
+	mov	cx,16
+	lea	di,WORD PTR [bx+24]
+	mov	si,OFFSET DGROUP:$S1360_Hunter
+	push	ds
+	pop	es
+	rep	movsw
 ; Line 631
 	push	0
 	push	16384
+	mov	ax,WORD PTR _nLevel
+	add	ax,15
+	shl	ax,1
+	cwd	
+	push	dx
+	push	ax
 	mov	bx,WORD PTR [bp-4]	;npHunt
 	mov	bl,BYTE PTR [bx+14]
 	sub	bh,bh
 	shl	bx,1
+	mov	cx,ax
 	mov	ax,WORD PTR _nCos[bx]
-	mov	cx,WORD PTR _nLevel
-	add	cx,15
-	shl	cx,1
-	imul	cx
+	mov	si,dx
+	cwd	
+	push	dx
+	push	ax
+	mov	di,cx
+	mov	WORD PTR [bp-12],bx
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -2262,14 +2234,14 @@ $FC1568:
 	add	WORD PTR [bx+8],ax
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	mov	cx,WORD PTR _nLevel
-	add	cx,15
-	shl	cx,1
-	imul	cx
+	push	si
+	push	di
+	mov	si,WORD PTR [bp-12]
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	push	dx
+	push	ax
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -2281,13 +2253,14 @@ $FC1568:
 	call	ADDHEAD
 ; Line 633
 	inc	WORD PTR _nBadGuys
-; Line 634
 ; Line 635
-$I1566:
+$EX1569:
 	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	
+	nop	
 
 CREATEHUNTER	ENDP
 ; Line 642
@@ -2297,15 +2270,16 @@ DRAWHUNTERS	PROC NEAR
 	mov	bp,sp
 	sub	sp,14
 	push	si
+;	hDC = 4
 ;	npHunt = -4
 ;	npNext = -2
-;	hDC = 4
+;	npShot = -6
+;	rect = -14
 ; Line 646
 	cmp	WORD PTR _nBadGuys,0
-	je	$I1575
-	dec	WORD PTR $S1574_nNextHunter
-	jns	$I1575
-; Line 647
+	je	$I1581
+	dec	WORD PTR $S1580_nNextHunter
+	jns	$I1581
 ; Line 648
 	call	CREATEHUNTER
 ; Line 649
@@ -2314,221 +2288,19 @@ DRAWHUNTERS	PROC NEAR
 	mov	cx,125
 	sub	cx,WORD PTR _nLevel
 	shl	cx,3
-	add	cx,ax
-	mov	WORD PTR $S1574_nNextHunter,cx
-; Line 650
+	add	ax,cx
+	mov	WORD PTR $S1580_nNextHunter,ax
 ; Line 652
-$I1575:
-	mov	ax,WORD PTR _HunterList
-	jmp	$L20048
-	nop	
-$I1582:
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	cmp	WORD PTR [bx+18],1
-	je	$JCC3865
-	jmp	$FB1589
-$JCC3865:
-	mov	BYTE PTR [bx+22],12
-; Line 674
-; Line 675
-	jmp	$FB1589
-	nop	
 $I1581:
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR $S1350_rectShotClip,ax
-	jle	$JCC3885
-	jmp	$FB1589
-$JCC3885:
-	mov	ax,WORD PTR [bp-14]	;rect
-	cmp	WORD PTR $S1350_rectShotClip+4,ax
-	jg	$JCC3897
-	jmp	$FB1589
-$JCC3897:
-	mov	ax,WORD PTR [bp-8]
-	cmp	WORD PTR $S1350_rectShotClip+2,ax
-	jle	$JCC3909
-	jmp	$FB1589
-$JCC3909:
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR $S1350_rectShotClip+6,ax
-	jg	$JCC3921
-	jmp	$FB1589
-$JCC3921:
-; Line 676
-; Line 677
-	mov	ax,WORD PTR _ShotList
-	jmp	SHORT $L20049
-	nop	
-$FC1588:
-	mov	ax,WORD PTR [bx]
-$L20049:
-	mov	WORD PTR [bp-6],ax	;npShot
-	or	ax,ax
-	jne	$JCC3939
-	jmp	$FB1589
-$JCC3939:
-; Line 678
-; Line 679
-	mov	ax,WORD PTR [bp-14]	;rect
-	mov	bx,WORD PTR [bp-6]	;npShot
-	cmp	WORD PTR [bx+4],ax
-	jl	$FC1588
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [bx+4],ax
-	jge	$FC1588
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [bx+6],ax
-	jl	$FC1588
-	mov	ax,WORD PTR [bp-8]
-	cmp	WORD PTR [bx+6],ax
-	jge	$FC1588
-; Line 680
-	mov	WORD PTR [bx+18],1
-; Line 681
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	imul	ax,WORD PTR [bx+18],1000
-	cwd	
-	add	WORD PTR _lScore,ax
-	adc	WORD PTR _lScore+2,dx
-; Line 682
-	dec	WORD PTR [bx+18]
-	cmp	WORD PTR [bx+18],1
-	jge	$I1592
-; Line 683
-; Line 684
-$L20051:
-	dec	WORD PTR _nBadGuys
-	cmp	WORD PTR _nBadGuys,0
-	jg	$L20010
-	push	2
-	call	SETRESTART
-$L20010:
-; Line 685
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	mov	BYTE PTR [bx+22],13
-; Line 686
-	push	WORD PTR [bp+4]	;hDC
-	push	bx
-	call	EXPLODE
-; Line 687
-	push	OFFSET DGROUP:_HunterList
-	push	WORD PTR [bp-4]	;npHunt
-	call	REMOVE
-; Line 688
-	push	OFFSET DGROUP:_FreeList
-	push	WORD PTR [bp-4]	;npHunt
-	call	ADDHEAD
-; Line 689
-; Line 690
-	jmp	SHORT $FB1589
-$I1592:
-; Line 691
-; Line 692
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	cmp	WORD PTR [bx+18],1
-	jne	$I1594
-	mov	BYTE PTR [bx+22],12
-; Line 693
-$I1594:
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-4]	;npHunt
-	call	HIT
-; Line 694
-; Line 695
-$FB1589:
-; Line 697
-; Line 698
-	push	0
-	push	16384
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nCos[bx]
-	cwd	
-	shl	ax,1
-	rcl	dx,1
-	shl	ax,1
-	rcl	dx,1
-	shl	ax,1
-	rcl	dx,1
-	push	dx
-	push	ax
-	call	FAR PTR __aFldiv
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	add	WORD PTR [bx+8],ax
-	push	0
-	push	16384
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	cwd	
-	shl	ax,1
-	rcl	dx,1
-	shl	ax,1
-	rcl	dx,1
-	shl	ax,1
-	rcl	dx,1
-	push	dx
-	push	ax
-	call	FAR PTR __aFldiv
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	add	WORD PTR [bx+10],ax
-; Line 699
-	mov	ax,WORD PTR [bx+8]
-	cwd	
-	xor	ax,dx
-	sub	ax,dx
-	sar	ax,4
-	xor	ax,dx
-	sub	ax,dx
-	sub	WORD PTR [bx+8],ax
-; Line 700
-	mov	ax,WORD PTR [bx+10]
-	cwd	
-	xor	ax,dx
-	sub	ax,dx
-	sar	ax,4
-	xor	ax,dx
-	sub	ax,dx
-	sub	WORD PTR [bx+10],ax
-; Line 701
-	dec	WORD PTR [bx+20]
-	cmp	WORD PTR [bx+20],0
-	jg	$I1595
-; Line 702
-; Line 703
-	push	10
-	call	ARAND
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	mov	WORD PTR [bx+20],ax
-; Line 704
-	push	11
-	call	ARAND
-	sub	ax,5
-	mov	bx,WORD PTR [bp-4]	;npHunt
-	mov	WORD PTR [bx+16],ax
-; Line 705
-	push	bx
-	call	FIREHUNTERSHOT
-; Line 706
-; Line 707
-$I1595:
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-4]	;npHunt
-	call	DRAWOBJECT
-; Line 708
-	mov	ax,WORD PTR [bp-2]	;npNext
-$L20048:
+	mov	ax,WORD PTR _HunterList
 	mov	WORD PTR [bp-4],ax	;npHunt
 	or	ax,ax
-	je	$FB1578
-; Line 653
-;	npShot = -6
-;	rect = -14
+	jne	$JCC3874
+	jmp	$EX1577
+$JCC3874:
+$F1582:
 ; Line 657
-	mov	bx,ax
+	mov	bx,WORD PTR [bp-4]	;npHunt
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-2],ax	;npNext
 ; Line 659
@@ -2546,41 +2318,218 @@ $L20048:
 	mov	WORD PTR [bp-8],ax
 ; Line 661
 	mov	ax,WORD PTR [bp-14]	;rect
-	mov	si,WORD PTR _npPlayer
-	cmp	WORD PTR [si+4],ax
-	jge	$JCC4315
-	jmp	$I1581
-$JCC4315:
+	mov	bx,WORD PTR _npPlayer
+	cmp	WORD PTR [bx+4],ax
+	jl	$I1587
 	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [si+4],ax
-	jl	$JCC4326
-	jmp	$I1581
-$JCC4326:
+	cmp	WORD PTR [bx+4],ax
+	jge	$I1587
 	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [si+6],ax
-	jge	$JCC4337
-	jmp	$I1581
-$JCC4337:
+	cmp	WORD PTR [bx+6],ax
+	jl	$I1587
 	mov	ax,WORD PTR [bp-8]
-	cmp	WORD PTR [si+6],ax
-	jl	$JCC4348
-	jmp	$I1581
-$JCC4348:
-; Line 662
+	cmp	WORD PTR [bx+6],ax
+	jge	$I1587
 ; Line 663
 	push	WORD PTR [bp+4]	;hDC
-	push	bx
+	push	WORD PTR [bp-4]	;npHunt
 	call	HITPLAYER
 ; Line 665
 	mov	bx,WORD PTR [bp-4]	;npHunt
 	dec	WORD PTR [bx+18]
 	cmp	WORD PTR [bx+18],1
-	jl	$JCC4370
-	jmp	$I1582
-$JCC4370:
-	jmp	$L20051
-$FB1578:
+	jge	$I1588
+; Line 667
+$L20142:
+	dec	WORD PTR _nBadGuys
+	cmp	WORD PTR _nBadGuys,0
+	jg	$L20033
+	push	2
+	call	SETRESTART
+$L20033:
+; Line 668
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	mov	BYTE PTR [bx+22],13
+; Line 669
+	push	WORD PTR [bp+4]	;hDC
+	push	bx
+	call	EXPLODE
+; Line 670
+	push	OFFSET DGROUP:_HunterList
+	push	WORD PTR [bp-4]	;npHunt
+	call	REMOVE
+; Line 671
+	push	OFFSET DGROUP:_FreeList
+	push	WORD PTR [bp-4]	;npHunt
+	call	ADDHEAD
+; Line 673
+	jmp	$I1591
+	nop	
+$I1588:
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	cmp	WORD PTR [bx+18],1
+	je	$JCC4039
+	jmp	$I1591
+$JCC4039:
+	mov	BYTE PTR [bx+22],12
+; Line 675
+	jmp	$I1591
+	nop	
+$I1587:
+	mov	ax,WORD PTR $S1356_rectShotClip
+	cmp	WORD PTR [bp-10],ax
+	jge	$JCC4058
+	jmp	$I1591
+$JCC4058:
+	mov	ax,WORD PTR $S1356_rectShotClip+4
+	cmp	WORD PTR [bp-14],ax	;rect
+	jl	$JCC4069
+	jmp	$I1591
+$JCC4069:
+	mov	ax,WORD PTR $S1356_rectShotClip+2
+	cmp	WORD PTR [bp-8],ax
+	jl	$I1591
+	mov	ax,WORD PTR $S1356_rectShotClip+6
+	cmp	WORD PTR [bp-12],ax
+	jge	$I1591
+; Line 677
+	mov	ax,WORD PTR _ShotList
+	mov	WORD PTR [bp-6],ax	;npShot
+	or	ax,ax
+	je	$I1591
+$F1593:
+; Line 679
+	mov	ax,WORD PTR [bp-14]	;rect
+	mov	bx,WORD PTR [bp-6]	;npShot
+	cmp	WORD PTR [bx+4],ax
+	jl	$FC1594
+	mov	ax,WORD PTR [bp-10]
+	cmp	WORD PTR [bx+4],ax
+	jge	$FC1594
+	mov	ax,WORD PTR [bp-12]
+	cmp	WORD PTR [bx+6],ax
+	jl	$FC1594
+	mov	ax,WORD PTR [bp-8]
+	cmp	WORD PTR [bx+6],ax
+	jl	$L20038
+; Line 677
+$FC1594:
+	mov	ax,WORD PTR [bx]
+	mov	WORD PTR [bp-6],ax	;npShot
+	or	ax,ax
+	jne	$F1593
+	jmp	SHORT $I1591
+$L20038:
+; Line 680
+	mov	WORD PTR [bx+18],1
+; Line 681
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	imul	ax,WORD PTR [bx+18],1000
+	cwd	
+	add	WORD PTR _lScore,ax
+	adc	WORD PTR _lScore+2,dx
+; Line 682
+	dec	WORD PTR [bx+18]
+	cmp	WORD PTR [bx+18],1
+	jge	$JCC4175
+	jmp	$L20142
+$JCC4175:
+; Line 692
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	cmp	WORD PTR [bx+18],1
+	jne	$I1600
+	mov	BYTE PTR [bx+22],12
+; Line 693
+$I1600:
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-4]	;npHunt
+	call	HIT
+; Line 698
+$I1591:
+; Line 699
+	push	0
+	push	16384
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	mov	bl,BYTE PTR [bx+14]
+	sub	bh,bh
+	shl	bx,1
+	mov	ax,WORD PTR _nCos[bx]
+	cwd	
+	shl	ax,1
+	rcl	dx,1
+	shl	ax,1
+	rcl	dx,1
+	shl	ax,1
+	rcl	dx,1
+	push	dx
+	push	ax
+	mov	si,bx
+	call	FAR PTR __aFldiv
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	add	WORD PTR [bx+8],ax
+	mov	ax,WORD PTR [bx+8]
+	cwd	
+	xor	ax,dx
+	sub	ax,dx
+	sar	ax,4
+	xor	ax,dx
+	sub	ax,dx
+	sub	WORD PTR [bx+8],ax
+; Line 700
+	push	0
+	push	16384
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	shl	ax,1
+	rcl	dx,1
+	shl	ax,1
+	rcl	dx,1
+	shl	ax,1
+	rcl	dx,1
+	push	dx
+	push	ax
+	call	FAR PTR __aFldiv
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	add	WORD PTR [bx+10],ax
+	mov	ax,WORD PTR [bx+10]
+	cwd	
+	xor	ax,dx
+	sub	ax,dx
+	sar	ax,4
+	xor	ax,dx
+	sub	ax,dx
+	sub	WORD PTR [bx+10],ax
+; Line 701
+	dec	WORD PTR [bx+20]
+	cmp	WORD PTR [bx+20],0
+	jg	$I1601
+; Line 703
+	push	10
+	call	ARAND
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	mov	WORD PTR [bx+20],ax
+; Line 704
+	push	11
+	call	ARAND
+	sub	ax,5
+	mov	bx,WORD PTR [bp-4]	;npHunt
+	mov	WORD PTR [bx+16],ax
+; Line 705
+	push	bx
+	call	FIREHUNTERSHOT
+; Line 707
+$I1601:
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-4]	;npHunt
+	call	DRAWOBJECT
+	mov	ax,WORD PTR [bp-2]	;npNext
+	mov	WORD PTR [bp-4],ax	;npHunt
+	or	ax,ax
+	je	$JCC4375
+	jmp	$F1582
+$JCC4375:
 ; Line 709
+$EX1577:
 	pop	si
 	mov	sp,bp
 	pop	bp
@@ -2593,33 +2542,35 @@ DRAWHUNTERS	ENDP
 CREATESWARMER	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,4
-;	npSwarm = -4
-;	nCnt = -2
+	sub	sp,12
+	push	di
+	push	si
 ;	Pos = 8
 ;	nDir = 6
 ;	nCount = 4
+;	npSwarm = -4
+;	nCnt = -2
 ; Line 720
 	push	OFFSET DGROUP:_FreeList
 	call	REMHEAD
 	mov	WORD PTR [bp-4],ax	;npSwarm
 	or	ax,ax
-	jne	$JCC4403
-	jmp	$I1603
-$JCC4403:
-; Line 721
+	jne	$JCC4407
+	jmp	$EX1606
+$JCC4407:
 ; Line 722
-	mov	bx,ax
-	mov	cx,WORD PTR [bp+8]	;Pos
+	mov	ax,WORD PTR [bp+8]	;Pos
 	mov	dx,WORD PTR [bp+10]
-	mov	WORD PTR [bx+4],cx
+	mov	bx,WORD PTR [bp-4]	;npSwarm
+	mov	WORD PTR [bx+4],ax
 	mov	WORD PTR [bx+6],dx
 ; Line 723
-	mov	WORD PTR [bx+10],0
-	mov	WORD PTR [bx+8],0
+	sub	ax,ax
+	mov	WORD PTR [bx+10],ax
+	mov	WORD PTR [bx+8],ax
 ; Line 724
-	mov	cx,WORD PTR [bp+6]	;nDir
-	mov	WORD PTR [bx+14],cx
+	mov	ax,WORD PTR [bp+6]	;nDir
+	mov	WORD PTR [bx+14],ax
 ; Line 725
 	push	31
 	call	ARAND
@@ -2641,41 +2592,54 @@ $JCC4403:
 	mov	BYTE PTR [bx+22],6
 ; Line 730
 	mov	BYTE PTR [bx+23],5
-; Line 731
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC1605:
-; Line 732
-; Line 733
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,2
-	mov	ax,WORD PTR $S1353_Swarmer[bx]
-	mov	dx,WORD PTR $S1353_Swarmer[bx+2]
-	add	bx,WORD PTR [bp-4]	;npSwarm
-	mov	WORD PTR [bx+24],ax
-	mov	WORD PTR [bx+26],dx
-; Line 734
+	lea	ax,WORD PTR [bx+26]
+	mov	WORD PTR [bp-6],ax
+	mov	WORD PTR [bp-8],OFFSET DGROUP:$S1359_Swarmer
 	mov	ax,WORD PTR [bp+4]	;nCount
 	mov	cx,ax
 	shl	ax,2
 	add	ax,cx
 	shl	ax,1
-	add	WORD PTR [bx+26],ax
-; Line 735
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],5	;nCnt
-	jl	$FC1605
+	mov	WORD PTR [bp-10],ax
+; Line 731
+$F1610:
+; Line 733
+	mov	bx,WORD PTR [bp-8]
+	mov	ax,WORD PTR [bx]
+	mov	dx,WORD PTR [bx+2]
+	mov	bx,WORD PTR [bp-6]
+	mov	WORD PTR [bx-2],ax
+	mov	WORD PTR [bx],dx
+; Line 734
+	mov	ax,WORD PTR [bp-10]
+	mov	bx,WORD PTR [bp-6]
+	add	WORD PTR [bx],ax
+	add	WORD PTR [bp-6],4
+	add	WORD PTR [bp-8],4
+	cmp	WORD PTR [bp-8],OFFSET DGROUP:$S1359_Swarmer+20
+	jb	$F1610
 ; Line 736
 	push	0
 	push	16384
+	mov	ax,WORD PTR _nLevel
+	add	ax,15
+	shl	ax,1
+	cwd	
+	push	dx
+	push	ax
 	mov	bx,WORD PTR [bp-4]	;npSwarm
 	mov	bl,BYTE PTR [bx+14]
 	sub	bh,bh
 	shl	bx,1
+	mov	cx,ax
 	mov	ax,WORD PTR _nCos[bx]
-	mov	cx,WORD PTR _nLevel
-	add	cx,15
-	shl	cx,1
-	imul	cx
+	mov	si,dx
+	cwd	
+	push	dx
+	push	ax
+	mov	di,cx
+	mov	WORD PTR [bp-12],bx
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -2683,14 +2647,14 @@ $FC1605:
 	add	WORD PTR [bx+8],ax
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	mov	cx,WORD PTR _nLevel
-	add	cx,15
-	shl	cx,1
-	imul	cx
+	push	si
+	push	di
+	mov	si,WORD PTR [bp-12]
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	push	dx
+	push	ax
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -2702,9 +2666,10 @@ $FC1605:
 	call	ADDHEAD
 ; Line 738
 	inc	WORD PTR _nBadGuys
-; Line 739
 ; Line 740
-$I1603:
+$EX1606:
+	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	8
@@ -2716,23 +2681,24 @@ CREATESWARMER	ENDP
 DRAWSWARMERS	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,20
-	push	si
+	sub	sp,22
+;	hDC = 4
 ;	npSwarm = -2
 ;	npNext = -4
-;	hDC = 4
+;	Pos = -8
+;	npShot = -10
+;	rect = -18
+;	nDir = -22
+;	nCount = -20
 ; Line 751
 	cmp	WORD PTR _nBadGuys,0
-	je	$I1613
-	dec	WORD PTR $S1612_nNextSwarmer
-	jns	$I1613
-; Line 752
-;	Pos = -8
+	je	$I1619
+	dec	WORD PTR $S1618_nNextSwarmer
+	jns	$I1619
 ; Line 754
 	push	16984
 	call	ARAND
 	sub	ax,8492
-	mov	WORD PTR [bp-8],ax	;Pos
 ; Line 755
 	mov	WORD PTR [bp-6],-8492
 ; Line 756
@@ -2753,51 +2719,118 @@ DRAWSWARMERS	PROC NEAR
 	sub	cx,WORD PTR _nLevel
 	shl	cx,2
 	add	cx,ax
-	mov	WORD PTR $S1612_nNextSwarmer,cx
-; Line 758
+	mov	WORD PTR $S1618_nNextSwarmer,cx
 ; Line 760
-$I1613:
+$I1619:
 	mov	ax,WORD PTR _SwarmerList
-	jmp	$L20053
-$I1620:
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR $S1350_rectShotClip,ax
-	jg	$FB1625
-	mov	ax,WORD PTR [bp-16]	;rect
-	cmp	WORD PTR $S1350_rectShotClip+4,ax
-	jle	$FB1625
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR $S1350_rectShotClip+2,ax
-	jg	$FB1625
+	mov	WORD PTR [bp-2],ax	;npSwarm
+	or	ax,ax
+	jne	$JCC4754
+	jmp	$EX1615
+$JCC4754:
+$F1621:
+; Line 765
+	mov	bx,WORD PTR [bp-2]	;npSwarm
+	mov	ax,WORD PTR [bx]
+	mov	WORD PTR [bp-4],ax	;npNext
+; Line 767
+	mov	ax,-15
+	sub	ax,WORD PTR [bx+18]
+	mov	cx,ax
+	shl	ax,2
+	add	ax,cx
+	shl	ax,1
+	add	ax,WORD PTR [bx+4]
+	mov	WORD PTR [bp-18],ax	;rect
+	mov	ax,WORD PTR [bx+18]
+	add	ax,15
+	mov	cx,ax
+	shl	ax,2
+	add	ax,cx
+	shl	ax,1
+	add	ax,WORD PTR [bx+4]
+	mov	WORD PTR [bp-14],ax
+	mov	ax,-15
+	sub	ax,WORD PTR [bx+18]
+	mov	cx,ax
+	shl	ax,2
+	add	ax,cx
+	shl	ax,1
+	add	ax,WORD PTR [bx+6]
+	mov	WORD PTR [bp-16],ax
+	mov	ax,WORD PTR [bx+18]
+	add	ax,15
+	mov	cx,ax
+	shl	ax,2
+	add	ax,cx
+	shl	ax,1
+	add	ax,WORD PTR [bx+6]
+	mov	WORD PTR [bp-12],ax
+; Line 769
+	mov	ax,WORD PTR [bp-18]	;rect
+	mov	bx,WORD PTR _npPlayer
+	cmp	WORD PTR [bx+4],ax
+	jl	$I1626
 	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR $S1350_rectShotClip+6,ax
-	jle	$FB1625
-; Line 775
+	cmp	WORD PTR [bx+4],ax
+	jge	$I1626
+	mov	ax,WORD PTR [bp-16]
+	cmp	WORD PTR [bx+6],ax
+	jl	$I1626
+	mov	ax,WORD PTR [bp-12]
+	cmp	WORD PTR [bx+6],ax
+	jge	$I1626
+; Line 771
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npSwarm
+	call	HITPLAYER
+; Line 772
+	mov	bx,WORD PTR [bp-2]	;npSwarm
+	jmp	SHORT $L20143
+	nop	
+$I1626:
+	mov	ax,WORD PTR [bp-14]
+	cmp	WORD PTR $S1356_rectShotClip,ax
+	jg	$I1627
+	mov	ax,WORD PTR [bp-18]	;rect
+	cmp	WORD PTR $S1356_rectShotClip+4,ax
+	jle	$I1627
+	mov	ax,WORD PTR [bp-12]
+	cmp	WORD PTR $S1356_rectShotClip+2,ax
+	jg	$I1627
+	mov	ax,WORD PTR [bp-16]
+	cmp	WORD PTR $S1356_rectShotClip+6,ax
+	jle	$I1627
 ; Line 776
 	mov	ax,WORD PTR _ShotList
-	jmp	SHORT $L20054
-	nop	
-$FC1624:
-	mov	ax,WORD PTR [bx]
-$L20054:
-	mov	WORD PTR [bp-8],ax	;Pos
+	mov	WORD PTR [bp-10],ax	;npShot
 	or	ax,ax
-	je	$FB1625
-; Line 777
+	je	$I1627
+$F1629:
 ; Line 778
-	mov	ax,WORD PTR [bp-16]	;rect
-	mov	bx,WORD PTR [bp-8]	;Pos
+	mov	ax,WORD PTR [bp-18]	;rect
+	mov	bx,WORD PTR [bp-10]	;npShot
 	cmp	WORD PTR [bx+4],ax
-	jl	$FC1624
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [bx+4],ax
-	jge	$FC1624
+	jl	$FC1630
 	mov	ax,WORD PTR [bp-14]
+	cmp	WORD PTR [bx+4],ax
+	jge	$FC1630
+	mov	ax,WORD PTR [bp-16]
 	cmp	WORD PTR [bx+6],ax
-	jl	$FC1624
-	mov	ax,WORD PTR [bp-10]
+	jl	$FC1630
+	mov	ax,WORD PTR [bp-12]
 	cmp	WORD PTR [bx+6],ax
-	jge	$FC1624
+	jl	$L20047
+; Line 776
+$FC1630:
+	mov	ax,WORD PTR [bx]
+	mov	WORD PTR [bp-10],ax	;npShot
+	or	ax,ax
+	jne	$F1629
+	jmp	SHORT $I1627
+	nop	
+	nop	
+$L20047:
 ; Line 779
 	mov	WORD PTR [bx+18],1
 ; Line 780
@@ -2807,25 +2840,22 @@ $L20054:
 	add	WORD PTR _lScore,ax
 	adc	WORD PTR _lScore+2,dx
 ; Line 781
-$L20055:
+$L20143:
 	mov	WORD PTR [bx+18],0
-; Line 782
-$FB1625:
-; Line 784
 ; Line 785
+$I1627:
 	mov	bx,WORD PTR [bp-2]	;npSwarm
 	cmp	WORD PTR [bx+18],0
-	jg	$I1628
-; Line 786
+	jg	$I1634
 ; Line 787
 	mov	BYTE PTR [bx+22],7
 ; Line 788
 	dec	WORD PTR _nBadGuys
 	cmp	WORD PTR _nBadGuys,0
-	jg	$L20012
+	jg	$L20044
 	push	2
 	call	SETRESTART
-$L20012:
+$L20044:
 ; Line 789
 	push	WORD PTR [bp+4]	;hDC
 	push	WORD PTR [bp-2]	;npSwarm
@@ -2838,146 +2868,66 @@ $L20012:
 	push	OFFSET DGROUP:_FreeList
 	push	WORD PTR [bp-2]	;npSwarm
 	call	ADDHEAD
-; Line 792
 ; Line 793
-	jmp	SHORT $FC1616
-$I1628:
-; Line 794
+	jmp	SHORT $FC1622
+$I1634:
 ; Line 795
 	cmp	WORD PTR [bx+18],1
-	jle	$I1630
+	jle	$I1636
 	dec	WORD PTR [bx+20]
 	cmp	WORD PTR [bx+20],0
-	jg	$I1630
-; Line 796
-;	nDir = -20
-;	nCount = -18
+	jg	$I1636
 ; Line 797
 	push	256
 	call	ARAND
-	mov	WORD PTR [bp-20],ax	;nDir
+	mov	WORD PTR [bp-22],ax	;nDir
 ; Line 798
 	mov	bx,WORD PTR [bp-2]	;npSwarm
 	mov	ax,WORD PTR [bx+18]
 	cwd	
 	sub	ax,dx
 	sar	ax,1
-	mov	WORD PTR [bp-18],ax	;nCount
+	mov	WORD PTR [bp-20],ax	;nCount
 ; Line 799
 	push	WORD PTR [bx+6]
 	push	WORD PTR [bx+4]
-	push	WORD PTR [bp-20]	;nDir
+	push	WORD PTR [bp-22]	;nDir
 	push	ax
 	call	CREATESWARMER
 ; Line 800
 	mov	bx,WORD PTR [bp-2]	;npSwarm
 	mov	ax,WORD PTR [bx+18]
-	sub	ax,WORD PTR [bp-18]	;nCount
-	mov	WORD PTR [bp-18],ax	;nCount
+	sub	ax,WORD PTR [bp-20]	;nCount
+	mov	WORD PTR [bp-20],ax	;nCount
 ; Line 801
 	push	WORD PTR [bx+6]
 	push	WORD PTR [bx+4]
-	mov	ax,WORD PTR [bp-20]	;nDir
+	mov	ax,WORD PTR [bp-22]	;nDir
 	add	ax,128
 	push	ax
-	push	WORD PTR [bp-18]	;nCount
+	push	WORD PTR [bp-20]	;nCount
 	call	CREATESWARMER
 ; Line 802
 	mov	bx,WORD PTR [bp-2]	;npSwarm
 	mov	WORD PTR [bx+18],0
-; Line 803
 ; Line 804
-$I1630:
+$I1636:
 	push	WORD PTR [bp+4]	;hDC
 	push	WORD PTR [bp-2]	;npSwarm
 	call	DRAWOBJECT
-; Line 805
-; Line 806
-$FC1616:
+; Line 760
+$FC1622:
 	mov	ax,WORD PTR [bp-4]	;npNext
-$L20053:
 	mov	WORD PTR [bp-2],ax	;npSwarm
 	or	ax,ax
-	jne	$JCC5003
-	jmp	$FB1617
-$JCC5003:
-; Line 761
-;	npShot = -8
-;	rect = -16
-; Line 765
-	mov	bx,ax
-	mov	ax,WORD PTR [bx]
-	mov	WORD PTR [bp-4],ax	;npNext
-; Line 767
-	mov	ax,-15
-	sub	ax,WORD PTR [bx+18]
-	mov	cx,ax
-	shl	ax,2
-	add	ax,cx
-	shl	ax,1
-	add	ax,WORD PTR [bx+4]
-	mov	WORD PTR [bp-16],ax	;rect
-	mov	ax,WORD PTR [bx+18]
-	add	ax,15
-	mov	cx,ax
-	shl	ax,2
-	add	ax,cx
-	shl	ax,1
-	add	ax,WORD PTR [bx+4]
-	mov	WORD PTR [bp-12],ax
-	mov	ax,-15
-	sub	ax,WORD PTR [bx+18]
-	mov	cx,ax
-	shl	ax,2
-	add	ax,cx
-	shl	ax,1
-	add	ax,WORD PTR [bx+6]
-	mov	WORD PTR [bp-14],ax
-	mov	ax,WORD PTR [bx+18]
-	add	ax,15
-	mov	cx,ax
-	shl	ax,2
-	add	ax,cx
-	shl	ax,1
-	add	ax,WORD PTR [bx+6]
-	mov	WORD PTR [bp-10],ax
-; Line 769
-	mov	ax,WORD PTR [bp-16]	;rect
-	mov	si,WORD PTR _npPlayer
-	cmp	WORD PTR [si+4],ax
-	jge	$JCC5109
-	jmp	$I1620
-$JCC5109:
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [si+4],ax
-	jl	$JCC5120
-	jmp	$I1620
-$JCC5120:
-	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR [si+6],ax
-	jge	$JCC5131
-	jmp	$I1620
-$JCC5131:
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [si+6],ax
-	jl	$JCC5142
-	jmp	$I1620
-$JCC5142:
-; Line 770
-; Line 771
-	push	WORD PTR [bp+4]	;hDC
-	push	bx
-	call	HITPLAYER
-; Line 772
-	mov	bx,WORD PTR [bp-2]	;npSwarm
-	jmp	$L20055
-$FB1617:
+	je	$JCC5187
+	jmp	$F1621
+$JCC5187:
 ; Line 807
-	pop	si
+$EX1615:
 	mov	sp,bp
 	pop	bp
 	ret	2
-	nop	
 
 DRAWSWARMERS	ENDP
 ; Line 814
@@ -2985,7 +2935,8 @@ DRAWSWARMERS	ENDP
 CREATESPINNER	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,4
+	sub	sp,12
+	push	di
 	push	si
 ;	npSpin = -4
 ;	nCnt = -2
@@ -2994,10 +2945,9 @@ CREATESPINNER	PROC NEAR
 	call	REMHEAD
 	mov	WORD PTR [bp-4],ax	;npSpin
 	or	ax,ax
-	jne	$JCC5186
-	jmp	$I1636
-$JCC5186:
-; Line 819
+	jne	$JCC5217
+	jmp	$EX1639
+$JCC5217:
 ; Line 820
 	push	16984
 	call	ARAND
@@ -3007,8 +2957,9 @@ $JCC5186:
 ; Line 821
 	mov	WORD PTR [bx+6],-8492
 ; Line 822
-	mov	WORD PTR [bx+10],0
-	mov	WORD PTR [bx+8],0
+	sub	ax,ax
+	mov	WORD PTR [bx+10],ax
+	mov	WORD PTR [bx+8],ax
 ; Line 823
 	push	256
 	call	ARAND
@@ -3023,44 +2974,45 @@ $JCC5186:
 	mov	bx,WORD PTR [bp-4]	;npSpin
 	mov	WORD PTR [bx+18],ax
 ; Line 826
+	mov	cx,ax
 	inc	ax
 	inc	ax
 	shl	ax,5
 	mov	WORD PTR [bx+12],ax
 ; Line 827
-	mov	al,15
-	sub	al,BYTE PTR [bx+18]
-	mov	BYTE PTR [bx+22],al
+	sub	cl,15
+	neg	cl
+	mov	BYTE PTR [bx+22],cl
 ; Line 828
 	mov	BYTE PTR [bx+23],5
-; Line 829
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC1638:
-; Line 830
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,2
-	mov	ax,WORD PTR $S1352_Spinner[bx]
-	mov	dx,WORD PTR $S1352_Spinner[bx+2]
-	mov	cx,bx
-	mov	bx,WORD PTR [bp-4]	;npSpin
-	mov	si,cx
-	mov	WORD PTR [bx+24][si],ax
-	mov	WORD PTR [bx+26][si],dx
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],5	;nCnt
-	jl	$FC1638
+	mov	cx,10
+	lea	di,WORD PTR [bx+24]
+	mov	si,OFFSET DGROUP:$S1358_Spinner
+	push	ds
+	pop	es
+	rep	movsw
 ; Line 831
 	push	0
 	push	16384
+	mov	ax,WORD PTR _nLevel
+	add	ax,15
+	shl	ax,1
+	cwd	
+	push	dx
+	push	ax
 	mov	bx,WORD PTR [bp-4]	;npSpin
 	mov	bl,BYTE PTR [bx+14]
 	sub	bh,bh
 	shl	bx,1
+	mov	cx,ax
 	mov	ax,WORD PTR _nCos[bx]
-	mov	cx,WORD PTR _nLevel
-	add	cx,15
-	shl	cx,1
-	imul	cx
+	mov	si,dx
+	cwd	
+	push	dx
+	push	ax
+	mov	di,cx
+	mov	WORD PTR [bp-12],bx
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -3068,14 +3020,14 @@ $FC1638:
 	add	WORD PTR [bx+8],ax
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	mov	cx,WORD PTR _nLevel
-	add	cx,15
-	shl	cx,1
-	imul	cx
+	push	si
+	push	di
+	mov	si,WORD PTR [bp-12]
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	push	dx
+	push	ax
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -3087,10 +3039,10 @@ $FC1638:
 	call	ADDHEAD
 ; Line 833
 	inc	WORD PTR _nBadGuys
-; Line 834
 ; Line 835
-$I1636:
+$EX1639:
 	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	
@@ -3103,15 +3055,17 @@ DRAWSPINNERS	PROC NEAR
 	mov	bp,sp
 	sub	sp,16
 	push	si
+;	hDC = 4
 ;	npSpin = -2
 ;	npNext = -4
-;	hDC = 4
+;	npShot = -8
+;	nDelta = -6
+;	rect = -16
 ; Line 846
 	cmp	WORD PTR _nBadGuys,0
-	je	$I1645
-	dec	WORD PTR $S1644_nNextSpinner
-	jns	$I1645
-; Line 847
+	je	$I1651
+	dec	WORD PTR $S1650_nNextSpinner
+	jns	$I1651
 ; Line 848
 	call	CREATESPINNER
 ; Line 849
@@ -3121,187 +3075,18 @@ DRAWSPINNERS	PROC NEAR
 	sub	cx,WORD PTR _nLevel
 	shl	cx,1
 	add	ax,cx
-	mov	WORD PTR $S1644_nNextSpinner,ax
-; Line 850
+	mov	WORD PTR $S1650_nNextSpinner,ax
 ; Line 852
-$I1645:
+$I1651:
 	mov	ax,WORD PTR _SpinnerList
-	jmp	$L20057
-	nop	
-$I1652:
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR $S1350_rectShotClip,ax
-	jle	$JCC5469
-	jmp	$FB1658
-$JCC5469:
-	mov	ax,WORD PTR [bp-16]	;rect
-	cmp	WORD PTR $S1350_rectShotClip+4,ax
-	jg	$JCC5481
-	jmp	$FB1658
-$JCC5481:
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR $S1350_rectShotClip+2,ax
-	jle	$JCC5493
-	jmp	$FB1658
-$JCC5493:
-	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR $S1350_rectShotClip+6,ax
-	jg	$JCC5505
-	jmp	$FB1658
-$JCC5505:
-; Line 876
-; Line 877
-	mov	ax,WORD PTR _ShotList
-	jmp	SHORT $L20058
-	nop	
-$FC1657:
-	mov	ax,WORD PTR [bx]
-$L20058:
-	mov	WORD PTR [bp-8],ax	;npShot
-	or	ax,ax
-	jne	$JCC5523
-	jmp	$FB1658
-$JCC5523:
-; Line 878
-; Line 879
-	mov	ax,WORD PTR [bp-16]	;rect
-	mov	bx,WORD PTR [bp-8]	;npShot
-	cmp	WORD PTR [bx+4],ax
-	jl	$FC1657
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [bx+4],ax
-	jge	$FC1657
-	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR [bx+6],ax
-	jl	$FC1657
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [bx+6],ax
-	jge	$FC1657
-; Line 880
-	mov	WORD PTR [bx+18],1
-; Line 881
-	mov	bx,WORD PTR [bp-2]	;npSpin
-	imul	ax,WORD PTR [bx+18],500
-	cwd	
-	add	WORD PTR _lScore,ax
-	adc	WORD PTR _lScore+2,dx
-; Line 882
-	mov	al,15
-	dec	WORD PTR [bx+18]
-	sub	al,BYTE PTR [bx+18]
-	mov	BYTE PTR [bx+22],al
-; Line 883
-	cmp	WORD PTR [bx+18],1
-	jge	$I1661
-; Line 884
-; Line 885
-$L20062:
-	dec	WORD PTR _nBadGuys
-	cmp	WORD PTR _nBadGuys,0
-	jg	$L20016
-	push	2
-	call	SETRESTART
-$L20016:
-; Line 886
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-2]	;npSpin
-	call	EXPLODE
-; Line 887
-	push	OFFSET DGROUP:_SpinnerList
-	push	WORD PTR [bp-2]	;npSpin
-	call	REMOVE
-; Line 888
-	push	OFFSET DGROUP:_FreeList
-	push	WORD PTR [bp-2]	;npSpin
-	call	ADDHEAD
-; Line 889
-; Line 890
-	jmp	SHORT $FB1658
-	nop	
-$I1661:
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-2]	;npSpin
-	call	HIT
-; Line 891
-$FB1658:
-; Line 893
-; Line 894
-	mov	bx,WORD PTR _npPlayer
-	mov	ax,WORD PTR [bx+4]
-	mov	bx,WORD PTR [bp-2]	;npSpin
-	sub	ax,WORD PTR [bx+4]
-$L20059:
-	mov	WORD PTR [bp-6],ax	;nDelta
-; Line 895
-	cmp	ax,-16
-	jl	$FB1666
-	cmp	ax,16
-	jle	$FB1665
-$FB1666:
-	mov	cx,2
-	cwd	
-	idiv	cx
-	jmp	SHORT $L20059
-	nop	
-$FB1665:
-; Line 896
-	mov	bx,WORD PTR [bp-2]	;npSpin
-	mov	ax,WORD PTR [bx+8]
-	cwd	
-	xor	ax,dx
-	sub	ax,dx
-	sar	ax,4
-	xor	ax,dx
-	sub	ax,dx
-	sub	ax,WORD PTR [bp-6]	;nDelta
-	neg	ax
-	add	WORD PTR [bx+8],ax
-; Line 897
-	mov	si,WORD PTR _npPlayer
-	mov	ax,WORD PTR [si+6]
-	sub	ax,WORD PTR [bx+6]
-$L20060:
-	mov	WORD PTR [bp-6],ax	;nDelta
-; Line 898
-	cmp	ax,-16
-	jl	$FB1670
-	cmp	ax,16
-	jle	$FB1669
-$FB1670:
-	mov	cx,2
-	cwd	
-	idiv	cx
-	jmp	SHORT $L20060
-	nop	
-$FB1669:
-; Line 899
-	mov	bx,WORD PTR [bp-2]	;npSpin
-	mov	ax,WORD PTR [bx+10]
-	cwd	
-	xor	ax,dx
-	sub	ax,dx
-	sar	ax,4
-	xor	ax,dx
-	sub	ax,dx
-	sub	ax,WORD PTR [bp-6]	;nDelta
-	neg	ax
-	add	WORD PTR [bx+10],ax
-; Line 900
-	push	WORD PTR [bp+4]	;hDC
-	push	bx
-	call	DRAWOBJECT
-; Line 901
-	mov	ax,WORD PTR [bp-4]	;npNext
-$L20057:
 	mov	WORD PTR [bp-2],ax	;npSpin
 	or	ax,ax
-	je	$FB1648
-; Line 853
-;	npShot = -8
-;	nDelta = -6
-;	rect = -16
+	jne	$JCC5479
+	jmp	$EX1647
+$JCC5479:
+$F1652:
 ; Line 858
-	mov	bx,ax
+	mov	bx,WORD PTR [bp-2]	;npSpin
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-4],ax	;npNext
 ; Line 860
@@ -3319,46 +3104,198 @@ $L20057:
 	mov	WORD PTR [bp-10],ax
 ; Line 862
 	mov	ax,WORD PTR [bp-16]	;rect
-	mov	si,WORD PTR _npPlayer
-	cmp	WORD PTR [si+4],ax
-	jge	$JCC5846
-	jmp	$I1652
-$JCC5846:
+	mov	bx,WORD PTR _npPlayer
+	cmp	WORD PTR [bx+4],ax
+	jl	$I1658
 	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [si+4],ax
-	jl	$JCC5857
-	jmp	$I1652
-$JCC5857:
+	cmp	WORD PTR [bx+4],ax
+	jge	$I1658
 	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR [si+6],ax
-	jge	$JCC5868
-	jmp	$I1652
-$JCC5868:
+	cmp	WORD PTR [bx+6],ax
+	jl	$I1658
 	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [si+6],ax
-	jl	$JCC5879
-	jmp	$I1652
-$JCC5879:
-; Line 863
+	cmp	WORD PTR [bx+6],ax
+	jge	$I1658
 ; Line 864
 	push	WORD PTR [bp+4]	;hDC
-	push	bx
+	push	WORD PTR [bp-2]	;npSpin
 	call	HITPLAYER
 ; Line 866
 	mov	al,15
 	mov	bx,WORD PTR [bp-2]	;npSpin
 	dec	WORD PTR [bx+18]
-	sub	al,BYTE PTR [bx+18]
+	mov	cx,WORD PTR [bx+18]
+	mov	dx,cx
+	sub	al,cl
 	mov	BYTE PTR [bx+22],al
 ; Line 867
-	cmp	WORD PTR [bx+18],1
-	jl	$JCC5909
-	jmp	$FB1658
-$JCC5909:
-	jmp	$L20062
+	cmp	dx,1
+	jl	$JCC5594
+	jmp	$I1660
+$JCC5594:
+; Line 869
+$L20147:
+	dec	WORD PTR _nBadGuys
+	cmp	WORD PTR _nBadGuys,0
+	jg	$L20053
+	push	2
+	call	SETRESTART
+$L20053:
+; Line 870
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npSpin
+	call	EXPLODE
+; Line 871
+	push	OFFSET DGROUP:_SpinnerList
+	push	WORD PTR [bp-2]	;npSpin
+	call	REMOVE
+; Line 872
+	push	OFFSET DGROUP:_FreeList
+	push	WORD PTR [bp-2]	;npSpin
+	call	ADDHEAD
+; Line 875
+	jmp	$I1660
 	nop	
-$FB1648:
+$I1658:
+	mov	ax,WORD PTR $S1356_rectShotClip
+	cmp	WORD PTR [bp-12],ax
+	jge	$JCC5652
+	jmp	$I1660
+$JCC5652:
+	mov	ax,WORD PTR $S1356_rectShotClip+4
+	cmp	WORD PTR [bp-16],ax	;rect
+	jge	$I1660
+	mov	ax,WORD PTR $S1356_rectShotClip+2
+	cmp	WORD PTR [bp-10],ax
+	jl	$I1660
+	mov	ax,WORD PTR $S1356_rectShotClip+6
+	cmp	WORD PTR [bp-14],ax
+	jge	$I1660
+; Line 877
+	mov	ax,WORD PTR _ShotList
+	mov	WORD PTR [bp-8],ax	;npShot
+	or	ax,ax
+	je	$I1660
+$F1662:
+; Line 879
+	mov	ax,WORD PTR [bp-16]	;rect
+	mov	bx,WORD PTR [bp-8]	;npShot
+	cmp	WORD PTR [bx+4],ax
+	jl	$FC1663
+	mov	ax,WORD PTR [bp-12]
+	cmp	WORD PTR [bx+4],ax
+	jge	$FC1663
+	mov	ax,WORD PTR [bp-14]
+	cmp	WORD PTR [bx+6],ax
+	jl	$FC1663
+	mov	ax,WORD PTR [bp-10]
+	cmp	WORD PTR [bx+6],ax
+	jl	$L20060
+; Line 877
+$FC1663:
+	mov	ax,WORD PTR [bx]
+	mov	WORD PTR [bp-8],ax	;npShot
+	or	ax,ax
+	jne	$F1662
+	jmp	SHORT $I1660
+	nop	
+$L20060:
+; Line 880
+	mov	WORD PTR [bx+18],1
+; Line 881
+	mov	bx,WORD PTR [bp-2]	;npSpin
+	imul	ax,WORD PTR [bx+18],500
+	cwd	
+	add	WORD PTR _lScore,ax
+	adc	WORD PTR _lScore+2,dx
+; Line 882
+	mov	al,15
+	dec	WORD PTR [bx+18]
+	mov	cx,WORD PTR [bx+18]
+	mov	dx,cx
+	sub	al,cl
+	mov	BYTE PTR [bx+22],al
+; Line 883
+	cmp	dx,1
+	jge	$JCC5778
+	jmp	$L20147
+$JCC5778:
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npSpin
+	call	HIT
+; Line 894
+$I1660:
+	mov	bx,WORD PTR _npPlayer
+	mov	ax,WORD PTR [bx+4]
+	mov	bx,WORD PTR [bp-2]	;npSpin
+	sub	ax,WORD PTR [bx+4]
+$L20145:
+	mov	WORD PTR [bp-6],ax	;nDelta
+; Line 895
+	cmp	ax,-16
+	jl	$FB1672
+	cmp	ax,16
+	jle	$L20061
+$FB1672:
+	mov	cx,2
+	cwd	
+	idiv	cx
+	jmp	SHORT $L20145
+$L20061:
+; Line 896
+	mov	bx,WORD PTR [bp-2]	;npSpin
+	mov	ax,WORD PTR [bx+8]
+	cwd	
+	xor	ax,dx
+	sub	ax,dx
+	sar	ax,4
+	xor	ax,dx
+	sub	ax,dx
+	sub	ax,WORD PTR [bp-6]	;nDelta
+	neg	ax
+	add	WORD PTR [bx+8],ax
+; Line 897
+	mov	si,WORD PTR _npPlayer
+	mov	ax,WORD PTR [si+6]
+	sub	ax,WORD PTR [bx+6]
+$L20146:
+	mov	WORD PTR [bp-6],ax	;nDelta
+; Line 898
+	cmp	ax,-16
+	jl	$FB1676
+	cmp	ax,16
+	jle	$L20062
+$FB1676:
+	mov	cx,2
+	cwd	
+	idiv	cx
+	jmp	SHORT $L20146
+	nop	
+$L20062:
+; Line 899
+	mov	bx,WORD PTR [bp-2]	;npSpin
+	mov	ax,WORD PTR [bx+10]
+	cwd	
+	xor	ax,dx
+	sub	ax,dx
+	sar	ax,4
+	xor	ax,dx
+	sub	ax,dx
+	sub	ax,WORD PTR [bp-6]	;nDelta
+	neg	ax
+	add	WORD PTR [bx+10],ax
+; Line 900
+	push	WORD PTR [bp+4]	;hDC
+	push	bx
+	call	DRAWOBJECT
+	mov	ax,WORD PTR [bp-4]	;npNext
+	mov	WORD PTR [bp-2],ax	;npSpin
+	or	ax,ax
+	je	$JCC5925
+	jmp	$F1652
+$JCC5925:
 ; Line 902
+$EX1647:
 	pop	si
 	mov	sp,bp
 	pop	bp
@@ -3371,11 +3308,9 @@ DRAWSPINNERS	ENDP
 CREATEROID	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,6
+	sub	sp,14
 	push	di
 	push	si
-;	npRoid = -4
-;	nCnt = -2
 ;	Pos = 18
 ;	Vel = 14
 ;	nSides = 12
@@ -3383,33 +3318,34 @@ CREATEROID	PROC NEAR
 ;	nDir = 8
 ;	nSpeed = 6
 ;	nSpin = 4
+;	npRoid = -4
+;	nCnt = -2
 ; Line 914
 	push	OFFSET DGROUP:_FreeList
 	call	REMHEAD
 	mov	WORD PTR [bp-4],ax	;npRoid
 	or	ax,ax
-	jne	$JCC5945
-	jmp	$I1681
-$JCC5945:
-; Line 915
+	jne	$JCC5957
+	jmp	$EX1684
+$JCC5957:
 ; Line 916
-	mov	bx,ax
-	mov	cx,WORD PTR [bp+18]	;Pos
+	mov	ax,WORD PTR [bp+18]	;Pos
 	mov	dx,WORD PTR [bp+20]
-	mov	WORD PTR [bx+4],cx
+	mov	bx,WORD PTR [bp-4]	;npRoid
+	mov	WORD PTR [bx+4],ax
 	mov	WORD PTR [bx+6],dx
 ; Line 917
-	mov	cx,WORD PTR [bp+14]	;Vel
+	mov	ax,WORD PTR [bp+14]	;Vel
 	mov	dx,WORD PTR [bp+16]
-	mov	WORD PTR [bx+8],cx
+	mov	WORD PTR [bx+8],ax
 	mov	WORD PTR [bx+10],dx
 ; Line 918
-	mov	cx,WORD PTR [bp+12]	;nSides
-	shl	cx,7
-	mov	WORD PTR [bx+12],cx
+	mov	ax,WORD PTR [bp+12]	;nSides
+	shl	ax,7
+	mov	WORD PTR [bx+12],ax
 ; Line 919
-	mov	cx,WORD PTR [bp+8]	;nDir
-	mov	WORD PTR [bx+14],cx
+	mov	ax,WORD PTR [bp+8]	;nDir
+	mov	WORD PTR [bx+14],ax
 ; Line 920
 	push	11
 	call	ARAND
@@ -3428,37 +3364,40 @@ $JCC5945:
 	inc	al
 	mov	BYTE PTR [bx+23],al
 ; Line 924
-	mov	WORD PTR [bp-2],0	;nCnt
-	jmp	SHORT $F1682
-$FC1683:
-; Line 925
+	cmp	WORD PTR [bp+12],0	;nSides
+	jle	$FB1690
+	mov	ax,WORD PTR [bp-4]	;npRoid
+	add	ax,24
+	mov	WORD PTR [bp-6],ax
+	mov	WORD PTR [bp-8],0
+	imul	ax,WORD PTR [bp+12],100	;nSides
+	mov	WORD PTR [bp-12],ax
+	mov	ax,WORD PTR [bp+12]	;nSides
+	mov	WORD PTR [bp-10],ax
+$F1688:
 ; Line 926
 	push	30
 	call	ARAND
 	mov	cx,ax
-	mov	ah,BYTE PTR [bp-2]	;nCnt
-	sub	al,al
+	mov	ax,WORD PTR [bp-8]
 	cwd	
 	idiv	WORD PTR [bp+12]	;nSides
 	add	cx,ax
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,2
-	add	bx,WORD PTR [bp-4]	;npRoid
-	mov	WORD PTR [bx+24],cx
+	mov	bx,WORD PTR [bp-6]
+	mov	WORD PTR [bx],cx
 ; Line 927
 	push	80
-	mov	si,bx
 	call	ARAND
-	imul	cx,WORD PTR [bp+12],100	;nSides
-	add	ax,cx
+	add	ax,WORD PTR [bp-12]
 	sub	ax,80
-	mov	WORD PTR [si+26],ax
+	mov	bx,WORD PTR [bp-6]
+	mov	WORD PTR [bx+2],ax
+	add	WORD PTR [bp-6],4
+	add	BYTE PTR [bp-7],1
+	dec	WORD PTR [bp-10]
+	jne	$F1688
 ; Line 928
-	inc	WORD PTR [bp-2]	;nCnt
-$F1682:
-	mov	ax,WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp+12],ax	;nSides
-	jg	$FC1683
+$FB1690:
 ; Line 929
 	mov	bx,WORD PTR [bp-4]	;npRoid
 	mov	ax,WORD PTR [bx+24]
@@ -3484,7 +3423,7 @@ $F1682:
 	push	dx
 	push	ax
 	mov	di,cx
-	mov	WORD PTR [bp-6],bx
+	mov	WORD PTR [bp-14],bx
 	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
@@ -3495,7 +3434,7 @@ $F1682:
 	push	16384
 	push	si
 	push	di
-	mov	si,WORD PTR [bp-6]
+	mov	si,WORD PTR [bp-14]
 	mov	ax,WORD PTR _nSin[si]
 	cwd	
 	push	dx
@@ -3512,9 +3451,8 @@ $F1682:
 	call	ADDHEAD
 ; Line 932
 	inc	WORD PTR _nBadGuys
-; Line 933
 ; Line 934
-$I1681:
+$EX1684:
 	pop	si
 	pop	di
 	mov	sp,bp
@@ -3528,13 +3466,16 @@ CREATEROID	ENDP
 BREAKROID	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,12
+	sub	sp,18
 	push	si
-;	nCnt = -2
-;	nNew = -4
 ;	hDC = 8
 ;	npRoid = 6
 ;	npShot = 4
+;	nCnt = -2
+;	nNew = -4
+;	Pt = -8
+;	nSpeed = -10
+;	Pt = -14
 ; Line 944
 	mov	bx,WORD PTR [bp+6]	;npRoid
 	mov	ax,WORD PTR [bx+18]
@@ -3543,47 +3484,62 @@ BREAKROID	PROC NEAR
 	adc	WORD PTR _lScore+2,dx
 ; Line 945
 	cmp	WORD PTR [bp+4],0	;npShot
-	je	$I1691
+	je	$I1697
 	mov	bx,WORD PTR [bp+4]	;npShot
 	mov	WORD PTR [bx+18],1
 ; Line 946
-$I1691:
+$I1697:
 	mov	bx,WORD PTR [bp+6]	;npRoid
 	mov	al,BYTE PTR [bx+23]
 	sub	ah,ah
+; Line 963
 	sub	ax,5
-	jne	$JCC6271
-	jmp	$SC1699
-$JCC6271:
+	je	$SC1705
 	dec	ax
-	je	$SC1698
+	je	$SC1704
 	dec	ax
-	je	$SC1697
+	je	$SC1703
 	dec	ax
-	je	$SC1696
+	je	$SC1702
 ; Line 961
 	mov	WORD PTR [bp-4],0	;nNew
 ; Line 962
-	jmp	SHORT $SB1693
-; Line 947
+	jmp	SHORT $SB1699
 	nop	
+; Line 957
+$SC1705:
+; Line 958
+	push	2
+	call	ARAND
+	jmp	SHORT $L20148
 	nop	
+; Line 954
+$SC1704:
+; Line 955
+	push	2
+	jmp	SHORT $L20149
+; Line 951
+$SC1703:
+; Line 952
+	push	3
+$L20149:
+	call	ARAND
+	inc	ax
+	jmp	SHORT $L20148
 ; Line 948
-$SC1696:
+$SC1702:
 ; Line 949
 	push	3
 	call	ARAND
 	inc	ax
 	inc	ax
-$L20064:
+$L20148:
 	mov	WORD PTR [bp-4],ax	;nNew
-; Line 950
-$SB1693:
+; Line 963
+$SB1699:
 ; Line 964
 	cmp	WORD PTR [bp-4],1	;nNew
-	jne	$I1701
-; Line 965
-;	Pt = -8
+	jne	$I1707
 ; Line 966
 	mov	bx,WORD PTR [bp+6]	;npRoid
 	mov	ax,WORD PTR [bx+4]
@@ -3617,38 +3573,14 @@ $SB1693:
 	push	8
 	push	WORD PTR [bx+16]
 	call	CREATEROID
-; Line 970
 ; Line 971
-	jmp	$I1704
+	jmp	$I1709
 	nop	
-; Line 951
-$SC1697:
-; Line 952
-	push	3
-	jmp	SHORT $L20065
-; Line 954
-$SC1698:
-; Line 955
-	push	2
-$L20065:
-	call	ARAND
-	inc	ax
-	jmp	SHORT $L20064
-; Line 957
-$SC1699:
-; Line 958
-	push	2
-	call	ARAND
-	jmp	SHORT $L20064
-; Line 960
-	nop	
-$I1701:
+$I1707:
 	cmp	WORD PTR [bp-4],0	;nNew
-	jg	$JCC6420
-	jmp	$I1704
-$JCC6420:
-; Line 972
-;	nSpeed = -8
+	jg	$JCC6446
+	jmp	$I1709
+$JCC6446:
 ; Line 973
 	mov	bx,WORD PTR [bp+6]	;npRoid
 	mov	ax,WORD PTR [bx+16]
@@ -3656,32 +3588,34 @@ $JCC6420:
 	imul	cx
 	imul	WORD PTR [bp-4]	;nNew
 	add	ax,16
-	mov	WORD PTR [bp-8],ax	;Pt
+	mov	WORD PTR [bp-10],ax	;nSpeed
 ; Line 974
-	mov	WORD PTR [bp-2],0	;nCnt
-	jmp	SHORT $F1706
-	nop	
-$FC1707:
-; Line 975
-;	Pt = -12
+	cmp	WORD PTR [bp-4],0	;nNew
+	jg	$JCC6474
+	jmp	$I1709
+$JCC6474:
+	mov	WORD PTR [bp-16],0
+	mov	ax,WORD PTR [bp-4]	;nNew
+	mov	WORD PTR [bp-18],ax
+$F1712:
 ; Line 976
 	mov	bx,WORD PTR [bp+6]	;npRoid
-	mov	cx,WORD PTR [bx+4]
+	mov	ax,WORD PTR [bx+4]
 	mov	dx,WORD PTR [bx+6]
-	mov	WORD PTR [bp-12],cx	;Pt
-	mov	WORD PTR [bp-10],dx
+	mov	WORD PTR [bp-14],ax	;Pt
+	mov	WORD PTR [bp-12],dx
 ; Line 977
 	push	601
 	call	ARAND
 	sub	ax,300
-	add	WORD PTR [bp-12],ax	;Pt
+	add	WORD PTR [bp-14],ax	;Pt
 	push	601
 	call	ARAND
 	sub	ax,300
-	add	WORD PTR [bp-10],ax
+	add	WORD PTR [bp-12],ax
 ; Line 982
-	push	WORD PTR [bp-10]
-	push	WORD PTR [bp-12]	;Pt
+	push	WORD PTR [bp-12]
+	push	WORD PTR [bp-14]	;Pt
 	mov	bx,WORD PTR [bp+6]	;npRoid
 	push	WORD PTR [bx+10]
 	push	WORD PTR [bx+8]
@@ -3695,19 +3629,18 @@ $FC1707:
 	push	32
 	call	ARAND
 	mov	cx,ax
-	mov	ah,BYTE PTR [bp-2]	;nCnt
-	sub	al,al
+	mov	ax,WORD PTR [bp-16]
 	cwd	
 	idiv	WORD PTR [bp-4]	;nNew
-	add	cx,ax
 	mov	bx,WORD PTR [bp+6]	;npRoid
 	add	cx,WORD PTR [bx+14]
-	push	cx
+	add	ax,cx
+	push	ax
 	mov	ax,WORD PTR _nLevel
 	shl	ax,2
 	push	ax
 	call	ARAND
-	add	ax,WORD PTR [bp-8]	;Pt
+	add	ax,WORD PTR [bp-10]	;nSpeed
 	push	ax
 	mov	bx,WORD PTR [bp+6]	;npRoid
 	mov	ax,WORD PTR [bx+16]
@@ -3716,23 +3649,19 @@ $FC1707:
 	sar	ax,1
 	push	ax
 	call	CREATEROID
-; Line 983
-	inc	WORD PTR [bp-2]	;nCnt
-$F1706:
-	mov	ax,WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-4],ax	;nNew
-	jle	$JCC6583
-	jmp	$FC1707
-$JCC6583:
-; Line 984
+	add	BYTE PTR [bp-15],1
+	dec	WORD PTR [bp-18]
+	je	$JCC6617
+	jmp	$F1712
+$JCC6617:
 ; Line 985
-$I1704:
+$I1709:
 	dec	WORD PTR _nBadGuys
 	cmp	WORD PTR _nBadGuys,0
-	jg	$L20018
+	jg	$L20068
 	push	2
 	call	SETRESTART
-$L20018:
+$L20068:
 ; Line 986
 	mov	bx,WORD PTR [bp+6]	;npRoid
 	inc	BYTE PTR [bx+22]
@@ -3740,25 +3669,23 @@ $L20018:
 	mov	WORD PTR [bx+18],0
 ; Line 988
 	cmp	WORD PTR [bp-4],0	;nNew
-	je	$I1710
-; Line 989
+	je	$I1716
 ; Line 990
 	push	WORD PTR [bp+8]	;hDC
-	push	bx
+	push	WORD PTR [bp+6]	;npRoid
 	call	HIT
 ; Line 991
 	push	WORD PTR [bp+8]	;hDC
 	push	WORD PTR [bp+6]	;npRoid
 	call	DRAWOBJECT
-; Line 992
 ; Line 993
-	jmp	SHORT $I1711
+	jmp	SHORT $I1717
 	nop	
-$I1710:
+$I1716:
 	push	WORD PTR [bp+8]	;hDC
 	push	WORD PTR [bp+6]	;npRoid
 	call	EXPLODE
-$I1711:
+$I1717:
 ; Line 994
 	push	OFFSET DGROUP:_RoidList
 	push	WORD PTR [bp+6]	;npRoid
@@ -3780,84 +3707,22 @@ DRAWROIDS	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,16
-	push	si
+;	hDC = 4
 ;	npRoid = -2
 ;	npNext = -4
-;	hDC = 4
-; Line 1006
-	mov	ax,WORD PTR _RoidList
-	jmp	SHORT $L20067
-	nop	
-	nop	
-$I1723:
-	push	2
-$L20069:
-	call	SETRESTART
-; Line 1026
-; Line 1027
-	jmp	SHORT $FB1729
-	nop	
-$I1722:
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR $S1350_rectShotClip,ax
-	jg	$FB1729
-	mov	ax,WORD PTR [bp-16]	;rect
-	cmp	WORD PTR $S1350_rectShotClip+4,ax
-	jle	$FB1729
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR $S1350_rectShotClip+2,ax
-	jg	$FB1729
-	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR $S1350_rectShotClip+6,ax
-	jle	$FB1729
-; Line 1028
-; Line 1029
-	mov	ax,WORD PTR _ShotList
-	jmp	SHORT $L20068
-	nop	
-$FC1728:
-	mov	ax,WORD PTR [bx]
-$L20068:
-	mov	WORD PTR [bp-8],ax	;npShot
-	or	ax,ax
-	je	$FB1729
-; Line 1030
-; Line 1031
-	mov	ax,WORD PTR [bp-16]	;rect
-	mov	bx,WORD PTR [bp-8]	;npShot
-	cmp	WORD PTR [bx+4],ax
-	jl	$FC1728
-	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [bx+4],ax
-	jge	$FC1728
-	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR [bx+6],ax
-	jl	$FC1728
-	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [bx+6],ax
-	jge	$FC1728
-; Line 1032
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-2]	;npRoid
-	push	bx
-	call	BREAKROID
-; Line 1033
-$FB1729:
-; Line 1035
-; Line 1036
-	mov	ax,WORD PTR [bp-4]	;npNext
-$L20067:
-	mov	WORD PTR [bp-2],ax	;npRoid
-	or	ax,ax
-	jne	$JCC6800
-	jmp	$FB1718
-$JCC6800:
-; Line 1007
 ;	nSize = -6
 ;	npShot = -8
 ;	rect = -16
+; Line 1006
+	mov	ax,WORD PTR _RoidList
+	mov	WORD PTR [bp-2],ax	;npRoid
+	or	ax,ax
+	jne	$JCC6724
+	jmp	$EX1719
+$JCC6724:
+$F1722:
 ; Line 1008
-	mov	bx,ax
+	mov	bx,WORD PTR [bp-2]	;npRoid
 	mov	ax,WORD PTR [bx+18]
 	mov	WORD PTR [bp-6],ax	;nSize
 ; Line 1012
@@ -3883,43 +3748,31 @@ $JCC6800:
 	mov	WORD PTR [bp-10],ax
 ; Line 1018
 	mov	ax,WORD PTR [bp-16]	;rect
-	mov	si,WORD PTR _npPlayer
-	cmp	WORD PTR [si+4],ax
-	jge	$JCC6874
-	jmp	$I1722
-$JCC6874:
+	mov	bx,WORD PTR _npPlayer
+	cmp	WORD PTR [bx+4],ax
+	jl	$I1728
 	mov	ax,WORD PTR [bp-12]
-	cmp	WORD PTR [si+4],ax
-	jl	$JCC6885
-	jmp	$I1722
-$JCC6885:
+	cmp	WORD PTR [bx+4],ax
+	jge	$I1728
 	mov	ax,WORD PTR [bp-14]
-	cmp	WORD PTR [si+6],ax
-	jge	$JCC6896
-	jmp	$I1722
-$JCC6896:
+	cmp	WORD PTR [bx+6],ax
+	jl	$I1728
 	mov	ax,WORD PTR [bp-10]
-	cmp	WORD PTR [si+6],ax
-	jl	$JCC6907
-	jmp	$I1722
-$JCC6907:
+	cmp	WORD PTR [bx+6],ax
+	jge	$I1728
 	push	WORD PTR [bp+4]	;hDC
-	push	bx
+	push	WORD PTR [bp-2]	;npRoid
 	call	HITPLAYER
 	or	ax,ax
-	jne	$JCC6921
-	jmp	$I1722
-$JCC6921:
-; Line 1019
+	je	$I1728
 ; Line 1020
 	mov	bx,WORD PTR _npPlayer
 	neg	WORD PTR [bx+18]
 ; Line 1021
-	mov	bx,WORD PTR _npPlayer
 	mov	BYTE PTR [bx+22],3
 ; Line 1022
 	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR _npPlayer
+	push	bx
 	call	EXPLODE
 ; Line 1023
 	push	WORD PTR [bp+4]	;hDC
@@ -3928,15 +3781,72 @@ $JCC6921:
 	call	BREAKROID
 ; Line 1024
 	cmp	WORD PTR _nBadGuys,0
-	jne	$JCC6967
-	jmp	$I1723
-$JCC6967:
+	je	$I1729
 	push	1
-	jmp	$L20069
+$L20150:
+	call	SETRESTART
+; Line 1025
+	jmp	SHORT $FC1723
 	nop	
-$FB1718:
+$I1729:
+	push	2
+	jmp	SHORT $L20150
+$I1728:
+	mov	ax,WORD PTR [bp-12]
+	cmp	WORD PTR $S1356_rectShotClip,ax
+	jg	$FC1723
+	mov	ax,WORD PTR [bp-16]	;rect
+	cmp	WORD PTR $S1356_rectShotClip+4,ax
+	jle	$FC1723
+	mov	ax,WORD PTR [bp-10]
+	cmp	WORD PTR $S1356_rectShotClip+2,ax
+	jg	$FC1723
+	mov	ax,WORD PTR [bp-14]
+	cmp	WORD PTR $S1356_rectShotClip+6,ax
+	jle	$FC1723
+; Line 1029
+	mov	ax,WORD PTR _ShotList
+	mov	WORD PTR [bp-8],ax	;npShot
+	or	ax,ax
+	je	$FC1723
+$F1733:
+; Line 1031
+	mov	ax,WORD PTR [bp-16]	;rect
+	mov	bx,WORD PTR [bp-8]	;npShot
+	cmp	WORD PTR [bx+4],ax
+	jl	$FC1734
+	mov	ax,WORD PTR [bp-12]
+	cmp	WORD PTR [bx+4],ax
+	jge	$FC1734
+	mov	ax,WORD PTR [bp-14]
+	cmp	WORD PTR [bx+6],ax
+	jl	$FC1734
+	mov	ax,WORD PTR [bp-10]
+	cmp	WORD PTR [bx+6],ax
+	jl	$L20073
+; Line 1029
+$FC1734:
+	mov	ax,WORD PTR [bx]
+	mov	WORD PTR [bp-8],ax	;npShot
+	or	ax,ax
+	jne	$F1733
+	jmp	SHORT $FC1723
+$L20073:
+; Line 1032
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npRoid
+	push	bx
+	call	BREAKROID
+; Line 1006
+$FC1723:
+	mov	ax,WORD PTR [bp-4]	;npNext
+	mov	WORD PTR [bp-2],ax	;npRoid
+	or	ax,ax
+	je	$JCC6996
+	jmp	$F1722
+$JCC6996:
 ; Line 1037
-	pop	si
+$EX1719:
 	mov	sp,bp
 	pop	bp
 	ret	2
@@ -3949,33 +3859,31 @@ DRAWSHOTS	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,4
+;	hDC = 4
 ;	npShot = -2
 ;	npNext = -4
-;	hDC = 4
 ; Line 1047
 	mov	ax,WORD PTR _ShotList
 	mov	WORD PTR [bp-2],ax	;npShot
 	or	ax,ax
-	jne	$JCC7000
-	jmp	$I1736
-$JCC7000:
-; Line 1048
+	jne	$JCC7022
+	jmp	$I1742
+$JCC7022:
 ; Line 1049
 	mov	bx,ax
-	mov	cx,WORD PTR [bx+4]
-	mov	WORD PTR $S1350_rectShotClip+4,cx
-	mov	WORD PTR $S1350_rectShotClip,cx
+	mov	ax,WORD PTR [bx+4]
+	mov	WORD PTR $S1356_rectShotClip+4,ax
+	mov	WORD PTR $S1356_rectShotClip,ax
 ; Line 1050
-	mov	cx,WORD PTR [bx+6]
-	mov	WORD PTR $S1350_rectShotClip+6,cx
-	mov	WORD PTR $S1350_rectShotClip+2,cx
+	mov	ax,WORD PTR [bx+6]
+	mov	WORD PTR $S1356_rectShotClip+6,ax
+	mov	WORD PTR $S1356_rectShotClip+2,ax
 ; Line 1051
-$FC1738:
-	cmp	WORD PTR [bp-2],0	;npShot
-	jne	$JCC7033
-	jmp	$I1753
-$JCC7033:
-; Line 1052
+	or	bx,bx
+	jne	$JCC7049
+	jmp	$EX1739
+$JCC7049:
+$FC1744:
 ; Line 1053
 	mov	bx,WORD PTR [bp-2]	;npShot
 	mov	ax,WORD PTR [bx]
@@ -3983,47 +3891,18 @@ $JCC7033:
 ; Line 1054
 	dec	WORD PTR [bx+18]
 	mov	ax,WORD PTR [bx+18]
+; Line 1066
 	cmp	ax,10
-	je	$SC1744
-	ja	$SB1741
+	je	$SC1750
+	ja	$SB1747
 	or	al,al
-	je	$SC1746
+	je	$SC1752
 	sub	al,5
-	je	$SC1745
-	jmp	SHORT $SB1741
-; Line 1055
-	nop	
-; Line 1056
-$SC1744:
-; Line 1057
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	BYTE PTR [bx+22],12
-; Line 1058
-$SB1741:
-; Line 1067
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-2]	;npShot
-	call	DRAWOBJECT
-; Line 1068
-	mov	ax,WORD PTR $S1350_rectShotClip
-	mov	bx,WORD PTR [bp-2]	;npShot
-	cmp	WORD PTR [bx+4],ax
-	jge	$I1747
-	mov	ax,WORD PTR [bx+4]
-	mov	WORD PTR $S1350_rectShotClip,ax
-; Line 1069
-	jmp	SHORT $I1749
-	nop	
-; Line 1059
-$SC1745:
-; Line 1060
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	BYTE PTR [bx+22],8
-; Line 1061
-	jmp	SHORT $SB1741
+	je	$SC1751
+	jmp	SHORT $SB1747
 	nop	
 ; Line 1062
-$SC1746:
+$SC1752:
 ; Line 1063
 	push	OFFSET DGROUP:_ShotList
 	push	WORD PTR [bp-2]	;npShot
@@ -4033,43 +3912,79 @@ $SC1746:
 	push	WORD PTR [bp-2]	;npShot
 	call	ADDHEAD
 ; Line 1065
-	jmp	SHORT $SB1741
-$I1747:
-	mov	ax,WORD PTR $S1350_rectShotClip+4
+	jmp	SHORT $SB1747
+; Line 1059
+$SC1751:
+; Line 1060
+	mov	bx,WORD PTR [bp-2]	;npShot
+	mov	BYTE PTR [bx+22],8
+; Line 1061
+	jmp	SHORT $SB1747
+	nop	
+; Line 1056
+$SC1750:
+; Line 1057
+	mov	bx,WORD PTR [bp-2]	;npShot
+	mov	BYTE PTR [bx+22],12
+; Line 1066
+$SB1747:
+; Line 1067
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npShot
+	call	DRAWOBJECT
+; Line 1068
+	mov	ax,WORD PTR $S1356_rectShotClip
+	mov	bx,WORD PTR [bp-2]	;npShot
 	cmp	WORD PTR [bx+4],ax
-	jle	$I1749
+	jge	$I1753
 	mov	ax,WORD PTR [bx+4]
-	mov	WORD PTR $S1350_rectShotClip+4,ax
+	mov	WORD PTR $S1356_rectShotClip,ax
+; Line 1069
+	jmp	SHORT $I1754
+	nop	
+$I1753:
+	mov	ax,WORD PTR $S1356_rectShotClip+4
+	cmp	WORD PTR [bx+4],ax
+	jle	$I1754
+	mov	ax,WORD PTR [bx+4]
+	mov	WORD PTR $S1356_rectShotClip+4,ax
 ; Line 1070
-$I1749:
-	mov	ax,WORD PTR $S1350_rectShotClip+2
+$I1754:
+	mov	ax,WORD PTR $S1356_rectShotClip+2
 	cmp	WORD PTR [bx+6],ax
-	jge	$I1750
+	jge	$I1756
 	mov	ax,WORD PTR [bx+6]
-	mov	WORD PTR $S1350_rectShotClip+2,ax
+	mov	WORD PTR $S1356_rectShotClip+2,ax
 ; Line 1071
-	jmp	SHORT $I1752
-$I1750:
-	mov	ax,WORD PTR $S1350_rectShotClip+6
+	jmp	SHORT $I1757
+$I1756:
+	mov	ax,WORD PTR $S1356_rectShotClip+6
 	cmp	WORD PTR [bx+6],ax
-	jle	$I1752
+	jle	$I1757
 	mov	ax,WORD PTR [bx+6]
-	mov	WORD PTR $S1350_rectShotClip+6,ax
+	mov	WORD PTR $S1356_rectShotClip+6,ax
 ; Line 1072
-$I1752:
+$I1757:
+; Line 1073
 	mov	ax,WORD PTR [bp-4]	;npNext
 	mov	WORD PTR [bp-2],ax	;npShot
-; Line 1073
-	jmp	$FC1738
+	or	ax,ax
+	je	$JCC7204
+	jmp	$FC1744
+$JCC7204:
+	mov	sp,bp
+	pop	bp
+	ret	2
 	nop	
-$I1736:
+; Line 1075
+$I1742:
 	mov	ax,32767
-	mov	WORD PTR $S1350_rectShotClip+6,ax
-	mov	WORD PTR $S1350_rectShotClip+2,ax
-	mov	WORD PTR $S1350_rectShotClip+4,ax
-	mov	WORD PTR $S1350_rectShotClip,ax
-$I1753:
+	mov	WORD PTR $S1356_rectShotClip+6,ax
+	mov	WORD PTR $S1356_rectShotClip+2,ax
+	mov	WORD PTR $S1356_rectShotClip+4,ax
+	mov	WORD PTR $S1356_rectShotClip,ax
 ; Line 1076
+$EX1739:
 	mov	sp,bp
 	pop	bp
 	ret	2
@@ -4082,54 +3997,34 @@ DRAWFLAMES	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,4
+;	hDC = 4
 ;	npFlame = -2
 ;	npNext = -4
-;	hDC = 4
 ; Line 1086
 	mov	ax,WORD PTR _FlameList
-	jmp	SHORT $L20070
-; Line 1090
-	nop	
-; Line 1091
-$SC1765:
-; Line 1092
-	mov	bx,WORD PTR [bp-2]	;npFlame
-	mov	BYTE PTR [bx+22],5
-; Line 1093
-$SB1762:
-; Line 1102
-	push	WORD PTR [bp+4]	;hDC
-	push	WORD PTR [bp-2]	;npFlame
-	call	DRAWOBJECT
-; Line 1103
-	mov	ax,WORD PTR [bp-4]	;npNext
-$L20070:
 	mov	WORD PTR [bp-2],ax	;npFlame
 	or	ax,ax
-	je	$FB1760
-; Line 1087
+	je	$EX1761
+$F1764:
 ; Line 1088
-	mov	bx,ax
+	mov	bx,WORD PTR [bp-2]	;npFlame
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-4],ax	;npNext
 ; Line 1089
 	dec	WORD PTR [bx+18]
 	mov	ax,WORD PTR [bx+18]
+; Line 1101
 	cmp	ax,7
-	je	$SC1765
-	ja	$SB1762
+	je	$SC1771
+	ja	$SB1768
 	or	al,al
-	je	$SC1767
+	je	$SC1773
 	sub	al,3
-	jne	$SB1762
-; Line 1095
-	mov	bx,WORD PTR [bp-2]	;npFlame
-	mov	BYTE PTR [bx+22],4
-; Line 1096
-	jmp	SHORT $SB1762
+	je	$SC1772
+	jmp	SHORT $SB1768
 	nop	
 ; Line 1097
-$SC1767:
+$SC1773:
 ; Line 1098
 	push	OFFSET DGROUP:_FlameList
 	push	WORD PTR [bp-2]	;npFlame
@@ -4139,9 +4034,32 @@ $SC1767:
 	push	WORD PTR [bp-2]	;npFlame
 	call	ADDHEAD
 ; Line 1100
-	jmp	SHORT $SB1762
-$FB1760:
+	jmp	SHORT $SB1768
+; Line 1094
+$SC1772:
+; Line 1095
+	mov	bx,WORD PTR [bp-2]	;npFlame
+	mov	BYTE PTR [bx+22],4
+; Line 1096
+	jmp	SHORT $SB1768
+	nop	
+; Line 1091
+$SC1771:
+; Line 1092
+	mov	bx,WORD PTR [bp-2]	;npFlame
+	mov	BYTE PTR [bx+22],5
+; Line 1101
+$SB1768:
+; Line 1102
+	push	WORD PTR [bp+4]	;hDC
+	push	WORD PTR [bp-2]	;npFlame
+	call	DRAWOBJECT
+	mov	ax,WORD PTR [bp-4]	;npNext
+	mov	WORD PTR [bp-2],ax	;npFlame
+	or	ax,ax
+	jne	$F1764
 ; Line 1104
+$EX1761:
 	mov	sp,bp
 	pop	bp
 	ret	2
@@ -4152,7 +4070,8 @@ DRAWFLAMES	ENDP
 FIRESHOT	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,2
+	sub	sp,4
+	push	di
 	push	si
 ;	npShot = -2
 ; Line 1114
@@ -4160,29 +4079,25 @@ FIRESHOT	PROC NEAR
 	call	REMHEAD
 	mov	WORD PTR [bp-2],ax	;npShot
 	or	ax,ax
-	jne	$JCC7332
-	jmp	$I1770
-$JCC7332:
-; Line 1115
+	jne	$JCC7367
+	jmp	$EX1774
+$JCC7367:
 ; Line 1116
-	mov	bx,ax
-	mov	si,WORD PTR _npPlayer
-	mov	cx,WORD PTR [si+4]
-	mov	WORD PTR [bx+4],cx
+	mov	bx,WORD PTR _npPlayer
+	mov	ax,WORD PTR [bx+4]
+	mov	si,WORD PTR [bp-2]	;npShot
+	mov	WORD PTR [si+4],ax
 ; Line 1117
-	mov	si,WORD PTR _npPlayer
-	mov	cx,WORD PTR [si+6]
-	mov	WORD PTR [bx+6],cx
+	mov	ax,WORD PTR [bx+6]
+	mov	WORD PTR [si+6],ax
 ; Line 1118
-	mov	si,WORD PTR _npPlayer
-	mov	cx,WORD PTR [si+8]
-	mov	WORD PTR [bx+8],cx
+	mov	ax,WORD PTR [bx+8]
+	mov	WORD PTR [si+8],ax
 ; Line 1119
-	mov	si,WORD PTR _npPlayer
-	mov	cx,WORD PTR [si+10]
-	mov	WORD PTR [bx+10],cx
+	mov	ax,WORD PTR [bx+10]
+	mov	WORD PTR [si+10],ax
 ; Line 1120
-	mov	WORD PTR [bx+12],8
+	mov	WORD PTR [si+12],8
 ; Line 1121
 	push	5
 	call	ARAND
@@ -4190,39 +4105,46 @@ $JCC7332:
 	add	ax,WORD PTR [bx+14]
 	dec	ax
 	dec	ax
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	WORD PTR [bx+14],ax
+	mov	WORD PTR [si+14],ax
 ; Line 1122
-	mov	WORD PTR [bx+16],0
+	mov	WORD PTR [si+16],0
 ; Line 1123
 	push	8
 	call	ARAND
 	add	ax,16
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	WORD PTR [bx+18],ax
+	mov	WORD PTR [si+18],ax
 ; Line 1124
-	mov	BYTE PTR [bx+22],13
+	mov	BYTE PTR [si+22],13
 ; Line 1125
-	mov	BYTE PTR [bx+23],2
+	mov	BYTE PTR [si+23],2
 ; Line 1126
-	mov	WORD PTR [bx+24],128
-; Line 1127
-	mov	WORD PTR [bx+26],50
+	mov	WORD PTR [si+24],128
 ; Line 1128
-	mov	WORD PTR [bx+28],0
+	mov	WORD PTR [si+28],0
 ; Line 1129
-	mov	WORD PTR [bx+30],50
+	mov	ax,50
+	mov	WORD PTR [si+26],ax
+	mov	WORD PTR [si+30],ax
 ; Line 1130
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [bx+14]
+	mov	ax,WORD PTR [si+18]
+	add	ax,200
+	cwd	
+	push	dx
+	push	ax
+	mov	bl,BYTE PTR [si+14]
 	sub	bh,bh
 	shl	bx,1
+	mov	cx,ax
 	mov	ax,WORD PTR _nCos[bx]
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	cx,WORD PTR [bx+18]
-	add	cx,200
-	imul	cx
+	mov	di,dx
+	cwd	
+	push	dx
+	push	ax
+	mov	si,cx
+	mov	WORD PTR [bp-4],bx
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -4230,14 +4152,14 @@ $JCC7332:
 	add	WORD PTR [bx+8],ax
 	push	0
 	push	16384
-	mov	bl,BYTE PTR [bx+14]
-	sub	bh,bh
-	shl	bx,1
-	mov	ax,WORD PTR _nSin[bx]
-	mov	bx,WORD PTR [bp-2]	;npShot
-	mov	cx,WORD PTR [bx+18]
-	add	cx,200
-	imul	cx
+	push	di
+	push	si
+	mov	si,WORD PTR [bp-4]
+	mov	ax,WORD PTR _nSin[si]
+	cwd	
+	push	dx
+	push	ax
+	call	FAR PTR __aFlmul
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
@@ -4247,10 +4169,10 @@ $JCC7332:
 	push	OFFSET DGROUP:_ShotList
 	push	bx
 	call	ADDHEAD
-; Line 1132
 ; Line 1133
-$I1770:
+$EX1774:
 	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	
@@ -4265,16 +4187,16 @@ ACCELPLAYER	PROC NEAR
 	sub	sp,4
 	push	di
 	push	si
-;	npFlame = -2
 ;	nDir = 6
 ;	nAccel = 4
+;	npFlame = -2
 ; Line 1143
 	mov	bx,WORD PTR _npPlayer
 	mov	ax,WORD PTR [bx+14]
 	add	WORD PTR [bp+6],ax	;nDir
 ; Line 1144
 	cmp	WORD PTR [bp+4],0	;nAccel
-	je	$I1775
+	je	$I1781
 	push	0
 	push	16384
 	mov	ax,WORD PTR [bp+4]	;nAccel
@@ -4302,8 +4224,8 @@ ACCELPLAYER	PROC NEAR
 	push	16384
 	push	si
 	push	di
-	mov	bx,WORD PTR [bp-4]
-	mov	ax,WORD PTR _nSin[bx]
+	mov	si,WORD PTR [bp-4]
+	mov	ax,WORD PTR _nSin[si]
 	cwd	
 	push	dx
 	push	ax
@@ -4314,63 +4236,57 @@ ACCELPLAYER	PROC NEAR
 	mov	bx,WORD PTR _npPlayer
 	add	WORD PTR [bx+10],ax
 ; Line 1145
-$I1775:
+$I1781:
 	push	OFFSET DGROUP:_FreeList
 	call	REMHEAD
 	mov	WORD PTR [bp-2],ax	;npFlame
 	or	ax,ax
-	jne	$JCC7670
-	jmp	$I1776
-$JCC7670:
-; Line 1146
+	jne	$JCC7696
+	jmp	$EX1779
+$JCC7696:
 ; Line 1147
-	mov	bx,ax
-	mov	si,WORD PTR _npPlayer
-	mov	cx,WORD PTR [si+4]
-	mov	WORD PTR [bx+4],cx
+	mov	bx,WORD PTR _npPlayer
+	mov	ax,WORD PTR [bx+4]
+	mov	si,WORD PTR [bp-2]	;npFlame
+	mov	WORD PTR [si+4],ax
 ; Line 1148
-	mov	si,WORD PTR _npPlayer
-	mov	cx,WORD PTR [si+6]
-	mov	WORD PTR [bx+6],cx
+	mov	ax,WORD PTR [bx+6]
+	mov	WORD PTR [si+6],ax
 ; Line 1149
-	mov	si,WORD PTR _npPlayer
-	mov	cx,WORD PTR [si+8]
-	mov	WORD PTR [bx+8],cx
+	mov	ax,WORD PTR [bx+8]
+	mov	WORD PTR [si+8],ax
 ; Line 1150
-	mov	si,WORD PTR _npPlayer
-	mov	cx,WORD PTR [si+10]
-	mov	WORD PTR [bx+10],cx
+	mov	ax,WORD PTR [bx+10]
+	mov	WORD PTR [si+10],ax
 ; Line 1151
 	push	57
 	call	ARAND
 	add	ax,WORD PTR [bp+6]	;nDir
 	add	ax,100
-	mov	bx,WORD PTR [bp-2]	;npFlame
-	mov	WORD PTR [bx+14],ax
+	mov	WORD PTR [si+14],ax
 ; Line 1152
-	mov	WORD PTR [bx+16],0
+	mov	WORD PTR [si+16],0
 ; Line 1153
 	push	7
 	call	ARAND
 	add	ax,WORD PTR [bp+4]	;nAccel
-	mov	bx,WORD PTR [bp-2]	;npFlame
-	mov	WORD PTR [bx+18],ax
+	mov	WORD PTR [si+18],ax
 ; Line 1154
-	mov	BYTE PTR [bx+22],11
+	mov	BYTE PTR [si+22],11
 ; Line 1155
-	mov	BYTE PTR [bx+23],1
+	mov	BYTE PTR [si+23],1
 ; Line 1156
-	mov	WORD PTR [bx+26],0
-	mov	WORD PTR [bx+24],0
+	sub	ax,ax
+	mov	WORD PTR [si+26],ax
+	mov	WORD PTR [si+24],ax
 ; Line 1157
-	push	0
+	push	ax
 	push	16384
 	push	10
 	call	ARAND
 	mov	cx,ax
 	add	cx,50
-	mov	bx,WORD PTR [bp-2]	;npFlame
-	mov	bl,BYTE PTR [bx+14]
+	mov	bl,BYTE PTR [si+14]
 	sub	bh,bh
 	shl	bx,1
 	mov	ax,WORD PTR _nCos[bx]
@@ -4378,16 +4294,14 @@ $JCC7670:
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
-	mov	bx,WORD PTR [bp-2]	;npFlame
-	add	WORD PTR [bx+8],ax
+	add	WORD PTR [si+8],ax
 	push	0
 	push	16384
 	push	10
 	call	ARAND
 	mov	cx,ax
 	add	cx,50
-	mov	bx,WORD PTR [bp-2]	;npFlame
-	mov	bl,BYTE PTR [bx+14]
+	mov	bl,BYTE PTR [si+14]
 	sub	bh,bh
 	shl	bx,1
 	mov	ax,WORD PTR _nSin[bx]
@@ -4395,15 +4309,13 @@ $JCC7670:
 	push	dx
 	push	ax
 	call	FAR PTR __aFldiv
-	mov	bx,WORD PTR [bp-2]	;npFlame
-	add	WORD PTR [bx+10],ax
+	add	WORD PTR [si+10],ax
 ; Line 1158
 	push	OFFSET DGROUP:_FlameList
-	push	bx
+	push	si
 	call	ADDHEAD
-; Line 1159
 ; Line 1160
-$I1776:
+$EX1779:
 	pop	si
 	pop	di
 	mov	sp,bp
@@ -4420,62 +4332,53 @@ DRAWPLAYER	PROC NEAR
 ; Line 1171
 	mov	bx,WORD PTR _npPlayer
 	cmp	WORD PTR [bx+18],0
-	jg	$JCC7885
-	jmp	$EX1778
-$JCC7885:
+	jg	$JCC7879
+	jmp	$EX1784
+$JCC7879:
 ; Line 1173
 	cmp	WORD PTR _nSafe,0
-	jle	$I1782
-; Line 1174
+	jle	$I1788
 ; Line 1175
 	dec	WORD PTR _nSafe
-	jne	$I1788
-; Line 1176
-; Line 1177
+	jne	$I1791
+; Line 1178
 	mov	al,BYTE PTR [bx+18]
 	mov	BYTE PTR [bx+22],al
-; Line 1178
+	cmp	al,3
+	jbe	$I1791
 	mov	bx,WORD PTR _npPlayer
-	cmp	BYTE PTR [bx+22],3
-	jbe	$I1788
 	mov	BYTE PTR [bx+22],3
-; Line 1179
-; Line 1180
 ; Line 1181
-	jmp	SHORT $I1788
+	jmp	SHORT $I1791
 	nop	
-$I1782:
+$I1788:
 	push	WORD PTR _vkShld
 	call	FAR PTR GETASYNCKEYSTATE
 	or	ax,ax
-	jge	$I1788
+	jge	$I1791
 	cmp	WORD PTR _nShield,0
-	jle	$I1788
-; Line 1182
+	jle	$I1791
 ; Line 1183
 	mov	WORD PTR _nSafe,15
 ; Line 1184
 	dec	WORD PTR _nShield
 	cmp	WORD PTR _nShield,0
-	jle	$I1787
-	mov	bx,WORD PTR _npPlayer
-	mov	BYTE PTR [bx+22],7
-; Line 1185
-	jmp	SHORT $I1788
+	jle	$I1793
+	mov	al,7
+	jmp	SHORT $L20080
 	nop	
-$I1787:
+$I1793:
+	mov	al,6
+$L20080:
 	mov	bx,WORD PTR _npPlayer
-	mov	BYTE PTR [bx+22],6
-$I1788:
-; Line 1186
+	mov	BYTE PTR [bx+22],al
 ; Line 1188
-	cmp	WORD PTR $S1779_nBombing,0
-	jle	$I1789
-; Line 1189
+$I1791:
+	cmp	WORD PTR $S1785_nBombing,0
+	jle	$I1795
 ; Line 1190
-	dec	WORD PTR $S1779_nBombing
-	jne	$I1790
-; Line 1191
+	dec	WORD PTR $S1785_nBombing
+	jne	$I1796
 ; Line 1192
 	push	WORD PTR [bp+4]	;hDC
 	push	OFFSET DGROUP:_SpinnerList
@@ -4488,11 +4391,10 @@ $I1788:
 	push	WORD PTR [bp+4]	;hDC
 	push	OFFSET DGROUP:_HunterList
 	call	EXPLODEBADGUYS
-; Line 1195
 ; Line 1196
-	jmp	SHORT $I1793
-$I1790:
-; Line 1197
+	jmp	SHORT $I1798
+	nop	
+$I1796:
 ; Line 1198
 	push	WORD PTR [bp+4]	;hDC
 	push	OFFSET DGROUP:_SpinnerList
@@ -4505,70 +4407,68 @@ $I1790:
 	push	WORD PTR [bp+4]	;hDC
 	push	OFFSET DGROUP:_HunterList
 	call	HITLIST
-; Line 1201
-; Line 1202
 ; Line 1203
-	jmp	SHORT $I1793
+	jmp	SHORT $I1798
 	nop	
-$I1789:
+$I1795:
 	cmp	WORD PTR _nBomb,0
-	je	$I1793
+	je	$I1798
 	push	WORD PTR _vkBomb
 	call	FAR PTR GETASYNCKEYSTATE
 	or	ax,ax
-	jge	$I1793
+	jge	$I1798
 	dec	WORD PTR _nBomb
-	mov	WORD PTR $S1779_nBombing,5
+	mov	WORD PTR $S1785_nBombing,5
 ; Line 1205
-$I1793:
+$I1798:
 	push	WORD PTR _vkClkw
 	call	FAR PTR GETASYNCKEYSTATE
 	or	ax,ax
-	jge	$I1794
+	jge	$I1800
 	mov	bx,WORD PTR _npPlayer
 	add	WORD PTR [bx+16],8
 ; Line 1206
-$I1794:
+$I1800:
 	push	WORD PTR _vkCtrClkw
 	call	FAR PTR GETASYNCKEYSTATE
 	or	ax,ax
-	jge	$I1795
+	jge	$I1801
 	mov	bx,WORD PTR _npPlayer
 	sub	WORD PTR [bx+16],8
 ; Line 1207
-$I1795:
+$I1801:
 	push	WORD PTR _vkThrst
 	call	FAR PTR GETASYNCKEYSTATE
 	or	ax,ax
-	jge	$I1796
+	jge	$I1802
 	push	0
 	push	12
 	call	ACCELPLAYER
 ; Line 1208
-$I1796:
+$I1802:
 	push	WORD PTR _vkRvThrst
 	call	FAR PTR GETASYNCKEYSTATE
 	or	ax,ax
-	jge	$I1797
+	jge	$I1803
 	push	128
 	push	12
 	call	ACCELPLAYER
 ; Line 1209
-$I1797:
-	cmp	WORD PTR $S1780_nShotDelay,0
-	je	$I1798
-	dec	WORD PTR $S1780_nShotDelay
+$I1803:
+	cmp	WORD PTR $S1786_nShotDelay,0
+	je	$I1804
+	dec	WORD PTR $S1786_nShotDelay
 ; Line 1210
-	jmp	SHORT $I1800
-$I1798:
+	jmp	SHORT $I1805
+$I1804:
 	push	WORD PTR _vkFire
 	call	FAR PTR GETASYNCKEYSTATE
 	or	ax,ax
-	jge	$I1800
+	jge	$I1805
 	call	FIRESHOT
-	mov	WORD PTR $S1780_nShotDelay,2
+	mov	WORD PTR $S1786_nShotDelay,2
 ; Line 1211
-$I1800:
+$I1805:
 	push	WORD PTR [bp+4]	;hDC
 	push	WORD PTR _npPlayer
 	call	DRAWOBJECT
@@ -4580,7 +4480,7 @@ $I1800:
 	idiv	cx
 	mov	WORD PTR [bx+16],ax
 ; Line 1213
-$EX1778:
+$EX1784:
 	mov	sp,bp
 	pop	bp
 	ret	2
@@ -4591,14 +4491,14 @@ DRAWPLAYER	ENDP
 GETHYPEROIDDC	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,14
+	sub	sp,16
 	push	di
 	push	si
+;	hWnd = 4
 ;	hDC = -14
 ;	cx = -2
 ;	cy = -4
 ;	rect = -12
-;	hWnd = 4
 ; Line 1225
 	push	WORD PTR [bp+4]	;hWnd
 	lea	ax,WORD PTR [bp-12]	;rect
@@ -4616,17 +4516,17 @@ GETHYPEROIDDC	PROC NEAR
 ; Line 1232
 	push	WORD PTR [bp+4]	;hWnd
 	call	FAR PTR GETDC
-	mov	WORD PTR [bp-14],ax	;hDC
 	push	ax
 	push	7
+	mov	si,ax
 	call	FAR PTR SETMAPMODE
 ; Line 1233
-	push	WORD PTR [bp-14]	;hDC
+	push	si
 	push	8192
 	push	8192
 	call	FAR PTR SETWINDOWEXT
 ; Line 1234
-	push	WORD PTR [bp-14]	;hDC
+	push	si
 	mov	ax,WORD PTR [bp-2]	;cx
 	cwd	
 	sub	ax,dx
@@ -4640,31 +4540,30 @@ GETHYPEROIDDC	PROC NEAR
 	mov	dx,ax
 	neg	ax
 	push	ax
-	mov	si,cx
-	mov	di,dx
+	mov	di,cx
+	mov	WORD PTR [bp-16],dx
 	call	FAR PTR SETVIEWPORTEXT
 ; Line 1235
-	push	WORD PTR [bp-14]	;hDC
 	push	si
 	push	di
+	push	WORD PTR [bp-16]
 	call	FAR PTR SETVIEWPORTORG
 ; Line 1238
-	push	WORD PTR [bp-14]	;hDC
+	push	si
 	push	WORD PTR _hAppPalette
 	push	0
 	call	FAR PTR SELECTPALETTE
 ; Line 1239
-	push	WORD PTR [bp-14]	;hDC
+	push	si
 	call	FAR PTR REALIZEPALETTE
 ; Line 1241
-	mov	ax,WORD PTR [bp-14]	;hDC
+	mov	ax,si
 ; Line 1242
 	pop	si
 	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	2
-	nop	
 
 GETHYPEROIDDC	ENDP
 ; Line 1249
@@ -4673,49 +4572,52 @@ DRAWOBJECTS	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,2
-;	hDC = -2
+	push	si
 ;	hWnd = 4
+;	hDC = -2
 ; Line 1253
 	push	WORD PTR [bp+4]	;hWnd
 	call	GETHYPEROIDDC
-	mov	WORD PTR [bp-2],ax	;hDC
 	push	ax
+	mov	si,ax
 	call	DRAWPLAYER
 ; Line 1254
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWFLAMES
 ; Line 1255
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWSHOTS
 ; Line 1256
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWROIDS
 ; Line 1257
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWSPINNERS
 ; Line 1258
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWSWARMERS
 ; Line 1259
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWHUNTERS
 ; Line 1260
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWHUNTERSHOTS
 ; Line 1261
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWLETTERS
 ; Line 1262
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	DRAWBONUSES
 ; Line 1265
 	push	WORD PTR [bp+4]	;hWnd
-	push	WORD PTR [bp-2]	;hDC
+	push	si
 	call	FAR PTR RELEASEDC
 ; Line 1266
+	pop	si
 	mov	sp,bp
 	pop	bp
 	ret	2
+	nop	
 
 DRAWOBJECTS	ENDP
 ; Line 1273
@@ -4723,14 +4625,14 @@ DRAWOBJECTS	ENDP
 SETINDICATOR	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,4
+	sub	sp,6
 ;	npBuff = 8
 ;	IDBitmap = 6
 ;	nQuant = 4
+;	nBlank = -2
 ; Line 1274
 	cmp	WORD PTR [bp+4],5	;nQuant
-	jle	$I1816
-; Line 1275
+	jle	$I1822
 ; Line 1276
 	mov	al,BYTE PTR [bp+6]	;IDBitmap
 	mov	bx,WORD PTR [bp+8]	;npBuff
@@ -4748,51 +4650,47 @@ SETINDICATOR	PROC NEAR
 	mov	BYTE PTR [bx],al
 ; Line 1278
 	mov	bx,WORD PTR [bp+8]	;npBuff
-	inc	WORD PTR [bp+8]	;npBuff
 	mov	BYTE PTR [bx],64
-; Line 1279
 ; Line 1280
-	jmp	SHORT $I1817
-$I1816:
-; Line 1281
-;	nBlank = -2
+	jmp	SHORT $I1823
+	nop	
+$I1822:
 ; Line 1282
 	mov	ax,5
 	sub	ax,WORD PTR [bp+4]	;nQuant
 	mov	WORD PTR [bp-2],ax	;nBlank
 ; Line 1283
-	jmp	SHORT $L20071
+	jmp	SHORT $L20151
 	nop	
-$FC1820:
+$FC1826:
 	mov	al,BYTE PTR [bp+6]	;IDBitmap
 	mov	bx,WORD PTR [bp+8]	;npBuff
 	inc	WORD PTR [bp+8]	;npBuff
 	mov	BYTE PTR [bx],al
-$L20071:
+$L20151:
 	mov	ax,WORD PTR [bp+4]	;nQuant
 	dec	WORD PTR [bp+4]	;nQuant
 	or	ax,ax
-	jne	$FC1820
+	jne	$FC1826
 ; Line 1284
-	jmp	SHORT $L20072
-	nop	
-$FC1823:
-	mov	bx,WORD PTR [bp+8]	;npBuff
-	inc	WORD PTR [bp+8]	;npBuff
-	mov	BYTE PTR [bx],50
-$L20072:
+$FC1829:
 	mov	ax,WORD PTR [bp-2]	;nBlank
 	dec	WORD PTR [bp-2]	;nBlank
 	or	ax,ax
-	jne	$FC1823
+	je	$I1823
+	mov	bx,WORD PTR [bp+8]	;npBuff
+	inc	WORD PTR [bp+8]	;npBuff
+	mov	BYTE PTR [bx],50
+	jmp	SHORT $FC1829
 ; Line 1285
-$I1817:
+$I1823:
 ; Line 1286
 	mov	ax,5
 ; Line 1287
 	mov	sp,bp
 	pop	bp
 	ret	6
+	nop	
 
 SETINDICATOR	ENDP
 ; Line 1294
@@ -4800,8 +4698,9 @@ SETINDICATOR	ENDP
 CHECKSCORE	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,60
+	sub	sp,58
 	push	si
+;	hWnd = 4
 ;	szBuff = -40
 ;	npBuff = -44
 ;	nLives = -42
@@ -4812,7 +4711,6 @@ CHECKSCORE	PROC NEAR
 ;	hbmOld = -48
 ;	hDC = -58
 ;	hDCMem = -56
-;	hWnd = 4
 ; Line 1296
 	lea	ax,WORD PTR [bp-40]	;szBuff
 	mov	WORD PTR [bp-44],ax	;npBuff
@@ -4820,21 +4718,20 @@ CHECKSCORE	PROC NEAR
 	push	WORD PTR [bp+4]	;hWnd
 	call	FAR PTR ISICONIC
 	or	ax,ax
-	je	$JCC8621
-	jmp	$EX1826
-$JCC8621:
+	je	$JCC8579
+	jmp	$EX1832
+$JCC8579:
 ; Line 1302
 	mov	ax,WORD PTR _lScore
 	mov	dx,WORD PTR _lScore+2
 	sub	ax,WORD PTR _lLastLife
 	sbb	dx,WORD PTR _lLastLife+2
 	cmp	dx,1
-	jl	$I1838
-	jg	$L20019
+	jl	$I1844
+	jg	$L20090
 	cmp	ax,-31072
-	jbe	$I1838
-$L20019:
-; Line 1303
+	jbe	$I1844
+$L20090:
 ; Line 1304
 	call	ADDEXTRALIFE
 ; Line 1305
@@ -4842,9 +4739,8 @@ $L20019:
 	mov	dx,WORD PTR _lScore+2
 	mov	WORD PTR _lLastLife,ax
 	mov	WORD PTR _lLastLife+2,dx
-; Line 1306
 ; Line 1307
-$I1838:
+$I1844:
 	mov	bx,WORD PTR _npPlayer
 	mov	ax,WORD PTR [bx+18]
 	cwd	
@@ -4852,31 +4748,38 @@ $I1838:
 	sub	ax,dx
 	mov	WORD PTR [bp-42],ax	;nLives
 ; Line 1309
-	mov	bx,WORD PTR [bp-44]	;npBuff
-	inc	WORD PTR [bp-44]	;npBuff
-	mov	BYTE PTR [bx],52
+	mov	BYTE PTR [bp-40],52	;szBuff
 ; Line 1310
 	push	WORD PTR _nLevel
 	push	ds
-	push	OFFSET DGROUP:$SG1839
+	push	OFFSET DGROUP:$SG1845
+	lea	ax,WORD PTR [bp-39]
+	mov	WORD PTR [bp-44],ax	;npBuff
 	push	ds
-	push	WORD PTR [bp-44]	;npBuff
+	push	ax
 	call	FAR PTR _wsprintf
 	add	sp,10
 ; Line 1311
-	jmp	SHORT $L20073
-$FC1841:
-; Line 1312
-	add	BYTE PTR [bx],6
-	inc	WORD PTR [bp-44]	;npBuff
-$L20073:
 	mov	bx,WORD PTR [bp-44]	;npBuff
 	mov	al,BYTE PTR [bx]
 	cbw	
-	mov	si,ax
-	test	BYTE PTR __ctype[si+1],4
-	jne	$FC1841
+	mov	bx,ax
+	test	BYTE PTR __ctype[bx+1],4
+	je	$FB1848
+$FC1847:
+; Line 1312
+	mov	bx,WORD PTR [bp-44]	;npBuff
+	add	BYTE PTR [bx],6
+	inc	WORD PTR [bp-44]	;npBuff
+	mov	bx,WORD PTR [bp-44]	;npBuff
+	mov	al,BYTE PTR [bx]
+	cbw	
+	mov	bx,ax
+	test	BYTE PTR __ctype[bx+1],4
+	jne	$FC1847
+$FB1848:
 ; Line 1313
+	mov	bx,WORD PTR [bp-44]	;npBuff
 	inc	WORD PTR [bp-44]	;npBuff
 	mov	BYTE PTR [bx],50
 	mov	bx,WORD PTR [bp-44]	;npBuff
@@ -4886,25 +4789,32 @@ $L20073:
 	push	WORD PTR _lScore+2
 	push	WORD PTR _lScore
 	push	ds
-	push	OFFSET DGROUP:$SG1843
+	push	OFFSET DGROUP:$SG1849
 	push	ds
 	push	WORD PTR [bp-44]	;npBuff
 	call	FAR PTR _wsprintf
 	add	sp,12
 ; Line 1315
-	jmp	SHORT $L20074
-$FC1845:
-; Line 1316
-	add	BYTE PTR [bx],6
-	inc	WORD PTR [bp-44]	;npBuff
-$L20074:
 	mov	bx,WORD PTR [bp-44]	;npBuff
 	mov	al,BYTE PTR [bx]
 	cbw	
-	mov	si,ax
-	test	BYTE PTR __ctype[si+1],4
-	jne	$FC1845
+	mov	bx,ax
+	test	BYTE PTR __ctype[bx+1],4
+	je	$FB1852
+$FC1851:
+; Line 1316
+	mov	bx,WORD PTR [bp-44]	;npBuff
+	add	BYTE PTR [bx],6
+	inc	WORD PTR [bp-44]	;npBuff
+	mov	bx,WORD PTR [bp-44]	;npBuff
+	mov	al,BYTE PTR [bx]
+	cbw	
+	mov	bx,ax
+	test	BYTE PTR __ctype[bx+1],4
+	jne	$FC1851
+$FB1852:
 ; Line 1317
+	mov	bx,WORD PTR [bp-44]	;npBuff
 	inc	WORD PTR [bp-44]	;npBuff
 	mov	BYTE PTR [bx],50
 ; Line 1318
@@ -4931,14 +4841,15 @@ $L20074:
 	mov	WORD PTR [bp-54],ax	;nLen
 ; Line 1323
 	push	WORD PTR [bp+4]	;hWnd
+	mov	si,ax
 	call	FAR PTR GETWINDOWDC
 	mov	WORD PTR [bp-58],ax	;hDC
 ; Line 1325
 	push	ax
-	push	WORD PTR $S1349_rectScoreClip
-	push	WORD PTR $S1349_rectScoreClip+2
-	push	WORD PTR $S1349_rectScoreClip+4
-	push	WORD PTR $S1349_rectScoreClip+6
+	push	WORD PTR $S1355_rectScoreClip
+	push	WORD PTR $S1355_rectScoreClip+2
+	push	WORD PTR $S1355_rectScoreClip+4
+	push	WORD PTR $S1355_rectScoreClip+6
 	call	FAR PTR INTERSECTCLIPRECT
 ; Line 1326
 	push	WORD PTR [bp-58]	;hDC
@@ -4950,30 +4861,29 @@ $L20074:
 	call	FAR PTR SELECTOBJECT
 	mov	WORD PTR [bp-48],ax	;hbmOld
 ; Line 1328
-	mov	ax,WORD PTR $S1349_rectScoreClip
+	mov	ax,WORD PTR $S1355_rectScoreClip
 	mov	WORD PTR [bp-50],ax	;x
 ; Line 1329
-	mov	ax,WORD PTR $S1349_rectScoreClip+2
+	mov	ax,WORD PTR $S1355_rectScoreClip+2
 	mov	WORD PTR [bp-52],ax	;y
 ; Line 1331
 	mov	WORD PTR [bp-46],0	;nCnt
-	jmp	SHORT $F1847
-$FC1848:
-; Line 1332
+	or	si,si
+	jle	$FB1855
+$F1853:
 ; Line 1333
-	mov	si,WORD PTR [bp-46]	;nCnt
-	mov	al,BYTE PTR [bp-40][si]
-	cmp	BYTE PTR $S1348_szScore[si],al
-	je	$I1850
-; Line 1334
+	mov	bx,WORD PTR [bp-46]	;nCnt
+	mov	al,BYTE PTR $S1354_szScore[bx]
+	mov	si,bx
+	cmp	BYTE PTR [bp-40][si],al
+	je	$I1856
 ; Line 1335
 	push	WORD PTR [bp-56]	;hDCMem
-	mov	cx,ax
+	mov	al,BYTE PTR [bp-40][si]
 	cbw	
 	mov	bx,ax
 	shl	bx,1
 	push	WORD PTR _hBitmap[bx-100]
-	mov	WORD PTR [bp-60],cx
 	call	FAR PTR SELECTOBJECT
 ; Line 1336
 	push	WORD PTR [bp-58]	;hDC
@@ -4988,34 +4898,31 @@ $FC1848:
 	push	32
 	call	FAR PTR BITBLT
 ; Line 1337
-	mov	al,BYTE PTR [bp-60]
-	mov	BYTE PTR $S1348_szScore[si],al
-; Line 1338
+	mov	al,BYTE PTR [bp-40][si]
+	mov	BYTE PTR $S1354_szScore[si],al
 ; Line 1339
-$I1850:
+$I1856:
 	add	WORD PTR [bp-50],16	;x
-; Line 1340
-	inc	WORD PTR [bp-46]	;nCnt
-$F1847:
 	mov	ax,WORD PTR [bp-54]	;nLen
+	inc	WORD PTR [bp-46]	;nCnt
 	cmp	WORD PTR [bp-46],ax	;nCnt
-	jl	$FC1848
+	jl	$F1853
+; Line 1340
+$FB1855:
 ; Line 1341
-	mov	ax,WORD PTR [bp-46]	;nCnt
-	cmp	WORD PTR $S1347_nScoreLen,ax
-	jle	$I1851
-; Line 1342
+	mov	ax,WORD PTR $S1353_nScoreLen
+	cmp	WORD PTR [bp-46],ax	;nCnt
+	jge	$I1857
 ; Line 1343
 	push	WORD PTR [bp-56]	;hDCMem
 	push	WORD PTR _hBitmap
 	call	FAR PTR SELECTOBJECT
 ; Line 1344
-$D1852:
+$D1858:
 ; Line 1345
 	mov	bx,WORD PTR [bp-46]	;nCnt
-	cmp	BYTE PTR $S1348_szScore[bx],50
-	je	$I1855
-; Line 1346
+	cmp	BYTE PTR $S1354_szScore[bx],50
+	je	$I1861
 ; Line 1347
 	push	WORD PTR [bp-58]	;hDC
 	push	WORD PTR [bp-50]	;x
@@ -5030,21 +4937,19 @@ $D1852:
 	call	FAR PTR BITBLT
 ; Line 1348
 	mov	bx,WORD PTR [bp-46]	;nCnt
-	mov	BYTE PTR $S1348_szScore[bx],50
-; Line 1349
+	mov	BYTE PTR $S1354_szScore[bx],50
 ; Line 1350
-$I1855:
+$I1861:
 	add	WORD PTR [bp-50],16	;x
 ; Line 1351
-	mov	ax,WORD PTR $S1347_nScoreLen
+	mov	ax,WORD PTR $S1353_nScoreLen
 	inc	WORD PTR [bp-46]	;nCnt
 	cmp	WORD PTR [bp-46],ax	;nCnt
-	jl	$D1852
-; Line 1352
+	jl	$D1858
 ; Line 1353
-$I1851:
+$I1857:
 	mov	ax,WORD PTR [bp-54]	;nLen
-	mov	WORD PTR $S1347_nScoreLen,ax
+	mov	WORD PTR $S1353_nScoreLen,ax
 ; Line 1355
 	push	WORD PTR [bp-56]	;hDCMem
 	push	WORD PTR [bp-48]	;hbmOld
@@ -5057,7 +4962,7 @@ $I1851:
 	push	WORD PTR [bp-58]	;hDC
 	call	FAR PTR RELEASEDC
 ; Line 1358
-$EX1826:
+$EX1832:
 	pop	si
 	mov	sp,bp
 	pop	bp
@@ -5071,29 +4976,32 @@ HITLIST	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,2
-;	npObj = -2
 ;	hDC = 6
 ;	npList = 4
+;	npObj = -2
 ; Line 1368
 	mov	bx,WORD PTR [bp+4]	;npList
-	jmp	SHORT $L20076
-	nop	
-$FC1861:
-; Line 1369
-	mov	bx,ax
-	cmp	WORD PTR [bx+18],0
-	je	$L20077
-	push	WORD PTR [bp+6]	;hDC
-	push	bx
-	call	HIT
-; Line 1370
-$L20077:
-	mov	bx,WORD PTR [bp-2]	;npObj
-$L20076:
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-2],ax	;npObj
 	or	ax,ax
-	jne	$FC1861
+	je	$EX1864
+$F1866:
+; Line 1369
+	mov	bx,ax
+	cmp	WORD PTR [bx+18],0
+	je	$FC1867
+	push	WORD PTR [bp+6]	;hDC
+	push	bx
+	call	HIT
+; Line 1368
+$FC1867:
+	mov	bx,WORD PTR [bp-2]	;npObj
+	mov	ax,WORD PTR [bx]
+	mov	WORD PTR [bp-2],ax	;npObj
+	or	ax,ax
+	jne	$F1866
+; Line 1370
+$EX1864:
 	mov	sp,bp
 	pop	bp
 	ret	4
@@ -5106,20 +5014,19 @@ EXPLODEBADGUYS	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,2
-;	npObj = -2
 ;	hDC = 6
 ;	npList = 4
+;	npObj = -2
 ; Line 1380
-	jmp	SHORT $L20078
-$FC1869:
-; Line 1381
+	jmp	SHORT $L20152
+$FC1875:
 ; Line 1382
 	dec	WORD PTR _nBadGuys
 	cmp	WORD PTR _nBadGuys,0
-	jg	$L20021
+	jg	$L20094
 	push	2
 	call	SETRESTART
-$L20021:
+$L20094:
 ; Line 1383
 	mov	bx,WORD PTR [bp-2]	;npObj
 	mov	WORD PTR [bx+18],0
@@ -5136,12 +5043,12 @@ $L20021:
 	push	WORD PTR [bp-2]	;npObj
 	call	ADDHEAD
 ; Line 1387
-$L20078:
+$L20152:
 	mov	bx,WORD PTR [bp+4]	;npList
 	mov	ax,WORD PTR [bx]
 	mov	WORD PTR [bp-2],ax	;npObj
 	or	ax,ax
-	jne	$FC1869
+	jne	$FC1875
 ; Line 1388
 	mov	sp,bp
 	pop	bp
@@ -5155,8 +5062,8 @@ NEWGAME	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,2
-;	hDC = -2
 ;	hWnd = 4
+;	hDC = -2
 ; Line 1396
 	push	WORD PTR [bp+4]	;hWnd
 	call	GETHYPEROIDDC
@@ -5165,11 +5072,10 @@ NEWGAME	PROC NEAR
 	mov	bx,WORD PTR _npPlayer
 	mov	WORD PTR [bx+18],0
 ; Line 1399
-	mov	bx,WORD PTR _npPlayer
 	mov	BYTE PTR [bx+22],3
 ; Line 1400
 	push	WORD PTR [bp-2]	;hDC
-	push	WORD PTR _npPlayer
+	push	bx
 	call	EXPLODE
 ; Line 1401
 	push	0
@@ -5198,6 +5104,7 @@ NEWGAME	PROC NEAR
 	mov	sp,bp
 	pop	bp
 	ret	2
+	nop	
 
 NEWGAME	ENDP
 ; Line 1415
@@ -5205,20 +5112,21 @@ NEWGAME	ENDP
 RESTARTHYPEROID	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,12
+	sub	sp,20
+;	Pos = -4
+;	Vel = -8
+;	npShot = -10
+;	nCnt = -12
+;	Pos = -16
+;	Vel = -20
 ; Line 1416
 	mov	bx,WORD PTR _npPlayer
 	cmp	WORD PTR [bx+18],0
-	jne	$I1875
-; Line 1417
-;	Pos = -4
-;	Vel = -8
+	jne	$I1881
 ; Line 1420
 	mov	WORD PTR [bp-2],-4246
 ; Line 1421
 	sub	ax,ax
-	mov	WORD PTR [bp-4],ax	;Pos
-	mov	WORD PTR [bp-8],ax	;Vel
 ; Line 1422
 	mov	WORD PTR [bp-6],150
 ; Line 1423
@@ -5237,15 +5145,15 @@ RESTARTHYPEROID	PROC NEAR
 	mov	ax,WORD PTR _lScore
 	mov	dx,WORD PTR _lScore+2
 	cmp	WORD PTR _lHighScore+2,dx
-	jg	$I1878
-	jl	$L20022
+	jg	$I1884
+	jl	$L20102
 	cmp	WORD PTR _lHighScore,ax
-	jae	$I1878
-$L20022:
+	jae	$I1884
+$L20102:
 	mov	WORD PTR _lHighScore,ax
 	mov	WORD PTR _lHighScore+2,dx
 ; Line 1426
-$I1878:
+$I1884:
 	sub	ax,ax
 	mov	WORD PTR _lScore+2,ax
 	mov	WORD PTR _lScore,ax
@@ -5253,98 +5161,77 @@ $I1878:
 	mov	WORD PTR _lLastLife,ax
 ; Line 1427
 	mov	WORD PTR _nLevel,ax
-	jmp	SHORT $L20081
+	jmp	SHORT $L20153
 	nop	
-$I1875:
+$I1881:
 	cmp	WORD PTR [bx+18],0
-	jge	$I1880
-; Line 1431
+	jge	$I1885
 ; Line 1433
 	neg	WORD PTR [bx+18]
 ; Line 1434
-$L20081:
+$L20153:
 	mov	ax,3
 	mov	WORD PTR _nBomb,ax
 	mov	WORD PTR _nShield,ax
-; Line 1435
 ; Line 1437
-$I1880:
-	mov	bx,WORD PTR _npPlayer
-	mov	WORD PTR [bx+6],0
-	mov	bx,WORD PTR _npPlayer
-	mov	ax,WORD PTR [bx+6]
-	mov	WORD PTR [bx+4],ax
-; Line 1438
-	mov	bx,WORD PTR _npPlayer
-	mov	WORD PTR [bx+10],0
-	mov	bx,WORD PTR _npPlayer
-	mov	ax,WORD PTR [bx+10]
-	mov	WORD PTR [bx+8],ax
+$I1885:
 ; Line 1439
 	mov	bx,WORD PTR _npPlayer
 	mov	WORD PTR [bx+14],64
 ; Line 1440
-	mov	bx,WORD PTR _npPlayer
-	mov	WORD PTR [bx+16],0
+	sub	ax,ax
+	mov	WORD PTR [bx+6],ax
+	mov	WORD PTR [bx+4],ax
+	mov	WORD PTR [bx+10],ax
+	mov	WORD PTR [bx+8],ax
+	mov	WORD PTR [bx+16],ax
 ; Line 1441
-	mov	bx,WORD PTR _npPlayer
 	mov	BYTE PTR [bx+22],7
 ; Line 1442
 	mov	WORD PTR _nSafe,30
 ; Line 1444
-	cmp	WORD PTR _ShotList,0
-	je	$FB1885
-; Line 1445
-;	npShot = -8
+	cmp	WORD PTR _ShotList,ax
+	je	$I1887
 ; Line 1447
 	mov	ax,WORD PTR _ShotList
-	jmp	SHORT $L20079
-$FC1884:
-	mov	bx,WORD PTR [bp-8]	;Vel
-	mov	ax,WORD PTR [bx]
-$L20079:
-	mov	WORD PTR [bp-8],ax	;Vel
 	or	ax,ax
-	je	$FB1885
+	je	$I1887
+$F1889:
 ; Line 1448
 	mov	bx,ax
 	mov	WORD PTR [bx+18],1
-	jmp	SHORT $FC1884
-	nop	
-$FB1885:
-; Line 1449
+	mov	ax,WORD PTR [bx]
+	or	ax,ax
+	jne	$F1889
 ; Line 1452
+$I1887:
 	cmp	WORD PTR _nBadGuys,0
-	jne	$I1886
-; Line 1453
-;	nCnt = -8
+	jne	$EX1880
 ; Line 1456
 	inc	WORD PTR _nLevel
 	mov	ax,WORD PTR _nLevel
 	add	ax,5
-	mov	WORD PTR [bp-8],ax	;Vel
-	jmp	SHORT $F1888
-$FC1889:
-; Line 1457
-;	Pos = -4
-;	Vel = -12
+	mov	WORD PTR [bp-12],ax	;nCnt
+	or	ax,ax
+	je	$EX1880
+	sub	ax,ax
+	mov	WORD PTR [bp-18],ax
+	mov	WORD PTR [bp-20],ax	;Vel
+$F1894:
 ; Line 1459
 	push	16384
 	call	ARAND
 	sub	ax,8192
-	mov	WORD PTR [bp-4],ax	;Pos
+	mov	WORD PTR [bp-16],ax	;Pos
 ; Line 1460
 	push	16384
 	call	ARAND
 	sub	ax,8192
-	mov	WORD PTR [bp-2],ax
-; Line 1461
-	sub	ax,ax
 ; Line 1464
-	push	WORD PTR [bp-2]
-	push	WORD PTR [bp-4]	;Pos
 	push	ax
-	push	ax
+	push	WORD PTR [bp-16]	;Pos
+	push	WORD PTR [bp-18]
+	push	WORD PTR [bp-20]	;Vel
 	push	2
 	call	ARAND
 	add	ax,6
@@ -5367,18 +5254,13 @@ $FC1889:
 	push	ax
 	push	0
 	call	CREATEROID
-; Line 1465
-	dec	WORD PTR [bp-8]	;Vel
-$F1888:
-	cmp	WORD PTR [bp-8],0	;Vel
-	jne	$FC1889
-; Line 1466
+	dec	WORD PTR [bp-12]	;nCnt
+	jne	$F1894
 ; Line 1467
-$I1886:
+$EX1880:
 	mov	sp,bp
 	pop	bp
 	ret	
-	nop	
 
 RESTARTHYPEROID	ENDP
 ; Line 1474
@@ -5389,10 +5271,9 @@ PANIC	PROC NEAR
 ;	bPanic = 4
 ; Line 1475
 	cmp	WORD PTR [bp+4],0	;bPanic
-	je	$I1895
+	je	$I1901
 	cmp	WORD PTR _bPaused,0
-	jne	$I1895
-; Line 1476
+	jne	$I1901
 ; Line 1478
 	push	WORD PTR _hAppWnd
 	mov	ax,1
@@ -5402,7 +5283,7 @@ PANIC	PROC NEAR
 ; Line 1479
 	push	WORD PTR _hAppWnd
 	push	ds
-	push	OFFSET DGROUP:$SG1896
+	push	OFFSET DGROUP:$SG1902
 	call	FAR PTR SETWINDOWTEXT
 ; Line 1480
 	push	WORD PTR _hAppWnd
@@ -5414,16 +5295,14 @@ PANIC	PROC NEAR
 	push	0
 	push	1
 	call	FAR PTR INVALIDATERECT
-; Line 1482
 ; Line 1483
 	mov	sp,bp
 	pop	bp
 	ret	2
 	nop	
-$I1895:
+$I1901:
 	cmp	WORD PTR _bPaused,0
-	je	$I1898
-; Line 1484
+	je	$EX1900
 ; Line 1485
 	mov	WORD PTR _bPaused,0
 ; Line 1486
@@ -5433,21 +5312,20 @@ $I1895:
 	call	FAR PTR SETWINDOWTEXT
 ; Line 1487
 	cmp	WORD PTR [bp+4],0	;bPanic
-	je	$I1899
+	je	$I1905
 	push	WORD PTR _hAppWnd
 	push	9
 	call	FAR PTR SHOWWINDOW
 ; Line 1488
-$I1899:
+$I1905:
 	push	WORD PTR _hAppWnd
 	push	1
 	push	WORD PTR _nDrawDelay
 	push	0
 	push	0
 	call	FAR PTR SETTIMER
-; Line 1489
 ; Line 1490
-$I1898:
+$EX1900:
 	mov	sp,bp
 	pop	bp
 	ret	2
@@ -5459,8 +5337,8 @@ PAINTHYPEROID	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,32
-;	ps = -32
 ;	hWnd = 4
+;	ps = -32
 ; Line 1500
 	push	WORD PTR [bp+4]	;hWnd
 	lea	ax,WORD PTR [bp-32]	;ps
@@ -5469,7 +5347,7 @@ PAINTHYPEROID	PROC NEAR
 	call	FAR PTR BEGINPAINT
 ; Line 1501
 	cmp	WORD PTR _bPaused,0
-	je	$I1903
+	je	$I1909
 	push	WORD PTR [bp-32]	;ps
 	push	2
 	push	2
@@ -5480,7 +5358,7 @@ PAINTHYPEROID	PROC NEAR
 	push	ax
 	call	FAR PTR DRAWICON
 ; Line 1502
-$I1903:
+$I1909:
 	push	WORD PTR [bp+4]	;hWnd
 	lea	ax,WORD PTR [bp-32]	;ps
 	push	ss
@@ -5499,10 +5377,10 @@ ERASEHYPEROIDBKGND	PROC NEAR
 	push	bp
 	mov	bp,sp
 	sub	sp,10
-;	hbr = -2
-;	rect = -10
 ;	hWnd = 6
 ;	hDC = 4
+;	hbr = -2
+;	rect = -10
 ; Line 1514
 	push	WORD PTR [bp+6]	;hWnd
 	lea	ax,WORD PTR [bp-10]	;rect
@@ -5511,8 +5389,7 @@ ERASEHYPEROIDBKGND	PROC NEAR
 	call	FAR PTR GETCLIENTRECT
 ; Line 1516
 	cmp	WORD PTR _bPaused,0
-	je	$I1910
-; Line 1517
+	je	$I1916
 ; Line 1518
 	push	WORD PTR [bp+4]	;hDC
 	push	0
@@ -5523,10 +5400,9 @@ ERASEHYPEROIDBKGND	PROC NEAR
 	call	FAR PTR GETSYSCOLOR
 	push	dx
 	push	ax
-	jmp	SHORT $L20082
+	jmp	SHORT $L20154
 	nop	
-$I1910:
-; Line 1522
+$I1916:
 ; Line 1523
 	push	WORD PTR [bp+4]	;hDC
 	push	WORD PTR _hAppPalette
@@ -5538,10 +5414,9 @@ $I1910:
 ; Line 1525
 	push	256
 	push	0
-$L20082:
+$L20154:
 	call	FAR PTR CREATESOLIDBRUSH
 	mov	WORD PTR [bp-2],ax	;hbr
-; Line 1526
 ; Line 1528
 	push	WORD PTR [bp+4]	;hDC
 	lea	ax,WORD PTR [bp-10]	;rect
@@ -5565,10 +5440,10 @@ ERASEHYPEROIDBKGND	ENDP
 DRAWSHADOWRECT	PROC NEAR
 	push	bp
 	mov	bp,sp
-;	hDC = 10
-;	npRect = 8
 ;	hHi = 6
 ;	hLo = 4
+;	hDC = 10
+;	npRect = 8
 ; Line 1539
 	push	WORD PTR [bp+10]	;hDC
 	push	WORD PTR [bp+6]	;hHi
@@ -5618,9 +5493,10 @@ DRAWSHADOWRECT	ENDP
 NCPAINTHYPEROID	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,44
+	sub	sp,46
 	push	di
 	push	si
+;	hWnd = 4
 ;	hDC = -44
 ;	hDCMem = -28
 ;	cx = -12
@@ -5634,14 +5510,13 @@ NCPAINTHYPEROID	PROC NEAR
 ;	hbmOld = -4
 ;	bm = -42
 ;	rect = -26
-;	hWnd = 4
 ; Line 1562
 	push	WORD PTR [bp+4]	;hWnd
 	call	FAR PTR ISICONIC
 	or	ax,ax
-	je	$JCC10194
-	jmp	$EX1920
-$JCC10194:
+	je	$JCC10146
+	jmp	$L20105
+$JCC10146:
 ; Line 1563
 	push	WORD PTR [bp+4]	;hWnd
 	call	FAR PTR GETWINDOWDC
@@ -5690,8 +5565,7 @@ $JCC10194:
 	call	FAR PTR REALIZEPALETTE
 ; Line 1574
 	cmp	WORD PTR _bBW,0
-	je	$I1935
-; Line 1575
+	je	$I1941
 ; Line 1576
 	push	WORD PTR [bp-44]	;hDC
 	push	256
@@ -5703,9 +5577,8 @@ $JCC10194:
 ; Line 1577
 	mov	ax,WORD PTR _hPen
 	mov	WORD PTR [bp-16],ax	;hpenHi
-	jmp	SHORT $L20083
-$I1935:
-; Line 1581
+	jmp	SHORT $L20155
+$I1941:
 ; Line 1582
 	push	WORD PTR [bp-44]	;hDC
 	push	256
@@ -5719,9 +5592,8 @@ $I1935:
 	mov	WORD PTR [bp-16],ax	;hpenHi
 ; Line 1584
 	mov	ax,WORD PTR _hPen+2
-$L20083:
+$L20155:
 	mov	WORD PTR [bp-6],ax	;hpenLo
-; Line 1585
 ; Line 1587
 	push	WORD PTR [bp-44]	;hDC
 	push	0
@@ -5773,8 +5645,8 @@ $L20083:
 	push	WORD PTR [bp-6]	;hpenLo
 	call	DRAWSHADOWRECT
 ; Line 1595
-	dec	WORD PTR [bp-12]	;cx
 	mov	ax,WORD PTR [bp-12]	;cx
+	dec	ax
 	add	WORD PTR [bp-26],ax	;rect
 	dec	WORD PTR [bp-18]	;cy
 	mov	cx,WORD PTR [bp-18]	;cy
@@ -5784,7 +5656,7 @@ $L20083:
 	sub	WORD PTR [bp-20],cx
 ; Line 1597
 	cmp	WORD PTR _bBW,0
-	jne	$I1937
+	jne	$I1943
 	push	WORD PTR [bp-44]	;hDC
 	lea	ax,WORD PTR [bp-26]	;rect
 	push	ax
@@ -5792,7 +5664,7 @@ $L20083:
 	push	WORD PTR [bp-16]	;hpenHi
 	call	DRAWSHADOWRECT
 ; Line 1600
-$I1937:
+$I1943:
 	inc	WORD PTR [bp-26]	;rect
 	dec	WORD PTR [bp-22]
 ; Line 1601
@@ -5821,12 +5693,12 @@ $I1937:
 	push	0
 	push	32754
 	call	FAR PTR LOADBITMAP
-	mov	WORD PTR [bp-8],ax	;hbm
 	push	ax
 	push	14
 	lea	cx,WORD PTR [bp-42]	;bm
 	push	ss
 	push	cx
+	mov	si,ax
 	call	FAR PTR GETOBJECT
 ; Line 1609
 	mov	cx,2
@@ -5836,7 +5708,7 @@ $I1937:
 	mov	WORD PTR [bp-40],ax
 ; Line 1610
 	push	WORD PTR [bp-28]	;hDCMem
-	push	WORD PTR [bp-8]	;hbm
+	push	si
 	call	FAR PTR SELECTOBJECT
 	mov	WORD PTR [bp-4],ax	;hbmOld
 ; Line 1611
@@ -5854,29 +5726,27 @@ $I1937:
 ; Line 1612
 	mov	ax,WORD PTR [bp-40]
 	add	WORD PTR [bp-26],ax	;rect
-; Line 1614
+; Line 1616
 	push	WORD PTR [bp+4]	;hWnd
 	call	FAR PTR ISZOOMED
 	or	ax,ax
-	je	$I1938
+	je	$I1944
 	push	0
 	push	0
 	push	32747
-	jmp	SHORT $L20084
-	nop	
-$I1938:
+	jmp	SHORT $L20156
+$I1944:
 	push	0
 	push	0
 	push	32748
-$L20084:
+$L20156:
 	call	FAR PTR LOADBITMAP
 	mov	WORD PTR [bp-8],ax	;hbm
-; Line 1616
 	push	ax
 	push	14
-	lea	ax,WORD PTR [bp-42]	;bm
+	lea	cx,WORD PTR [bp-42]	;bm
 	push	ss
-	push	ax
+	push	cx
 	call	FAR PTR GETOBJECT
 ; Line 1617
 	push	WORD PTR [bp-28]	;hDCMem
@@ -5901,16 +5771,16 @@ $L20084:
 	push	0
 	push	32749
 	call	FAR PTR LOADBITMAP
-	mov	WORD PTR [bp-8],ax	;hbm
 	push	ax
 	push	14
 	lea	cx,WORD PTR [bp-42]	;bm
 	push	ss
 	push	cx
+	mov	si,ax
 	call	FAR PTR GETOBJECT
 ; Line 1623
 	push	WORD PTR [bp-28]	;hDCMem
-	push	WORD PTR [bp-8]	;hbm
+	push	si
 	call	FAR PTR SELECTOBJECT
 ; Line 1625
 	push	WORD PTR [bp-44]	;hDC
@@ -5939,7 +5809,7 @@ $L20084:
 	inc	WORD PTR [bp-26]	;rect
 	inc	WORD PTR [bp-24]
 ; Line 1632
-	mov	ax,OFFSET DGROUP:$S1349_rectScoreClip
+	mov	ax,OFFSET DGROUP:$S1355_rectScoreClip
 	mov	di,ax
 	lea	si,WORD PTR [bp-26]	;rect
 	push	ds
@@ -5968,25 +5838,25 @@ $L20084:
 	push	WORD PTR [bp-44]	;hDC
 	call	FAR PTR RELEASEDC
 ; Line 1640
-	mov	WORD PTR [bp-12],0	;cx
-	jmp	SHORT $F1940
-	nop	
-$FC1941:
-	mov	bx,ax
-	mov	BYTE PTR $S1348_szScore[bx],0
-	inc	WORD PTR [bp-12]	;cx
-$F1940:
-	mov	ax,WORD PTR [bp-12]	;cx
-	cmp	WORD PTR $S1347_nScoreLen,ax
-	jg	$FC1941
+	cmp	WORD PTR $S1353_nScoreLen,0
+	jle	$L20105
+	sub	ax,ax
+	mov	bx,OFFSET DGROUP:$S1354_szScore
+	mov	cx,WORD PTR $S1353_nScoreLen
+	shr	cx,1
+	mov	di,bx
+	push	ds
+	pop	es
+	rep	stosw
+	jae	$L20105
+	stosb
+$L20105:
 ; Line 1641
-$EX1920:
 	pop	si
 	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	2
-	nop	
 
 NCPAINTHYPEROID	ENDP
 ; Line 1649
@@ -6001,44 +5871,71 @@ HYPEROIDWNDPROC	PROC FAR
 	push	ds
 	mov	ds,ax
 	sub	sp,4
+;	hDC = -4
 ;	hWnd = 14
 ;	message = 12
 ;	wParam = 10
 ;	lParam = 6
 ; Line 1650
 	mov	ax,WORD PTR [bp+12]	;message
+; Line 1748
 	cmp	ax,134
-	jbe	$JCC11019
-	jmp	$L20025
-$JCC11019:
+	ja	$L20106
 	cmp	ax,133
-	jb	$JCC11027
-	jmp	$SC1982
-$JCC11027:
+	jb	$JCC10966
+	jmp	$SC1988
+$JCC10966:
 	cmp	ax,20
-	jne	$JCC11035
-	jmp	$SC1981
-$JCC11035:
-	ja	$SD1967
+	jne	$JCC10974
+	jmp	$SC1987
+$JCC10974:
+	jbe	$JCC10979
+	jmp	$L20157
+$JCC10979:
 	dec	al
-	je	$SC1952
+	je	$SC1958
 	dec	al
-	jne	$JCC11048
-	jmp	$SC1986
-$JCC11048:
+	je	$SC1992
 	sub	al,13
-	jne	$JCC11055
-	jmp	$SC1983
-$JCC11055:
+	jne	$JCC10994
+	jmp	$SC1989
+$JCC10994:
 	sub	al,4
-	jne	$JCC11062
-	jmp	$SC1968
-$JCC11062:
-	jmp	SHORT $SD1967
-; Line 1651
+	jne	$JCC11001
+	jmp	$SC1974
+$JCC11001:
+	jmp	$L20157
 	nop	
+$L20106:
+	cmp	ax,274
+	jne	$JCC11013
+	jmp	$SC1966
+$JCC11013:
+	ja	$L20107
+	sub	ax,258
+	jne	$JCC11023
+	jmp	$SC1975
+$JCC11023:
+	sub	ax,2
+	jb	$L20157
+	sub	ax,2
+	ja	$JCC11036
+	jmp	$SC1977
+$JCC11036:
+	jmp	SHORT $L20157
+	nop	
+$L20107:
+	sub	ax,275
+	jne	$JCC11047
+	jmp	$SC1959
+$JCC11047:
+	sub	ax,508
+	jne	$JCC11055
+	jmp	$SC1990
+$JCC11055:
+	jmp	SHORT $L20157
 ; Line 1652
-$SC1952:
+$SC1958:
 ; Line 1653
 	call	RESTARTHYPEROID
 ; Line 1654
@@ -6052,22 +5949,141 @@ $SC1952:
 	push	WORD PTR [bp+14]	;hWnd
 	call	NCPAINTHYPEROID
 ; Line 1656
-	jmp	SHORT $L20086
+$SB1955:
+; Line 1749
+	sub	ax,ax
+$L20162:
+	cwd	
+	jmp	$EX1953
+	nop	
+; Line 1739
+$SC1992:
+; Line 1740
+	push	WORD PTR [bp+14]	;hWnd
+	push	1
+	call	FAR PTR KILLTIMER
+; Line 1741
+	push	WORD PTR [bp+14]	;hWnd
+	push	2
+	call	FAR PTR KILLTIMER
+; Line 1742
+	push	WORD PTR [bp+14]	;hWnd
+	call	FAR PTR SAVEHYPEROIDWINDOWPOS
+; Line 1743
+	push	0
+	call	FAR PTR POSTQUITMESSAGE
+; Line 1744
+	jmp	SHORT $SB1955
+	nop	
+; Line 1726
+$SC1989:
+; Line 1727
+	push	WORD PTR [bp+14]	;hWnd
+	call	PAINTHYPEROID
+; Line 1728
+	jmp	SHORT $SB1955
+; Line 1690
+$SC1974:
+; Line 1691
+	push	0
+	call	PANIC
+; Line 1692
+$L20157:
+	push	WORD PTR [bp+14]	;hWnd
+	push	WORD PTR [bp+12]	;message
+	push	WORD PTR [bp+10]	;wParam
+	push	WORD PTR [bp+8]
+	push	WORD PTR [bp+6]	;lParam
+	call	FAR PTR DEFWINDOWPROC
+	jmp	$EX1953
+; Line 1718
+$SC1987:
+; Line 1719
+	push	WORD PTR [bp+14]	;hWnd
+	push	WORD PTR [bp+10]	;wParam
+	call	ERASEHYPEROIDBKGND
+	jmp	SHORT $L20162
+	nop	
+; Line 1721
+$SC1988:
+; Line 1723
+	push	WORD PTR [bp+14]	;hWnd
+	call	NCPAINTHYPEROID
+	jmp	$L20158
+	nop	
+; Line 1694
+$SC1975:
+; Line 1695
+	cmp	WORD PTR [bp+10],27	;wParam
+	jne	$SB1955
+	push	1
+	call	PANIC
+; Line 1696
+	jmp	SHORT $SB1955
+	nop	
+; Line 1698
+$SC1977:
+; Line 1701
+	test	WORD PTR [bp+8],8192
+	jne	$L20157
+; Line 1705
+	mov	ax,WORD PTR [bp+10]	;wParam
+; Line 1715
+	cmp	ax,32
+	je	$L20161
+	ja	$L20157
+	sub	al,9
+	je	$L20161
+	sub	al,18
+	jne	$L20157
+; Line 1708
+	cmp	WORD PTR [bp+12],260	;message
+	jne	$L20161
+	push	1
+	call	PANIC
+; Line 1709
+	jmp	SHORT $L20161
+	nop	
+; Line 1674
+$SC1966:
+; Line 1675
+	mov	ax,WORD PTR [bp+10]	;wParam
+; Line 1687
+	sub	ax,200
+	je	$SC1971
+	dec	ax
+	je	$SC1972
+; Line 1685
+	jmp	SHORT $L20157
+	nop	
+; Line 1677
+$SC1971:
+; Line 1678
+	push	WORD PTR [bp+14]	;hWnd
+	call	NEWGAME
+; Line 1679
+	jmp	$SB1955
+	nop	
+; Line 1681
+$SC1972:
+; Line 1682
+	push	WORD PTR [bp+14]	;hWnd
+	call	FAR PTR ABOUTHYPEROID
+; Line 1683
+	jmp	$SB1955
 	nop	
 ; Line 1658
-$SC1953:
+$SC1959:
 ; Line 1659
 	mov	ax,WORD PTR [bp+10]	;wParam
+; Line 1671
 	dec	ax
-	je	$SC1958
+	je	$SC1964
 	dec	ax
-	je	$SC1959
-; Line 1672
-	jmp	SHORT $L20086
-; Line 1660
-	nop	
+	je	$SC1965
+	jmp	$SB1955
 ; Line 1661
-$SC1958:
+$SC1964:
 ; Line 1662
 	push	WORD PTR [bp+14]	;hWnd
 	call	CHECKSCORE
@@ -6075,14 +6091,9 @@ $SC1958:
 	push	WORD PTR [bp+14]	;hWnd
 	call	DRAWOBJECTS
 ; Line 1664
-$L20086:
-	sub	ax,ax
-$L20087:
-	sub	dx,dx
-	jmp	$EX1947
-	nop	
+	jmp	SHORT $L20161
 ; Line 1666
-$SC1959:
+$SC1965:
 ; Line 1667
 	push	WORD PTR [bp+14]	;hWnd
 	push	2
@@ -6091,106 +6102,13 @@ $SC1959:
 	mov	WORD PTR _bRestart,0
 ; Line 1669
 	call	RESTARTHYPEROID
-	jmp	SHORT $L20086
-	nop	
-; Line 1674
-$SC1960:
-; Line 1675
-	mov	ax,WORD PTR [bp+10]	;wParam
-	sub	ax,200
-	je	$SC1965
-	dec	ax
-	je	$SC1966
-$SD1967:
-; Line 1686
-	push	WORD PTR [bp+14]	;hWnd
-	push	WORD PTR [bp+12]	;message
-	push	WORD PTR [bp+10]	;wParam
-	push	WORD PTR [bp+8]
-	push	WORD PTR [bp+6]	;lParam
-	call	FAR PTR DEFWINDOWPROC
-	jmp	$EX1947
-; Line 1676
-; Line 1677
-$SC1965:
-; Line 1678
-	push	WORD PTR [bp+14]	;hWnd
-	call	NEWGAME
-; Line 1688
-	jmp	SHORT $L20086
-; Line 1681
-$SC1966:
-; Line 1682
-	push	WORD PTR [bp+14]	;hWnd
-	call	FAR PTR ABOUTHYPEROID
-; Line 1683
-	jmp	SHORT $L20086
-; Line 1685
-$SC1968:
-; Line 1691
-	push	0
-	call	PANIC
-	jmp	SHORT $SD1967
-	nop	
-; Line 1694
-$SC1969:
-; Line 1695
-	cmp	WORD PTR [bp+10],27	;wParam
-$L20090:
-	jne	$L20086
-	push	1
-	call	PANIC
-; Line 1696
-	jmp	SHORT $L20086
-	nop	
-; Line 1698
-$SC1971:
-; Line 1701
-	test	WORD PTR [bp+8],8192
-	jne	$SD1967
-; Line 1704
-; Line 1705
-	mov	ax,WORD PTR [bp+10]	;wParam
-	cmp	ax,32
-	je	$L20086
-	ja	$SD1967
-	sub	al,9
-	je	$L20086
-	sub	al,18
-	jne	$SD1967
-; Line 1706
-; Line 1708
-	cmp	WORD PTR [bp+12],260	;message
-	jmp	SHORT $L20090
-$SC1981:
-; Line 1719
-	push	WORD PTR [bp+14]	;hWnd
-	push	WORD PTR [bp+10]	;wParam
-	call	ERASEHYPEROIDBKGND
-	cwd	
-	jmp	$EX1947
-	nop	
-; Line 1721
-$SC1982:
-; Line 1723
-	push	WORD PTR [bp+14]	;hWnd
-	call	NCPAINTHYPEROID
-; Line 1724
-$L20089:
-	mov	ax,1
-	jmp	$L20087
-; Line 1726
-$SC1983:
-; Line 1727
-	push	WORD PTR [bp+14]	;hWnd
-	call	PAINTHYPEROID
-; Line 1728
-	jmp	$L20086
+; Line 1670
+$L20161:
+	sub	ax,ax
+	jmp	SHORT $L20159
 	nop	
 ; Line 1730
-$SC1984:
-; Line 1731
-;	hDC = -4
+$SC1990:
 ; Line 1732
 	push	WORD PTR [bp+14]	;hWnd
 	call	FAR PTR GETDC
@@ -6207,59 +6125,13 @@ $SC1984:
 	push	WORD PTR [bp+14]	;hWnd
 	push	WORD PTR [bp-4]	;hDC
 	call	FAR PTR RELEASEDC
-	jmp	SHORT $L20089
-; Line 1739
-$SC1986:
-; Line 1740
-	push	WORD PTR [bp+14]	;hWnd
-	push	1
-	call	FAR PTR KILLTIMER
-; Line 1741
-	push	WORD PTR [bp+14]	;hWnd
-	push	2
-	call	FAR PTR KILLTIMER
-; Line 1742
-	push	WORD PTR [bp+14]	;hWnd
-	call	FAR PTR SAVEHYPEROIDWINDOWPOS
-; Line 1743
-	push	0
-	call	FAR PTR POSTQUITMESSAGE
-; Line 1744
-	jmp	$L20086
-; Line 1746
-$L20025:
-	cmp	ax,274
-	jne	$JCC11381
-	jmp	$SC1960
-$JCC11381:
-	ja	$L20026
-	sub	ax,258
-	jne	$JCC11391
-	jmp	$SC1969
-$JCC11391:
-	sub	ax,2
-	jae	$JCC11399
-	jmp	$SD1967
-$JCC11399:
-	sub	ax,2
-	ja	$JCC11407
-	jmp	$SC1971
-$JCC11407:
-	jmp	$SD1967
-	nop	
-$L20026:
-	sub	ax,275
-	jne	$JCC11419
-	jmp	$SC1953
-$JCC11419:
-	sub	ax,508
-	jne	$JCC11427
-	jmp	$SC1984
-$JCC11427:
-	jmp	$SD1967
+; Line 1737
+$L20158:
+	mov	ax,1
+$L20159:
+	sub	dx,dx
 ; Line 1750
-	nop	
-$EX1947:
+$EX1953:
 	dec	bp
 	dec	bp
 	mov	sp,bp
@@ -6267,21 +6139,23 @@ $EX1947:
 	pop	bp
 	dec	bp
 	ret	10
+	nop	
 
 HYPEROIDWNDPROC	ENDP
-; Line 1757
 HYPEROID_TEXT      ENDS
 CONST      SEGMENT
-$T20027	DQ	03f9921fb6134ce3er    ;	2.454369335937500E-02
-$T20028	DQ	040d0000000000000r    ;	16384.00000000000
+$T20122	DQ	03f9921fb6134ce3er    ;	2.454369335937500E-02
+$T20123	DQ	040d0000000000000r    ;	16384.00000000000
 CONST      ENDS
 HYPEROID_TEXT      SEGMENT
 	ASSUME	CS: HYPEROID_TEXT
+; Line 1757
 	PUBLIC	INITHYPEROID
 INITHYPEROID	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,10
+	sub	sp,32
+	push	di
 	push	si
 ;	dRad = -10
 ;	nCnt = -2
@@ -6290,51 +6164,40 @@ INITHYPEROID	PROC NEAR
 	mov	WORD PTR _hAppPalette,ax
 ; Line 1763
 	or	ax,ax
-	jne	$I1991
-$L20091:
+	jne	$I1997
+$L20163:
 	sub	ax,ax
 	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	
 ; Line 1764
-$I1991:
+$I1997:
 	mov	WORD PTR [bp-2],0	;nCnt
-	jmp	SHORT $F1992
-; Line 1768
-	nop	
-$FC1993:
-	inc	WORD PTR [bp-2]	;nCnt
-$F1992:
-	cmp	WORD PTR [bp-2],16	;nCnt
-	jge	$FB1994
-; Line 1765
+	mov	WORD PTR [bp-12],OFFSET DGROUP:_hPen
+$F1998:
 ; Line 1766
 	push	0
 	push	1
 	push	256
 	push	WORD PTR [bp-2]	;nCnt
 	call	FAR PTR CREATEPEN
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,1
-	mov	WORD PTR _hPen[bx],ax
+	mov	bx,WORD PTR [bp-12]
+	mov	WORD PTR [bx],ax
 ; Line 1767
-	or	ax,ax
-	jne	$FC1993
-	jmp	SHORT $L20091
-	nop	
-$FB1994:
-; Line 1769
-	mov	WORD PTR [bp-2],0	;nCnt
-	jmp	SHORT $F1996
-; Line 1773
-	nop	
-$FC1997:
+	mov	bx,WORD PTR [bp-12]
+	cmp	WORD PTR [bx],0
+	je	$L20163
 	inc	WORD PTR [bp-2]	;nCnt
-$F1996:
-	cmp	WORD PTR [bp-2],17	;nCnt
-	jge	$FB1998
-; Line 1770
+	add	WORD PTR [bp-12],2
+	cmp	WORD PTR [bp-12],OFFSET DGROUP:_hPen+32
+	jb	$F1998
+	sub	ax,ax
+	mov	WORD PTR [bp-2],ax	;nCnt
+	mov	WORD PTR [bp-14],ax
+; Line 1769
+$F2002:
 ; Line 1771
 	push	WORD PTR _hAppInst
 	mov	ax,WORD PTR [bp-2]	;nCnt
@@ -6343,73 +6206,58 @@ $F1996:
 	push	dx
 	push	ax
 	call	FAR PTR LOADBITMAP
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,1
+	mov	bx,WORD PTR [bp-14]
 	mov	WORD PTR _hBitmap[bx],ax
 ; Line 1772
+	mov	bx,WORD PTR [bp-14]
 	cmp	WORD PTR _hPen[bx],0
-	jne	$FC1997
-	jmp	SHORT $L20091
-$FB1998:
+	je	$L20163
+	inc	WORD PTR [bp-2]	;nCnt
+	add	WORD PTR [bp-14],2
+	cmp	WORD PTR [bp-14],34
+	jl	$F2002
 ; Line 1776
 	call	FAR PTR GETCURRENTTIME
-	mov	WORD PTR $S1346_dwSeed,ax
-	mov	WORD PTR $S1346_dwSeed+2,dx
+	mov	WORD PTR $S1352_dwSeed,ax
+	mov	WORD PTR $S1352_dwSeed+2,dx
+	sub	ax,ax
+	mov	WORD PTR [bp-2],ax	;nCnt
+	mov	WORD PTR [bp-16],ax
 ; Line 1779
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC2001:
-; Line 1780
+$F2006:
 ; Line 1782
 	fild	WORD PTR [bp-2]	;nCnt
-	fmul	QWORD PTR $T20027
-	fst	QWORD PTR [bp-10]	;dRad
-	fwait	
-	sub	sp,8
-	mov	bx,sp
-	fstp	QWORD PTR [bx]
-	fwait	
-	call	FAR PTR _cos
-	add	sp,8
-	mov	bx,ax
-	fld	QWORD PTR [bx]
-	fmul	QWORD PTR $T20028
+	fmul	QWORD PTR $T20122
+	fst	QWORD PTR [bp-32]
+	call	FAR PTR __aFCIcos
+	fmul	QWORD PTR $T20123
 	call	FAR PTR __aFftol
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,1
+	mov	bx,WORD PTR [bp-16]
 	mov	WORD PTR _nCos[bx],ax
 ; Line 1783
-	fld	QWORD PTR [bp-10]	;dRad
-	mov	ax,bx
-	sub	sp,8
-	mov	bx,sp
-	fstp	QWORD PTR [bx]
-	fwait	
-	mov	si,ax
-	call	FAR PTR _sin
-	add	sp,8
-	mov	bx,ax
-	fld	QWORD PTR [bx]
-	fmul	QWORD PTR $T20028
+	fld	QWORD PTR [bp-32]
+	call	FAR PTR __aFCIsin
+	fmul	QWORD PTR $T20123
 	call	FAR PTR __aFftol
-	mov	WORD PTR _nSin[si],ax
-; Line 1784
+	mov	bx,WORD PTR [bp-16]
+	mov	WORD PTR _nSin[bx],ax
+; Line 1779
 	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],256	;nCnt
-	jl	$FC2001
+	add	WORD PTR [bp-16],2
+	cmp	WORD PTR [bp-16],512
+	jl	$F2006
 ; Line 1787
 	call	FAR PTR GETHYPEROIDINI
+	mov	WORD PTR [bp-18],OFFSET DGROUP:_Obj
 ; Line 1790
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC2004:
+$F2009:
 ; Line 1791
 	push	OFFSET DGROUP:_FreeList
-	imul	ax,WORD PTR [bp-2],88	;nCnt
-	add	ax,OFFSET DGROUP:_Obj
-	push	ax
+	push	WORD PTR [bp-18]
 	call	ADDHEAD
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],100	;nCnt
-	jl	$FC2004
+	add	WORD PTR [bp-18],88
+	cmp	WORD PTR [bp-18],OFFSET DGROUP:_Obj+8800
+	jb	$F2009
 ; Line 1794
 	push	OFFSET DGROUP:_FreeList
 	call	REMHEAD
@@ -6418,28 +6266,18 @@ $FC2004:
 	mov	bx,ax
 	mov	BYTE PTR [bx+23],5
 ; Line 1796
-	mov	bx,WORD PTR _npPlayer
 	mov	WORD PTR [bx+12],256
-; Line 1797
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC2007:
-; Line 1798
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,2
-	mov	ax,WORD PTR $S1351_Player[bx]
-	mov	dx,WORD PTR $S1351_Player[bx+2]
-	mov	cx,bx
-	mov	bx,WORD PTR _npPlayer
-	mov	si,cx
-	mov	WORD PTR [bx+24][si],ax
-	mov	WORD PTR [bx+26][si],dx
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],5	;nCnt
-	jl	$FC2007
+	mov	cx,10
+	lea	di,WORD PTR [bx+24]
+	mov	si,OFFSET DGROUP:$S1357_Player
+	push	ds
+	pop	es
+	rep	movsw
 ; Line 1800
 	mov	ax,1
 ; Line 1801
 	pop	si
+	pop	di
 	mov	sp,bp
 	pop	bp
 	ret	
@@ -6450,43 +6288,43 @@ INITHYPEROID	ENDP
 EXITHYPEROID	PROC NEAR
 	push	bp
 	mov	bp,sp
-	sub	sp,2
+	sub	sp,6
 ;	nCnt = -2
 ; Line 1811
 	cmp	WORD PTR _hAppPalette,0
-	je	$I2011
+	je	$I2017
 	push	WORD PTR _hAppPalette
 	call	FAR PTR DELETEOBJECT
 ; Line 1812
-$I2011:
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC2013:
+$I2017:
+	mov	WORD PTR [bp-4],OFFSET DGROUP:_hPen
+$F2018:
 ; Line 1813
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,1
-	cmp	WORD PTR _hPen[bx],0
-	je	$I2015
-	push	WORD PTR _hPen[bx]
+	mov	bx,WORD PTR [bp-4]
+	cmp	WORD PTR [bx],0
+	je	$FC2019
+	push	WORD PTR [bx]
+	call	FAR PTR DELETEOBJECT
+; Line 1812
+$FC2019:
+	add	WORD PTR [bp-4],2
+	cmp	WORD PTR [bp-4],OFFSET DGROUP:_hPen+32
+	jb	$F2018
+; Line 1814
+	mov	WORD PTR [bp-6],OFFSET DGROUP:_hBitmap
+$F2022:
+; Line 1815
+	mov	bx,WORD PTR [bp-6]
+	cmp	WORD PTR [bx],0
+	je	$FC2023
+	push	WORD PTR [bx]
 	call	FAR PTR DELETEOBJECT
 ; Line 1814
-$I2015:
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],16	;nCnt
-	jl	$FC2013
-	mov	WORD PTR [bp-2],0	;nCnt
-$FC2017:
-; Line 1815
-	mov	bx,WORD PTR [bp-2]	;nCnt
-	shl	bx,1
-	cmp	WORD PTR _hBitmap[bx],0
-	je	$I2019
-	push	WORD PTR _hBitmap[bx]
-	call	FAR PTR DELETEOBJECT
+$FC2023:
+	add	WORD PTR [bp-6],2
+	cmp	WORD PTR [bp-6],OFFSET DGROUP:_hBitmap+34
+	jb	$F2022
 ; Line 1816
-$I2019:
-	inc	WORD PTR [bp-2]	;nCnt
-	cmp	WORD PTR [bp-2],17	;nCnt
-	jl	$FC2017
 	mov	sp,bp
 	pop	bp
 	ret	
@@ -6504,38 +6342,37 @@ WINMAIN	PROC FAR
 	push	ds
 	mov	ds,ax
 	sub	sp,20
-;	msg = -20
 ;	hInstance = 14
 ;	hPrevInstance = 12
 ;	lpszCmdLine = 8
 ;	nCmdShow = 6
+;	msg = -20
 ; Line 1827
 	mov	ax,WORD PTR [bp+14]	;hInstance
 	mov	WORD PTR _hAppInst,ax
 ; Line 1828
 	cmp	WORD PTR [bp+12],0	;hPrevInstance
-	jne	$I2026
-; Line 1829
+	jne	$I2032
 ; Line 1831
 	call	FAR PTR CREATEHYPEROIDCLASS
 	or	ax,ax
-	jne	$I2028
-$L20095:
+	jne	$I2034
+$L20164:
 	sub	ax,ax
-	jmp	SHORT $EX2024
-$I2026:
-; Line 1834
+	jmp	SHORT $EX2030
+; Line 1833
+$I2032:
 ; Line 1836
 	push	WORD PTR [bp+12]	;hPrevInstance
 	push	OFFSET DGROUP:_szAppName
 	push	32
 	call	FAR PTR GETINSTANCEDATA
 ; Line 1837
-$I2028:
+$I2034:
 ; Line 1838
 	call	INITHYPEROID
 	or	ax,ax
-	je	$Abort2030
+	je	$Abort2036
 ; Line 1839
 	push	WORD PTR [bp+10]
 	push	WORD PTR [bp+8]	;lpszCmdLine
@@ -6544,12 +6381,18 @@ $I2028:
 	mov	WORD PTR _hAppWnd,ax
 ; Line 1840
 	or	ax,ax
-	je	$L20095
+	je	$L20164
 ; Line 1842
-	jmp	SHORT $L20096
-	nop	
-$FC2033:
-; Line 1843
+	lea	ax,WORD PTR [bp-20]	;msg
+	push	ss
+	push	ax
+	push	0
+	push	0
+	push	0
+	call	FAR PTR GETMESSAGE
+	or	ax,ax
+	je	$Abort2036
+$FC2039:
 ; Line 1844
 	lea	ax,WORD PTR [bp-20]	;msg
 	push	ss
@@ -6561,7 +6404,6 @@ $FC2033:
 	push	ax
 	call	FAR PTR DISPATCHMESSAGE
 ; Line 1846
-$L20096:
 	lea	ax,WORD PTR [bp-20]	;msg
 	push	ss
 	push	ax
@@ -6570,15 +6412,15 @@ $L20096:
 	push	0
 	call	FAR PTR GETMESSAGE
 	or	ax,ax
-	jne	$FC2033
+	jne	$FC2039
 ; Line 1848
-$Abort2030:
+$Abort2036:
 ; Line 1849
 	call	EXITHYPEROID
 ; Line 1850
 	mov	ax,WORD PTR [bp-16]
 ; Line 1851
-$EX2024:
+$EX2030:
 	dec	bp
 	dec	bp
 	mov	sp,bp
@@ -6586,6 +6428,7 @@ $EX2024:
 	pop	bp
 	dec	bp
 	ret	10
+	nop	
 
 WINMAIN	ENDP
 HYPEROID_TEXT	ENDS
